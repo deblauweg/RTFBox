@@ -4193,7 +4193,7 @@
    <SourceLine>strLastWord.Right(4) = ".png" Or _</SourceLine>
    <SourceLine>strLastWord.Right(4) = ".gif" Or _</SourceLine>
    <SourceLine>strLastWord.Right(4) = ".bmp" Then</SourceLine>
-   <SourceLine>strLink = "&lt;IMG src=""" + strLastWord + """&gt;"</SourceLine>
+   <SourceLine>strLink = "&lt;IMG src=""" + strLastWord + """ alt=""""&gt;"</SourceLine>
    <SourceLine>strHtml = strHtml.Left(iPosStartLastWord - 1)</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>strLink = "&lt;A href=""" + strLastWord + """&gt;"</SourceLine>
