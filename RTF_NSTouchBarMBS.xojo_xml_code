@@ -1,0 +1,209 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RBProject version="2016r4.1" FormatVersion="2" MinIDEVersion="20070100">
+<block type="Module" ID="683511807">
+ <ObjName>RTF_NSTouchBarMBS</ObjName>
+ <ObjContainerID>0</ObjContainerID>
+ <IsClass>1</IsClass>
+ <Superclass>NSTouchBarMBS</Superclass>
+ <ItemFlags>1</ItemFlags>
+ <IsInterface>0</IsInterface>
+ <Compatibility></Compatibility>
+ <HookInstance>
+  <ItemName>makeItemForIdentifier</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function makeItemForIdentifier(identifier as string) As NSTouchBarItemMBS</SourceLine>
+   <SourceLine>Dim ctb As NSCustomTouchBarItemMBS</SourceLine>
+   <SourceLine>Dim b As NSButtonMBS</SourceLine>
+   <SourceLine>Dim strName As String</SourceLine>
+   <SourceLine>Dim strFullName As String</SourceLine>
+   <SourceLine>Dim bPressed As Boolean</SourceLine>
+   <SourceLine>Dim pic As Picture</SourceLine>
+   <SourceLine>Dim g As Graphics </SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>bPressed = False</SourceLine>
+   <SourceLine>If identifier = "RTF_Bold0" Or identifier = "RTF_Bold1" Then</SourceLine>
+   <SourceLine>strName = "rtf_bold"</SourceLine>
+   <SourceLine>strFullName = "Bold"</SourceLine>
+   <SourceLine>PreparePic(pic, g)</SourceLine>
+   <SourceLine>g.Bold = True</SourceLine>
+   <SourceLine>g.DrawString("B", ((34 - g.StringWidth("B")) / 2), 27)</SourceLine>
+   <SourceLine>ElseIf identifier = "RTF_Italic0" Or identifier = "RTF_Italic1" Then</SourceLine>
+   <SourceLine>strName = "rtf_italic"</SourceLine>
+   <SourceLine>strFullName = "Italic"</SourceLine>
+   <SourceLine>PreparePic(pic, g)</SourceLine>
+   <SourceLine>g.Italic = True</SourceLine>
+   <SourceLine>g.DrawString("I", ((34 - g.StringWidth("I")) / 2), 27)</SourceLine>
+   <SourceLine>ElseIf identifier = "RTF_Underlined0" Or identifier = "RTF_Underlined1" Then</SourceLine>
+   <SourceLine>strName = "rtf_underlined"</SourceLine>
+   <SourceLine>strFullName = "Underlined"</SourceLine>
+   <SourceLine>PreparePic(pic, g)</SourceLine>
+   <SourceLine>g.Underline = True</SourceLine>
+   <SourceLine>g.DrawString("U", ((34 - g.StringWidth("U")) / 2), 27)</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>strName = ""</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If strName.Len &gt; 0 Then</SourceLine>
+   <SourceLine>ctb = New NSCustomTouchBarItemMBS(identifier)</SourceLine>
+   <SourceLine>b = New NSButtonMBS(strName)</SourceLine>
+   <SourceLine>If Not IsNull(pic) Then</SourceLine>
+   <SourceLine>b.image = New NSImageMBS(pic)</SourceLine>
+   <SourceLine>If identifier.Right(1) = "1" Then</SourceLine>
+   <SourceLine>b.bezelColor = NSColorMBS.colorWithDeviceRGB(0.61, 0.61, 0.61, 1.00)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>AddHandler b.Action, AddressOf TouchBar_Action</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>ctb.customizationLabel = strFullName</SourceLine>
+   <SourceLine>ctb.view = b</SourceLine>
+   <SourceLine>ctb.visibilityPriority = ctb.PriorityNormal</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>m_ctbItems.Append ctb</SourceLine>
+   <SourceLine>m_bButtons.Append b</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return ctb</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+ </HookInstance>
+ <Method>
+  <ItemName>TouchBar_Action</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub TouchBar_Action(bt As NSButtonMBS)</SourceLine>
+   <SourceLine>RTF_TouchbarAction bt.title</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>bt As NSButtonMBS</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Destructor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Destructor()</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>For t = m_bButtons.Ubound To 0 Step -1</SourceLine>
+   <SourceLine>RemoveHandler m_bButtons(t).Action, AddressOf TouchBar_Action</SourceLine>
+   <SourceLine>m_bButtons(t) = Nil</SourceLine>
+   <SourceLine>m_bButtons.Remove(t)</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine>For t = m_ctbItems.Ubound To 0 Step -1</SourceLine>
+   <SourceLine>m_ctbItems(t) = Nil</SourceLine>
+   <SourceLine>m_ctbItems.Remove(t)</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>PreparePic</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub PreparePic(ByRef pic As Picture, ByRef g As Graphics)</SourceLine>
+   <SourceLine>pic = New Picture(34, 34)</SourceLine>
+   <SourceLine>g = pic.Graphics</SourceLine>
+   <SourceLine>g.ForeColor = &amp;cFFFFFF</SourceLine>
+   <SourceLine>g.TextFont = "Arial"</SourceLine>
+   <SourceLine>g.TextSize = 28</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>ByRef pic As Picture, ByRef g As Graphics</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Hook>
+  <ItemName>RTF_TouchbarAction</ItemName>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemFlags>33</ItemFlags>
+  <SystemFlags>0</SystemFlags>
+  <ItemParams>strButtonName As String</ItemParams>
+  <ItemResult></ItemResult>
+ </Hook>
+ <Property>
+  <ItemName>m_ctbItems()</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_ctbItems() As NSTouchBarItemMBS</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_ctbItems() As NSTouchBarItemMBS</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>m_bButtons()</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_bButtons() As NSButtonMBS</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_bButtons() As NSButtonMBS</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <ViewBehavior>
+  <ViewProperty>
+   <ObjName>Name</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Index</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Super</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Left</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Top</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+ </ViewBehavior>
+</block>
+</RBProject>

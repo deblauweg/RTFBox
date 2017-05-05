@@ -1,0 +1,621 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<RBProject version="2016r4.1" FormatVersion="2" MinIDEVersion="20070100">
+<block type="Module" ID="1064204045">
+ <ObjName>clsRTFBox_Paragraph</ObjName>
+ <ObjContainerID>0</ObjContainerID>
+ <IsClass>1</IsClass>
+ <ItemFlags>1</ItemFlags>
+ <IsInterface>0</IsInterface>
+ <Compatibility></Compatibility>
+ <Method>
+  <ItemName>AddTabstop</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub AddTabstop(iTabstop As Integer)</SourceLine>
+   <SourceLine>If iTabstop &gt; 0 And m_iArrTabstop.IndexOf(iTabstop) &lt; 0 Then</SourceLine>
+   <SourceLine>m_iArrTabstop.Append(iTabstop)</SourceLine>
+   <SourceLine>m_iArrTabstop.Sort</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>iTabstop As Integer</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetNextTabstop</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetNextTabstop(iCurrentPos As Integer) As Integer</SourceLine>
+   <SourceLine>Dim iRtVal As Integer</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>iRtVal = 0</SourceLine>
+   <SourceLine>If iCurrentPos &gt;= 0 Then</SourceLine>
+   <SourceLine>For t = m_iArrTabstop.Ubound To 0 Step -1</SourceLine>
+   <SourceLine>If m_iArrTabstop(t) &gt; (iCurrentPos + 1) Then</SourceLine>
+   <SourceLine>iRtVal = m_iArrTabstop(t)</SourceLine>
+   <SourceLine>Else </SourceLine>
+   <SourceLine>t = -1</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iRtVal = 0 Then</SourceLine>
+   <SourceLine>iRtVal = (Floor(iCurrentPos / 36.0) + 1) * 36</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return iRtVal</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>iCurrentPos As Integer</ItemParams>
+  <ItemResult>Integer</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>DelTabstop</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub DelTabstop(iTabstop As Integer)</SourceLine>
+   <SourceLine>Dim iPos As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iTabstop &gt; 0 Then</SourceLine>
+   <SourceLine>iPos = m_iArrTabstop.IndexOf(iTabstop) </SourceLine>
+   <SourceLine>If iPos &gt;= 0 Then</SourceLine>
+   <SourceLine>m_iArrTabstop.Remove(iPos)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>iTabstop As Integer</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Constructor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Constructor()</SourceLine>
+   <SourceLine>m_iAlign = ALIGNLEFT</SourceLine>
+   <SourceLine>m_iIndent = 0</SourceLine>
+   <SourceLine>ReDim m_iArrTabstop(-1)</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>Constructor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub Constructor(rp As clsRTFBox_Paragraph)</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If IsNull(rp) Then</SourceLine>
+   <SourceLine>m_iAlign = ALIGNLEFT</SourceLine>
+   <SourceLine>m_iIndent = 0</SourceLine>
+   <SourceLine>m_iFirstIndent = 0</SourceLine>
+   <SourceLine>m_iTableCell = -1</SourceLine>
+   <SourceLine>ReDim m_iArrTabstop(-1)</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>m_iAlign = rp.m_iAlign </SourceLine>
+   <SourceLine>m_iIndent = rp.m_iIndent</SourceLine>
+   <SourceLine>m_iFirstIndent = rp.m_iFirstIndent </SourceLine>
+   <SourceLine>m_iTableCell = rp.m_iTableCell</SourceLine>
+   <SourceLine>ReDim m_iArrTabstop(-1)</SourceLine>
+   <SourceLine>For t = 0 To rp.m_iArrTabstop.Ubound</SourceLine>
+   <SourceLine>m_iArrTabstop.Append(rp.m_iArrTabstop(t))</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>rp As clsRTFBox_Paragraph</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>RemoveAllTabstops</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub RemoveAllTabstops()</SourceLine>
+   <SourceLine>ReDim m_iArrTabstop(-1)</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetRTFString</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetRTFString(bRemoveFirstParagraphTag As Boolean) As String</SourceLine>
+   <SourceLine>Dim strRtVal As String</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine>Dim iLast As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If bRemoveFirstParagraphTag Then</SourceLine>
+   <SourceLine>strRtVal = ""</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>strRtVal = "\par"</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>If m_iAlign = ALIGNCENTER Then</SourceLine>
+   <SourceLine>strRtVal = strRtVal + "\qc"</SourceLine>
+   <SourceLine>ElseIf m_iAlign = ALIGNRIGHT Then</SourceLine>
+   <SourceLine>strRtVal = strRtVal + "\qr\ri" + Format(m_iIndent * 20, "0")</SourceLine>
+   <SourceLine>If m_iFirstIndent &lt;&gt; 0 And (m_iFirstIndent &gt; 0 Or Abs(m_iFirstIndent) &lt;= m_iIndent) Then</SourceLine>
+   <SourceLine>strRtVal = strRtVal + "\fi" + Format(m_iFirstIndent * 20, "-0")</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>strRtVal = strRtVal + "\ql\li" + Format(m_iIndent * 20, "0")</SourceLine>
+   <SourceLine>If m_iFirstIndent &lt;&gt; 0 And (m_iFirstIndent &gt; 0 Or Abs(m_iFirstIndent) &lt;= m_iIndent) Then</SourceLine>
+   <SourceLine>strRtVal = strRtVal + "\fi" + Format(m_iFirstIndent * 20, "-0")</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>iLast = m_iArrTabstop.Ubound</SourceLine>
+   <SourceLine>For t = 0 To iLast</SourceLine>
+   <SourceLine>strRtVal = strRtVal + "\tx" + Format(m_iArrTabstop(t) * 20, "0")</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return strRtVal</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>bRemoveFirstParagraphTag As Boolean</ItemParams>
+  <ItemResult>String</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetFixedTabstops</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetFixedTabstops() As Integer()</SourceLine>
+   <SourceLine>Dim iArrRtVal() As Integer</SourceLine>
+   <SourceLine>Dim iLast As Integer</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>iLast = m_iArrTabstop.Ubound</SourceLine>
+   <SourceLine>For t = 0 To iLast</SourceLine>
+   <SourceLine>iArrRtVal.Append(m_iArrTabstop(t))</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return iArrRtVal</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>Integer()</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ToggleTabstop</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub ToggleTabstop(iPos As Integer)</SourceLine>
+   <SourceLine>Dim iLast As Integer</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine>Dim iMinPos As Integer</SourceLine>
+   <SourceLine>Dim iMaxPos As Integer</SourceLine>
+   <SourceLine>Dim iClosest As Integer</SourceLine>
+   <SourceLine>Dim iClosestDiff As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>iMinPos = iPos - 4</SourceLine>
+   <SourceLine>iMaxPos = iPos + 4</SourceLine>
+   <SourceLine>iClosest = -1</SourceLine>
+   <SourceLine>iClosestDiff = 5</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>iLast = m_iArrTabstop.Ubound</SourceLine>
+   <SourceLine>For t = 0 To iLast</SourceLine>
+   <SourceLine>If m_iArrTabstop(t) &gt;= iMinPos And m_iArrTabstop(t) &lt;= iMaxPos And Abs(m_iArrTabstop(t) - iPos) &lt; iClosestDiff Then</SourceLine>
+   <SourceLine>iClosest = t</SourceLine>
+   <SourceLine>iClosestDiff = Abs(m_iArrTabstop(t) - iPos)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iClosest &gt;= 0 Then</SourceLine>
+   <SourceLine>m_iArrTabstop.Remove(iClosest)</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>m_iArrTabstop.Append(iPos)</SourceLine>
+   <SourceLine>m_iArrTabstop.Sort</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>iPos As Integer</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsTabStop</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function IsTabStop(iPos As Integer) As Boolean</SourceLine>
+   <SourceLine>Dim iLast As Integer</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine>Dim iMinPos As Integer</SourceLine>
+   <SourceLine>Dim iMaxPos As Integer</SourceLine>
+   <SourceLine>Dim bRtVal As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>iMinPos = iPos - 4</SourceLine>
+   <SourceLine>iMaxPos = iPos + 4</SourceLine>
+   <SourceLine>bRtVal = False</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>iLast = m_iArrTabstop.Ubound</SourceLine>
+   <SourceLine>For t = 0 To iLast</SourceLine>
+   <SourceLine>If m_iArrTabstop(t) &gt;= iMinPos And m_iArrTabstop(t) &lt;= iMaxPos Then</SourceLine>
+   <SourceLine>bRtVal = True</SourceLine>
+   <SourceLine>t = iLast + 1</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return bRtVal</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>iPos As Integer</ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>GetPreviousTabstop</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function GetPreviousTabstop(iCurrentPos As Integer) As Integer</SourceLine>
+   <SourceLine>Dim iRtVal As Integer</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine>Dim iLastTabStop As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>iRtVal = 0</SourceLine>
+   <SourceLine>If iCurrentPos &gt;= 0 Then</SourceLine>
+   <SourceLine>If m_iArrTabstop.Ubound &gt;= 0 Then</SourceLine>
+   <SourceLine>iLastTabStop = m_iArrTabstop(m_iArrTabstop.Ubound)</SourceLine>
+   <SourceLine>If iLastTabStop &lt; iCurrentPos - 1 Then</SourceLine>
+   <SourceLine>iRtVal = (Floor(iCurrentPos / 36.0) - 1) * 36</SourceLine>
+   <SourceLine>If iRtVal &lt; iLastTabStop Then</SourceLine>
+   <SourceLine>iRtVal = iLastTabStop</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>For t = m_iArrTabstop.Ubound To 0 Step -1</SourceLine>
+   <SourceLine>If m_iArrTabstop(t) &lt; iCurrentPos - 1 Then</SourceLine>
+   <SourceLine>iRtVal = m_iArrTabstop(t)</SourceLine>
+   <SourceLine>t = -1</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>iRtVal = (Floor(iCurrentPos / 36.0) - 1) * 36 </SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return iRtVal</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>iCurrentPos As Integer</ItemParams>
+  <ItemResult>Integer</ItemResult>
+ </Method>
+ <Property>
+  <ItemName>m_iArrTabstop()</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_iArrTabstop() As Integer</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_iArrTabstop() As Integer</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>m_iAlign</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_iAlign As Integer = 0</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_iAlign As Integer = 0</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>Alignment</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Alignment As Integer</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>Alignment As Integer</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine>If value &gt;= ALIGNLEFT And value &lt;= ALIGNRIGHT Then</SourceLine>
+   <SourceLine>m_iAlign = value</SourceLine>
+   <SourceLine>If value = ALIGNCENTER Then</SourceLine>
+   <SourceLine>m_iIndent = 0</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>Return m_iAlign</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <Property>
+  <ItemName>m_iIndent</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_iIndent As Integer = 0</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_iIndent As Integer = 0</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>Indent</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Indent As Integer</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>Indent As Integer</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine>If m_iAlign = ALIGNCENTER Or value &lt; 0 Then</SourceLine>
+   <SourceLine>m_iIndent = 0</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>m_iIndent = value</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>Return m_iIndent</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <Property>
+  <ItemName>m_iTableCell</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_iTableCell As Int16</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_iTableCell As Int16</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>TableCell</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>TableCell As Int16</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>TableCell As Int16</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine>If value &gt;= -1 Then</SourceLine>
+   <SourceLine>m_iTableCell = value</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>Return m_iTableCell</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <Property>
+  <ItemName>m_iFirstIndent</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_iFirstIndent As Integer</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_iFirstIndent As Integer</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>FirstIndent</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>FirstIndent As Integer</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>FirstIndent As Integer</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine>If m_iAlign = ALIGNCENTER Then</SourceLine>
+   <SourceLine>m_iFirstIndent = 0</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>m_iFirstIndent = value</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>Return m_iFirstIndent</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <ViewBehavior>
+  <ViewProperty>
+   <ObjName>Name</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Index</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <PropertyValue>-2147483648</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Super</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>ID</PropertyGroup>
+   <ItemType>String</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Left</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Top</ObjName>
+   <Visible>1</Visible>
+   <PropertyGroup>Position</PropertyGroup>
+   <PropertyValue>0</PropertyValue>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Alignment</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Indent</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>TableCell</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>Int16</ItemType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>FirstIndent</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>Integer</ItemType>
+  </ViewProperty>
+ </ViewBehavior>
+ <Constant>
+  <ItemName>ALIGNLEFT</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemType>2</ItemType>
+  <ItemDef>0</ItemDef>
+  <ItemFlags>33</ItemFlags>
+ </Constant>
+ <Constant>
+  <ItemName>ALIGNRIGHT</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemType>2</ItemType>
+  <ItemDef>2</ItemDef>
+  <ItemFlags>33</ItemFlags>
+ </Constant>
+ <Constant>
+  <ItemName>ALIGNCENTER</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemType>2</ItemType>
+  <ItemDef>1</ItemDef>
+  <ItemFlags>33</ItemFlags>
+ </Constant>
+</block>
+</RBProject>
