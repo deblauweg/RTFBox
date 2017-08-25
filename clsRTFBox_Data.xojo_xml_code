@@ -391,6 +391,7 @@
    <SourceLine>ReDim m_rpArrParagraph(-1)</SourceLine>
    <SourceLine>ReDim m_rpicArr(-1)</SourceLine>
    <SourceLine>ReDim m_strArrFieldFunctie(-1)</SourceLine>
+   <SourceLine>ReDim m_iArrFunctieType(-1)</SourceLine>
    <SourceLine>'m_dLargestDrawingTime = 0</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>iLen = strValue.Len</SourceLine>
@@ -1823,6 +1824,7 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>Next t</SourceLine>
    <SourceLine>m_strArrFieldFunctie.Remove(tFind)</SourceLine>
+   <SourceLine>m_iArrFunctieType.Remove(tFind)</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>Next tFind</SourceLine>
    <SourceLine></SourceLine>
@@ -2301,10 +2303,17 @@
    <SourceLine>If iPos &gt; m_cpArr.Ubound Then</SourceLine>
    <SourceLine>iPos = m_cpArr.Ubound</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine>If m_cpArr(iPos).iFunctie &gt; 0 And m_iArrFunctieType(m_cpArr(iPos).iFunctie - 1) = FT_HYPERLINK Then</SourceLine>
+   <SourceLine>iColor = -17</SourceLine>
+   <SourceLine>Else</SourceLine>
    <SourceLine>iColor = m_cpArr(iPos).iColorNr</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>If iColor &lt; 0 Or iColor &gt; m_clColors.Ubound Then</SourceLine>
+   <SourceLine>If iColor = -17 Then</SourceLine>
+   <SourceLine>'Hyperlink</SourceLine>
+   <SourceLine>clRtVal = &amp;c4444BB</SourceLine>
+   <SourceLine>ElseIf iColor &lt; 0 Or iColor &gt; m_clColors.Ubound Then</SourceLine>
    <SourceLine>clRtVal = m_clColors(0)</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>clRtVal = m_clColors(iColor)</SourceLine>
@@ -4182,7 +4191,7 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>If iCell &lt; 0 Then</SourceLine>
    <SourceLine>strHtml = strHtml + strAlign</SourceLine>
-   <SourceLine>End If</SourceLine>
+   <SourceLine>End If </SourceLine>
    <SourceLine>strLastAlign = strAlign</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
@@ -4919,7 +4928,7 @@
    <SourceLine>strIntern = strIntern.ReplaceAll("{\*", "{")</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>iLen = strIntern.Len</SourceLine>
-   <SourceLine>strFunctie = ""</SourceLine>
+   <SourceLine>strFunctie = "" </SourceLine>
    <SourceLine>strValue = ""</SourceLine>
    <SourceLine>bValueFound = False</SourceLine>
    <SourceLine></SourceLine>
@@ -4929,7 +4938,10 @@
    <SourceLine>bStepOut = False</SourceLine>
    <SourceLine>Do</SourceLine>
    <SourceLine>ch = strIntern.Mid(t, 1)</SourceLine>
-   <SourceLine>If ch = " " Or ch = "\" Or ch = "}" Or ch = Chr(9) Or ch = Chr(10) Or ch = Chr(13) Then</SourceLine>
+   <SourceLine>If ch = " " And strFunctie = "HYPERLINK" Then</SourceLine>
+   <SourceLine>strFunctie = strFunctie + ch</SourceLine>
+   <SourceLine>t = t + 1</SourceLine>
+   <SourceLine>ElseIf ch = " " Or ch = "\" Or ch = "}" Or ch = Chr(9) Or ch = Chr(10) Or ch = Chr(13) Then</SourceLine>
    <SourceLine>bStepOut = True</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>strFunctie = strFunctie + ch</SourceLine>
@@ -4969,11 +4981,17 @@
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If strFunctie.Len &gt; 0 And bValueFound Then</SourceLine>
-   <SourceLine>'strValue = GetFunctieValue(strFunctie, strValue)</SourceLine>
-   <SourceLine></SourceLine>
+   <SourceLine>If strFunctie.ReplaceAll(" ", "") = strFunctie Or _</SourceLine>
+   <SourceLine>(strFunctie.Len &gt; 12 And strFunctie.Left(11) = "HYPERLINK """ And strFunctie.Right(1) = """") Then</SourceLine>
    <SourceLine>m_strArrFieldFunctie.Append(strFunctie)</SourceLine>
+   <SourceLine>If strFunctie.Left(11) = "HYPERLINK """ Then</SourceLine>
+   <SourceLine>m_iArrFunctieType.Append(FT_HYPERLINK)</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>m_iArrFunctieType.Append(FT_NORMAL)</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>strField = "\fieldfunctie" + Format(m_strArrFieldFunctie.Ubound + 1, "0") + " " + strValue + "\fieldfunctie0"</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>End Sub</SourceLine>
@@ -5224,6 +5242,7 @@
    <SourceLine></SourceLine>
    <SourceLine>If iLen &gt; 0 Then</SourceLine>
    <SourceLine>m_strArrFieldFunctie.Append(strFunctie)</SourceLine>
+   <SourceLine>m_iArrFunctieType.Append(FT_NORMAL)</SourceLine>
    <SourceLine>iFunctie = m_strArrFieldFunctie.Ubound + 1 </SourceLine>
    <SourceLine>iPosStart = iPos</SourceLine>
    <SourceLine></SourceLine>
@@ -5902,6 +5921,7 @@
    <SourceLine>iLast = rtf.m_strArrFieldFunctie.Ubound</SourceLine>
    <SourceLine>For t = 0 To iLast</SourceLine>
    <SourceLine>m_strArrFieldFunctie.Append(rtf.m_strArrFieldFunctie(t))</SourceLine>
+   <SourceLine>m_iArrFunctieType.Append(rtf.m_iArrFunctieType(t))</SourceLine>
    <SourceLine>Next t</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Paragrafen aanpassen alvorens in te voegen</SourceLine>
@@ -8237,7 +8257,7 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>If iUnderLine &gt; 0 Then</SourceLine>
+   <SourceLine>If iUnderLine &gt; 0 Or (m_cpArr(t).iFunctie &gt; 0 And m_iArrFunctieType(m_cpArr(t).iFunctie - 1) = FT_HYPERLINK) Then</SourceLine>
    <SourceLine>If (Not bSpatie And Not bTab) Or _</SourceLine>
    <SourceLine>(IsUnderline(t - 1, False) And IsUnderline(t + 1, False) And iUnderline &lt;&gt; clsRTFBox_Data.STYLE_UNDERLINE_WORD)Then</SourceLine>
    <SourceLine></SourceLine>
@@ -8862,12 +8882,14 @@
    <SourceLine>Dim bRtVal As Boolean</SourceLine>
    <SourceLine>Dim strNewValue As String</SourceLine>
    <SourceLine>Dim iFunctie As Integer</SourceLine>
+   <SourceLine>Dim strFunctie As String</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>bRtVal = False</SourceLine>
    <SourceLine>If iPos &gt;= 0 And iPos &lt;= m_cpArr.Ubound And _</SourceLine>
    <SourceLine>m_cpArr(iPos).iFunctie &gt; 0 Then</SourceLine>
    <SourceLine>If m_cpArr(iPos).iFunctie - 1 &lt;= m_strArrFieldFunctie.Ubound Then</SourceLine>
-   <SourceLine>If m_strArrFieldFunctie(m_cpArr(iPos).iFunctie - 1) = "checkbox" Then</SourceLine>
+   <SourceLine>strFunctie = m_strArrFieldFunctie(m_cpArr(iPos).iFunctie - 1)</SourceLine>
+   <SourceLine>If strFunctie = "checkbox" Then</SourceLine>
    <SourceLine>If (m_chArr(iPos - 1) = CHECKBOX_CHECKED And (m_chArr(iPos) = Chr(9) Or m_chArr(iPos) = " ")) Then</SourceLine>
    <SourceLine>strNewValue = CHECKBOX_UNCHECKED</SourceLine>
    <SourceLine>iPos = iPos -1</SourceLine>
@@ -8902,6 +8924,10 @@
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>bRtVal = True</SourceLine>
+   <SourceLine>ElseIf strFunctie.Left(11) = "HYPERLINK """ And strFunctie.Right(1) = """" Then</SourceLine>
+   <SourceLine>strFunctie = strFunctie.Mid(12, strFunctie.Len - 12)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>ShowURL strFunctie</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -10058,6 +10084,20 @@
   <ItemFlags>33</ItemFlags>
   <IsShared>1</IsShared>
  </Property>
+ <Property>
+  <ItemName>m_iArrFunctieType()</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_iArrFunctieType() As Integer</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_iArrFunctieType() As Integer</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
  <ViewBehavior>
   <ViewProperty>
    <ObjName>Name</ObjName>
@@ -10335,6 +10375,24 @@
   <ItemType>3</ItemType>
   <ItemDef>False</ItemDef>
   <ItemFlags>0</ItemFlags>
+ </Constant>
+ <Constant>
+  <ItemName>FT_HYPERLINK</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemType>2</ItemType>
+  <ItemDef>1</ItemDef>
+  <ItemFlags>33</ItemFlags>
+ </Constant>
+ <Constant>
+  <ItemName>FT_NORMAL</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemType>2</ItemType>
+  <ItemDef>0</ItemDef>
+  <ItemFlags>33</ItemFlags>
  </Constant>
  <Structure>
   <TextEncoding>134217984</TextEncoding>

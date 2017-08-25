@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RBProject version="2016r4.1" FormatVersion="2" MinIDEVersion="20070100">
+<RBProject version="2017r1.1" FormatVersion="2" MinIDEVersion="20070100">
 <block type="Module" ID="498593937">
  <ObjName>clsRTFBox</ObjName>
  <ObjContainerID>0</ObjContainerID>
@@ -2392,6 +2392,7 @@
    <SourceLine>Dim iStartPos As Integer</SourceLine>
    <SourceLine>Dim iX1 As Integer</SourceLine>
    <SourceLine>Dim iX2 As Integer</SourceLine>
+   <SourceLine>Dim bCheckWithTimes As Boolean</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>iScale = GetScaleFactor</SourceLine>
    <SourceLine></SourceLine>
@@ -2456,8 +2457,17 @@
    <SourceLine>g.Bold = False</SourceLine>
    <SourceLine>g.Underline = False</SourceLine>
    <SourceLine>g.Italic = False</SourceLine>
+   <SourceLine>bCheckWithTimes = False</SourceLine>
    <SourceLine>Do</SourceLine>
    <SourceLine>iWidth = g.StringWidth(strFont)</SourceLine>
+   <SourceLine>If iWidth = 0 Then</SourceLine>
+   <SourceLine>If bCheckWithTimes Then</SourceLine>
+   <SourceLine>iWidth = 1</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>bCheckWithTimes = True</SourceLine>
+   <SourceLine>g.TextFont = "Times New Roman"</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>If iWidth &gt; m_iLayoutCtrlWidth(CTRLPOSFONT) - 15 Then</SourceLine>
    <SourceLine>strFont = strFont.Left(strFont.Len - 1)</SourceLine>
    <SourceLine>iWidth = 0</SourceLine>
