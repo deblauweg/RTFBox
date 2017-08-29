@@ -251,6 +251,25 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>#endif</SourceLine>
    <SourceLine></SourceLine>
+   <SourceLine>#if clsRTFBox_Data.ALLOW_HYPERLINKS</SourceLine>
+   <SourceLine>If m_iSelLen = 0 Then</SourceLine>
+   <SourceLine>If m_rtf.GetHyperlink(iPosClicked).Len &gt; 0 Or _</SourceLine>
+   <SourceLine>(iPosClicked &gt; 0 And m_rtf.GetHyperlink(iPosClicked - 1).Len &gt; 0) Then</SourceLine>
+   <SourceLine>mnu = New MenuItem</SourceLine>
+   <SourceLine>mnu.Text = "Update Hyperlink"</SourceLine>
+   <SourceLine>mnu.Tag = "hyperlink"</SourceLine>
+   <SourceLine>mnuBase.Append(mnu)</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>mnu = New MenuItem</SourceLine>
+   <SourceLine>mnu.Text = "Insert Hyperlink"</SourceLine>
+   <SourceLine>mnu.Tag = "hyperlink"</SourceLine>
+   <SourceLine>mnuBase.Append(mnu)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>bAdded = True</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>#endif</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>#if clsRTFBox_Data.ALLOW_PICTURES </SourceLine>
    <SourceLine>If iPosClicked &gt;= 0 And m_rtf.m_cpArr(iPosClicked).iPicture &gt; 0 Then</SourceLine>
    <SourceLine>mnu = New MenuItem</SourceLine>
@@ -287,6 +306,25 @@
    <SourceLine>mnu.Tag = "UpdateFunctions"</SourceLine>
    <SourceLine>mnuBase.Append(mnu)</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>#if clsRTFBox_Data.ALLOW_EMBEDDEDHTML</SourceLine>
+   <SourceLine>If m_iSelLen = 0 Then</SourceLine>
+   <SourceLine>If m_rtf.GetEmbeddedHtmlCode(iPosClicked).Len &gt; 0 Or _</SourceLine>
+   <SourceLine>(iPosClicked &gt; 0 And m_rtf.GetEmbeddedHtmlCode(iPosClicked - 1).Len &gt; 0) Then</SourceLine>
+   <SourceLine>mnu = New MenuItem</SourceLine>
+   <SourceLine>mnu.Text = "Update Embedded Html"</SourceLine>
+   <SourceLine>mnu.Tag = "embeddedhtml"</SourceLine>
+   <SourceLine>mnuBase.Append(mnu)</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>mnu = New MenuItem</SourceLine>
+   <SourceLine>mnu.Text = "Insert Embedded Html"</SourceLine>
+   <SourceLine>mnu.Tag = "embeddedhtml"</SourceLine>
+   <SourceLine>mnuBase.Append(mnu)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>bAdded = True</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>#endif</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>mnu = GetSpellCheckerMenu(iPosClicked)</SourceLine>
    <SourceLine>If Not IsNull(mnu) Then</SourceLine>
@@ -398,6 +436,10 @@
    <SourceLine>ActionInsertPagebreak</SourceLine>
    <SourceLine>ElseIf mnu.Tag = "checkbox" Then</SourceLine>
    <SourceLine>ActionInsertCheckBox</SourceLine>
+   <SourceLine>ElseIf mnu.Tag = "hyperlink" Then</SourceLine>
+   <SourceLine>ActionHyperlink(iPosClicked)</SourceLine>
+   <SourceLine>ElseIf mnu.Tag = "embeddedhtml" Then</SourceLine>
+   <SourceLine>ActionHTMLCode(iPosClicked)</SourceLine>
    <SourceLine>ElseIf mnu.Tag = "UpdateFunctions" Then</SourceLine>
    <SourceLine>ActionUpdateFunctions</SourceLine>
    <SourceLine>ElseIf mnu.Tag = "SelectAll" Then</SourceLine>
@@ -593,6 +635,9 @@
    <SourceLine>bRefresh = True</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>m_iTicksTripleClick = m_iTicksDoubleClick</SourceLine>
+   <SourceLine>ElseIf m_iKlikStart = iStop And m_rtf.GetHyperlink(iStop).Len &gt; 0 Then</SourceLine>
+   <SourceLine>strHyperLink = m_rtf.GetHyperlink(iStop)</SourceLine>
+   <SourceLine>ShowURL strHyperLink</SourceLine>
    <SourceLine>ElseIf Not m_bReadOnly And m_iKlikStart = iStop And _</SourceLine>
    <SourceLine>(((m_rtf.m_cpArr(iStop).btAscSpecial = 0 Or m_rtf.m_cpArr(iStop).btAscSpecial = 9 Or m_rtf.m_cpArr(iStop).btAscSpecial &gt;= 32) And _</SourceLine>
    <SourceLine>m_rtf.m_cpArr(iStop).iFunctie &gt; 0 And m_rtf.ClickOnFunction(iStop)) Or _</SourceLine>
@@ -1424,7 +1469,7 @@
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
    <SourceLine>picRtf = m_rtf.DrawRTF(iPicWidth - 17, iPicHeight - (2 + m_iTopText), _</SourceLine>
    <SourceLine>iFrom, iTo, m_iScrollValue, m_iSelP1, m_iSelP2, _</SourceLine>
-   <SourceLine>False, False, bResizedPictures, Window, Nil)</SourceLine>
+   <SourceLine>False, m_bReadOnly, False, bResizedPictures, Window, Nil)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>m_bCursorVisible = False</SourceLine>
    <SourceLine>g.ForeColor = &amp;cFFFFFF</SourceLine>
@@ -1436,9 +1481,10 @@
    <SourceLine></SourceLine>
    <SourceLine>'Draw ScrollBar</SourceLine>
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
+   <SourceLine>If m_iScrollMaximum &gt; 0 Or Not m_bReadOnly Then</SourceLine>
+   <SourceLine>g.ForeColor = &amp;cEEEEEE </SourceLine>
    <SourceLine>g.FillRect(iPicWidth - 17, m_iTopText + 1, 16, iPicHeight - (2 + m_iTopText))</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>If m_iScrollMaximum &gt; 0 Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;cCCCCCC</SourceLine>
    <SourceLine>g.DrawRect(iPicWidth - 17, m_iTopText + 1, 16, iPicHeight - (2 + m_iTopText))</SourceLine>
@@ -5825,6 +5871,116 @@
   <ItemFlags>0</ItemFlags>
   <IsShared>0</IsShared>
   <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ActionHyperlink</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub ActionHyperlink(iPos As Integer)</SourceLine>
+   <SourceLine>Dim strHyperlink As String</SourceLine>
+   <SourceLine>Dim strDescription As String</SourceLine>
+   <SourceLine>Dim bInsert As Boolean</SourceLine>
+   <SourceLine>Dim iRefreshFrom As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If Not m_bReadOnly Then</SourceLine>
+   <SourceLine>strHyperlink = m_rtf.GetHyperlinkWithDescription(iPos, strDescription)</SourceLine>
+   <SourceLine>If strHyperlink.Len = 0 And iPos &gt; 0 Then</SourceLine>
+   <SourceLine>strHyperlink = m_rtf.GetHyperlinkWithDescription(iPos - 1, strDescription)</SourceLine>
+   <SourceLine>If strHyperlink.Len &gt; 0 Then</SourceLine>
+   <SourceLine>iPos = iPos - 1</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If strHyperlink.Len = 0 Then</SourceLine>
+   <SourceLine>strDescription = ""</SourceLine>
+   <SourceLine>bInsert = True</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>bInsert = False</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If wndHyperlink.Show(strDescription, strHyperlink) Then</SourceLine>
+   <SourceLine>If Not bInsert Then</SourceLine>
+   <SourceLine>m_rtf.DeleteHyperlink(iPos)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>m_rtf.InsertHyperlink(iPos, strHyperlink, strDescription)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>m_iSelStart = iPos</SourceLine>
+   <SourceLine>m_iSelP1 = m_iSelStart</SourceLine>
+   <SourceLine>m_iSelP2 = m_iSelStart</SourceLine>
+   <SourceLine>m_iSelLen = 0</SourceLine>
+   <SourceLine>SetDirty</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>m_iRedrawFromPos = iRefreshFrom</SourceLine>
+   <SourceLine>m_iRedrawToPos = m_iSelP2 + 1</SourceLine>
+   <SourceLine>Refresh</SourceLine>
+   <SourceLine>TextChanged</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>iPos As Integer</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ActionHTMLCode</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub ActionHTMLCode(iPos As Integer)</SourceLine>
+   <SourceLine>Dim strHtmlCode As String</SourceLine>
+   <SourceLine>Dim bInsert As Boolean</SourceLine>
+   <SourceLine>Dim iRefreshFrom As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If Not m_bReadOnly Then</SourceLine>
+   <SourceLine>strHtmlCode = m_rtf.GetEmbeddedHtmlCode(iPos)</SourceLine>
+   <SourceLine>If strHtmlCode.Len = 0 And iPos &gt; 0 Then</SourceLine>
+   <SourceLine>strHtmlCode = m_rtf.GetEmbeddedHtmlCode(iPos - 1)</SourceLine>
+   <SourceLine>If strHtmlCode.Len &gt; 0 Then</SourceLine>
+   <SourceLine>iPos = iPos - 1</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If strHtmlCode.Len = 0 Then</SourceLine>
+   <SourceLine>bInsert = True</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>bInsert = False</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If wndInputBox.Question("Embed Html", "Html", strHtmlCode) Then</SourceLine>
+   <SourceLine>If Not bInsert Then</SourceLine>
+   <SourceLine>m_rtf.DeleteEmbeddedHtmlCode(iPos)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>m_rtf.InsertEmbeddedHtmlCode(iPos, strHtmlCode)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>m_iSelStart = iPos</SourceLine>
+   <SourceLine>m_iSelP1 = m_iSelStart</SourceLine>
+   <SourceLine>m_iSelP2 = m_iSelStart</SourceLine>
+   <SourceLine>m_iSelLen = 0</SourceLine>
+   <SourceLine>SetDirty</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>m_iRedrawFromPos = iRefreshFrom</SourceLine>
+   <SourceLine>m_iRedrawToPos = m_iSelP2 + 1</SourceLine>
+   <SourceLine>Refresh</SourceLine>
+   <SourceLine>TextChanged</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>iPos As Integer</ItemParams>
   <ItemResult></ItemResult>
  </Method>
  <Hook>
