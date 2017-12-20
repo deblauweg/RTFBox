@@ -583,6 +583,7 @@
    <SourceLine>Dim iStop As Integer</SourceLine>
    <SourceLine>Dim t As Integer</SourceLine>
    <SourceLine>Dim bRefresh As Boolean</SourceLine>
+   <SourceLine>Dim strHyperLink As String</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If Not m_bGotFocus Then</SourceLine>
    <SourceLine>Self.SetFocus</SourceLine>
@@ -637,7 +638,9 @@
    <SourceLine>m_iTicksTripleClick = m_iTicksDoubleClick</SourceLine>
    <SourceLine>ElseIf m_iKlikStart = iStop And m_rtf.GetHyperlink(iStop).Len &gt; 0 Then</SourceLine>
    <SourceLine>strHyperLink = m_rtf.GetHyperlink(iStop)</SourceLine>
+   <SourceLine>If Not ShowURL(strHyperLink) Then</SourceLine>
    <SourceLine>ShowURL strHyperLink</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>ElseIf Not m_bReadOnly And m_iKlikStart = iStop And _</SourceLine>
    <SourceLine>(((m_rtf.m_cpArr(iStop).btAscSpecial = 0 Or m_rtf.m_cpArr(iStop).btAscSpecial = 9 Or m_rtf.m_cpArr(iStop).btAscSpecial &gt;= 32) And _</SourceLine>
    <SourceLine>m_rtf.m_cpArr(iStop).iFunctie &gt; 0 And m_rtf.ClickOnFunction(iStop)) Or _</SourceLine>
@@ -1481,11 +1484,11 @@
    <SourceLine></SourceLine>
    <SourceLine>'Draw ScrollBar</SourceLine>
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
-   <SourceLine>If m_iScrollMaximum &gt; 0 Or Not m_bReadOnly Then</SourceLine>
+   <SourceLine>If m_bScrollbar And (m_iScrollMaximum &gt; 0 Or Not m_bReadOnly) Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE </SourceLine>
    <SourceLine>g.FillRect(iPicWidth - 17, m_iTopText + 1, 16, iPicHeight - (2 + m_iTopText))</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>If m_iScrollMaximum &gt; 0 Then</SourceLine>
+   <SourceLine>If m_bScrollbar And m_iScrollMaximum &gt; 0 Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;cCCCCCC</SourceLine>
    <SourceLine>g.DrawRect(iPicWidth - 17, m_iTopText + 1, 16, iPicHeight - (2 + m_iTopText))</SourceLine>
    <SourceLine></SourceLine>
@@ -1601,6 +1604,7 @@
    <SourceLine>Super.Constructor</SourceLine>
    <SourceLine>AddHandler m_rtf.FillFunctionValue, AddressOf Event_FillFunctionValue</SourceLine>
    <SourceLine>AddHandler m_rtf.GetDefaultStyle, AddressOf Event_GetDefaultStyle</SourceLine>
+   <SourceLine>AddHandler m_rtf.ShowURL, AddressOf Event_ShowURL</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>m_iKlikStart = -1</SourceLine>
    <SourceLine>LoadLayoutWidth(True)</SourceLine>
@@ -1722,6 +1726,11 @@
    <SourceLine>Else</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine>If m_iSelStart &lt;= 0 And m_rtf.m_cpArr.Ubound &lt;= 0 Then</SourceLine>
+   <SourceLine>iX = 3</SourceLine>
+   <SourceLine>iY1 = 4 + m_iTopText - m_iScrollValue</SourceLine>
+   <SourceLine>iY2 = iY1 + GetFontSize + 2</SourceLine>
+   <SourceLine>Else</SourceLine>
    <SourceLine>iCurPos = m_iSelStart</SourceLine>
    <SourceLine>iX = m_rtf.m_cpArr(m_iSelStart).iLeft</SourceLine>
    <SourceLine>iY1 = (2 + m_iTopText - m_iScrollValue + m_rtf.m_cpArr(m_iSelStart).iBottom) - m_rtf.m_cpArr(m_iSelStart).iHeight</SourceLine>
@@ -1730,11 +1739,7 @@
    <SourceLine>iX = iX + m_rtf.GetTableCellLeft(m_iSelStart)</SourceLine>
    <SourceLine>iY1 = iY1 + m_rtf.GetTableCellTop(m_iSelStart)</SourceLine>
    <SourceLine>iY2 = iY2 + m_rtf.GetTableCellTop(m_iSelStart)</SourceLine>
-   <SourceLine>'If iCell &gt;= 0 Then</SourceLine>
-   <SourceLine>'iX = iX + m_rtf.m_tcArr(iCell).iLeft</SourceLine>
-   <SourceLine>'iY1 = iY1 + m_rtf.m_tcArr(iCell).iTop</SourceLine>
-   <SourceLine>'iY2 = iY2 + m_rtf.m_tcArr(iCell).iTop</SourceLine>
-   <SourceLine>'End If</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>g.DrawLine(iX, iY1, iX, iY2)</SourceLine>
    <SourceLine>If Not m_bReadOnly And m_bLayoutBar Then</SourceLine>
    <SourceLine>DrawLayoutBar(g)</SourceLine>
@@ -4342,6 +4347,7 @@
    <SourceLine>RemoveMySelf(m_iIndex)</SourceLine>
    <SourceLine>RemoveHandler m_rtf.FillFunctionValue, AddressOf Event_FillFunctionValue</SourceLine>
    <SourceLine>RemoveHandler m_rtf.GetDefaultStyle, AddressOf Event_GetDefaultStyle</SourceLine>
+   <SourceLine>RemoveHandler m_rtf.ShowURL, AddressOf Event_ShowURL</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>End Sub</SourceLine>
   </ItemSource>
@@ -5983,6 +5989,23 @@
   <ItemParams>iPos As Integer</ItemParams>
   <ItemResult></ItemResult>
  </Method>
+ <Method>
+  <ItemName>Event_ShowURL</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function Event_ShowURL(rtf As clsRTFBox_Data, strURL As String) As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>rtf As clsRTFBox_Data, strURL As String</ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
  <Hook>
   <ItemName>TextChanged</ItemName>
   <TextEncoding>134217984</TextEncoding>
@@ -6046,6 +6069,14 @@
   <SystemFlags>0</SystemFlags>
   <ItemParams>ByRef strFont As String, ByRef iFontSize As Integer, ByRef bBold As Boolean, ByRef bItalic As Boolean, ByRef bUnderline As Boolean</ItemParams>
   <ItemResult></ItemResult>
+ </Hook>
+ <Hook>
+  <ItemName>ShowURL</ItemName>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemFlags>33</ItemFlags>
+  <SystemFlags>0</SystemFlags>
+  <ItemParams>strURL As String</ItemParams>
+  <ItemResult>Boolean</ItemResult>
  </Hook>
  <Property>
   <ItemName>Value</ItemName>
@@ -6829,6 +6860,46 @@
   <ItemFlags>33</ItemFlags>
   <IsShared>0</IsShared>
  </Property>
+ <Property>
+  <ItemName>m_bScrollbar</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_bScrollbar As Boolean = True</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_bScrollbar As Boolean = True</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>Scrollbar</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Scrollbar As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>Scrollbar As Boolean</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine>m_bScrollbar = value</SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>Return m_bScrollbar</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
  <ViewBehavior>
   <ViewProperty>
    <ObjName>Name</ObjName>
@@ -7017,6 +7088,11 @@
    <PropertyGroup>Behavior</PropertyGroup>
    <ItemType>String</ItemType>
    <EditorType>MultiLineEditor</EditorType>
+  </ViewProperty>
+  <ViewProperty>
+   <ObjName>Scrollbar</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>Boolean</ItemType>
   </ViewProperty>
  </ViewBehavior>
  <Constant>

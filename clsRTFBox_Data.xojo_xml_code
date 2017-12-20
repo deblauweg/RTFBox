@@ -7155,6 +7155,7 @@
    <SourceLine>Dim bScaled As Boolean</SourceLine>
    <SourceLine>Dim iGrace As Integer</SourceLine>
    <SourceLine>Dim bGraced As Boolean</SourceLine>
+   <SourceLine>Dim bFirstPage As Boolean</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>Dim dScaleForPrinting_Resolution As Double</SourceLine>
    <SourceLine>Dim dScaleForPrinting_Multiplicator As Double</SourceLine>
@@ -7227,12 +7228,15 @@
    <SourceLine>'CheckEnMeetRTF(iWidth, iFrom, iTo, True)</SourceLine>
    <SourceLine>tPage = 0</SourceLine>
    <SourceLine>Do </SourceLine>
+   <SourceLine>bFirstPage = False</SourceLine>
    <SourceLine>If tPage = 0 Then</SourceLine>
    <SourceLine>iHeight = iHeightFirstPage</SourceLine>
    <SourceLine>If iHeight = 0 Then </SourceLine>
    <SourceLine>picArr.Append(New Picture(1, 1))</SourceLine>
    <SourceLine>tPage = tPage + 1</SourceLine>
    <SourceLine>iHeight = iHeightOtherPages</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>bFirstPage = True</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>iHeight = iHeightOtherPages</SourceLine>
@@ -7336,15 +7340,19 @@
    <SourceLine></SourceLine>
    <SourceLine>g.DrawPicture(DrawRTF(iWidth, iHeight, _</SourceLine>
    <SourceLine>iFrom, iTo, iScrollValue, 0, 0, _</SourceLine>
-   <SourceLine>True, bTransparent, bResizedPictures, Nil, Nil), 0, 0)</SourceLine>
+   <SourceLine>True, True, bTransparent, bResizedPictures, Nil, Nil), 0, 0)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>picArr.Append(pic)</SourceLine>
    <SourceLine>ElseIf tPage + 1 = iPageNr Then</SourceLine>
    <SourceLine>pic = DrawRTF(iWidth, iHeight, _</SourceLine>
    <SourceLine>iFrom, iTo, iScrollValue, 0, 0, _</SourceLine>
-   <SourceLine>True, bTransparent, bResizedPictures, Nil, gPrinter)</SourceLine>
+   <SourceLine>True, True, bTransparent, bResizedPictures, Nil, gPrinter)</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>picArr.Append(Nil)</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine>ElseIf bFirstPage Then</SourceLine>
+   <SourceLine>picArr.Append(New Picture(1, 1))</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If iNextScrollStart &gt; 0 Then</SourceLine>
@@ -8141,14 +8149,14 @@
    <SourceLine></SourceLine>
    <SourceLine>If bPrint Then</SourceLine>
    <SourceLine>clColor = clBackColor</SourceLine>
-   <SourceLine>ElseIf m_cpArr(t).iFunctie &gt; 0 Or IsInvisible(t, False) Then</SourceLine>
+   <SourceLine>ElseIf Not bReadOnly And (m_cpArr(t).iFunctie &gt; 0 Or IsInvisible(t, False)) Then</SourceLine>
    <SourceLine>If m_cpArr(t).bScreenSelected Then</SourceLine>
    <SourceLine>clColor = &amp;c4444DD</SourceLine>
    <SourceLine>ElseIf m_cpArr(t).iFunctie &gt; 0 Then</SourceLine>
    <SourceLine>clColor = &amp;cDDDDDD</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>clColor = &amp;cCCCCFF</SourceLine>
-   <SourceLine>End If</SourceLine>
+   <SourceLine>End If </SourceLine>
    <SourceLine>ElseIf m_cpArr(t).bScreenSelected Then</SourceLine>
    <SourceLine>clColor = &amp;c6666FF</SourceLine>
    <SourceLine>Else</SourceLine>
@@ -8428,7 +8436,7 @@
    <SourceLine>dMsTussenStop = Microseconds</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If iArrCells.Ubound &gt;= 0 Then</SourceLine>
-   <SourceLine>If Not bPrint Then</SourceLine>
+   <SourceLine>If Not bPrint And Not bReadOnly Then</SourceLine>
    <SourceLine>If IsNull(picMask) Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;cCCCCCC</SourceLine>
    <SourceLine>Else</SourceLine>
@@ -8992,7 +9000,9 @@
    <SourceLine>ElseIf strFunctie.Left(11) = "HYPERLINK """ And strFunctie.Right(1) = """" Then</SourceLine>
    <SourceLine>strFunctie = strFunctie.Mid(12, strFunctie.Len - 12)</SourceLine>
    <SourceLine></SourceLine>
+   <SourceLine>If Not ShowURL(strFunctie) Then</SourceLine>
    <SourceLine>ShowURL strFunctie</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -10250,6 +10260,14 @@
   <SystemFlags>0</SystemFlags>
   <ItemParams>ByRef strFont As String, ByRef iFontSize As Integer, ByRef bBold As Boolean, ByRef bItalic As Boolean, ByRef bUnderline As Boolean</ItemParams>
   <ItemResult></ItemResult>
+ </Hook>
+ <Hook>
+  <ItemName>ShowURL</ItemName>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemFlags>33</ItemFlags>
+  <SystemFlags>0</SystemFlags>
+  <ItemParams>strURL As String</ItemParams>
+  <ItemResult>Boolean</ItemResult>
  </Hook>
  <Note>
   <ItemName>License</ItemName>
