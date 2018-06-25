@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RBProject version="2017r1.1" FormatVersion="2" MinIDEVersion="20070100">
+<RBProject version="2018r1.1" FormatVersion="2" MinIDEVersion="20070100">
 <block type="Module" ID="498593937">
  <ObjName>clsRTFBox</ObjName>
  <ObjContainerID>0</ObjContainerID>
@@ -12,18 +12,21 @@
   <ItemName>Paint</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1176498175</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Paint(g As Graphics, areas() As REALbasic.Rect)</SourceLine>
    <SourceLine>#Pragma Unused areas</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>Dim dScale As Double</SourceLine>
+   <SourceLine>Dim dScaleBase As Double</SourceLine>
+   <SourceLine>Dim iScale As Integer</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If IsNull(m_pic) Then</SourceLine>
    <SourceLine>GetImage</SourceLine>
    <SourceLine>Else</SourceLine>
-   <SourceLine>dScale = GetScaleFactor</SourceLine>
-   <SourceLine>If (m_pic.Width &lt;&gt; Self.Width * dScale Or m_pic.Height &lt;&gt; Self.Height * dScale) Then</SourceLine>
+   <SourceLine>GetScaleFactor(iScale, dScaleBase)</SourceLine>
+   <SourceLine>If (m_pic.Width &lt;&gt; Round(Self.Width * dScaleBase * iScale) Or _</SourceLine>
+   <SourceLine>m_pic.Height &lt;&gt; Round(Self.Height * dScaleBase * iScale)) Then</SourceLine>
    <SourceLine>m_pic = Nil</SourceLine>
    <SourceLine>GetImage</SourceLine>
    <SourceLine>ElseIf m_iRedrawFromPos &gt;= 0 Then</SourceLine>
@@ -39,6 +42,7 @@
   <ItemName>GotFocus</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1037803519</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub GotFocus()</SourceLine>
@@ -54,6 +58,7 @@
   <ItemName>LostFocus</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1171982335</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub LostFocus()</SourceLine>
@@ -67,6 +72,7 @@
   <ItemName>MouseDown</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1299949567</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function MouseDown(X As Integer, Y As Integer) As Boolean</SourceLine>
@@ -577,6 +583,7 @@
   <ItemName>MouseUp</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>342507519</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub MouseUp(X As Integer, Y As Integer)</SourceLine>
@@ -693,6 +700,7 @@
   <ItemName>KeyDown</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1383614463</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function KeyDown(Key As String) As Boolean</SourceLine>
@@ -1285,6 +1293,7 @@
   <ItemName>MouseWheel</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>755777535</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function MouseWheel(X As Integer, Y As Integer, deltaX as Integer, deltaY as Integer) As Boolean</SourceLine>
@@ -1317,6 +1326,7 @@
   <ItemName>GetImage</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>347027455</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub GetImage()</SourceLine>
@@ -1340,6 +1350,9 @@
    <SourceLine>Dim bResizedPictures As Boolean</SourceLine>
    <SourceLine>Dim wnd As Window</SourceLine>
    <SourceLine>Dim iScale As Integer</SourceLine>
+   <SourceLine>Dim dScaleBase As Double</SourceLine>
+   <SourceLine>Dim dScaleOriginalX As Double</SourceLine>
+   <SourceLine>Dim dScaleOriginalY As Double</SourceLine>
    <SourceLine>Dim tXY As Integer</SourceLine>
    <SourceLine>Dim iX1 As Integer</SourceLine>
    <SourceLine>Dim iX2 As Integer</SourceLine>
@@ -1352,7 +1365,7 @@
    <SourceLine></SourceLine>
    <SourceLine>Try</SourceLine>
    <SourceLine>wnd = Window</SourceLine>
-   <SourceLine>iScale = GetScaleFactor</SourceLine>
+   <SourceLine>GetScaleFactor(iScale, dScaleBase)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If iPicWidth &lt;= 0 Or iPicHeight &lt;= 0 Then</SourceLine>
    <SourceLine>If App.SupportsHiDPI And Not IsNull(wnd) Then</SourceLine>
@@ -1371,6 +1384,9 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>g = m_pic.Graphics</SourceLine>
+   <SourceLine>g.AntiAlias = m_rtf.AntiAlias</SourceLine>
+   <SourceLine>dScaleOriginalX = g.ScaleX</SourceLine>
+   <SourceLine>dScaleOriginalY = g.ScaleY</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
    <SourceLine>g.DrawRect(0, 0, iPicWidth, iPicHeight)</SourceLine>
@@ -1472,7 +1488,7 @@
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
    <SourceLine>picRtf = m_rtf.DrawRTF(iPicWidth - 17, iPicHeight - (2 + m_iTopText), _</SourceLine>
    <SourceLine>iFrom, iTo, m_iScrollValue, m_iSelP1, m_iSelP2, _</SourceLine>
-   <SourceLine>False, m_bReadOnly, False, bResizedPictures, Window, Nil)</SourceLine>
+   <SourceLine>False, m_bReadOnly, (256 * 256 * 256), bResizedPictures, Window, Nil)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>m_bCursorVisible = False</SourceLine>
    <SourceLine>g.ForeColor = &amp;cFFFFFF</SourceLine>
@@ -1484,17 +1500,17 @@
    <SourceLine></SourceLine>
    <SourceLine>'Draw ScrollBar</SourceLine>
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
-   <SourceLine>If m_bScrollbar And (m_iScrollMaximum &gt; 0 Or Not m_bReadOnly) Then</SourceLine>
+   <SourceLine>'If m_bScrollbar And (m_iScrollMaximum &gt; 0 Or Not m_bReadOnly) Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE </SourceLine>
    <SourceLine>g.FillRect(iPicWidth - 17, m_iTopText + 1, 16, iPicHeight - (2 + m_iTopText))</SourceLine>
-   <SourceLine>End If</SourceLine>
+   <SourceLine>'End If</SourceLine>
    <SourceLine>If m_bScrollbar And m_iScrollMaximum &gt; 0 Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;cCCCCCC</SourceLine>
    <SourceLine>g.DrawRect(iPicWidth - 17, m_iTopText + 1, 16, iPicHeight - (2 + m_iTopText))</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>If iScale &lt;&gt; 1 Then</SourceLine>
-   <SourceLine>g.ScaleX = 1</SourceLine>
-   <SourceLine>g.ScaleY = 1</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleBase</SourceLine>
+   <SourceLine>g.ScaleY = dScaleBase</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If m_iScrollValue &gt; 0 Then</SourceLine>
@@ -1539,9 +1555,9 @@
    <SourceLine>iPos = 13 + m_iTopText + (((iPicHeight - (28 + m_iTopText)) * m_iScrollValue) / m_iScrollMaximum)</SourceLine>
    <SourceLine>g.FillOval((iPicWidth - 11) * iScale, (iPos * iScale), (5 * iScale), (3 * iScale))</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>If iScale &lt;&gt; 1 Then</SourceLine>
-   <SourceLine>g.ScaleX = iScale</SourceLine>
-   <SourceLine>g.ScaleY = iScale</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleOriginalX</SourceLine>
+   <SourceLine>g.ScaleY = dScaleOriginalY</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>System.DebugLog "GetImage.DrawScrollbar executed in " + Format(Round(((Microseconds - dMSTussenStop) / 1000.0)), "0") + " ms"</SourceLine>
@@ -1596,6 +1612,7 @@
   <ItemName>Constructor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>395812863</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Constructor()</SourceLine>
@@ -1607,6 +1624,7 @@
    <SourceLine>AddHandler m_rtf.ShowURL, AddressOf Event_ShowURL</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>m_iKlikStart = -1</SourceLine>
+   <SourceLine>m_bScrollbar = True</SourceLine>
    <SourceLine>LoadLayoutWidth(True)</SourceLine>
    <SourceLine>m_iIndex = AddMySelf(Self)</SourceLine>
    <SourceLine>End Sub</SourceLine>
@@ -1622,6 +1640,7 @@
   <ItemName>AddMySelf</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>817743871</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared Function AddMySelf(rtf As clsRTFBox) As Integer</SourceLine>
@@ -1652,6 +1671,7 @@
   <ItemName>TimerAction</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1371834367</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared Sub TimerAction(tmr As Timer)</SourceLine>
@@ -1689,6 +1709,7 @@
   <ItemName>DrawCursorAndMakeUndoPointIfNecessary</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>203278335</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub DrawCursorAndMakeUndoPointIfNecessary(bWithRefresh As Boolean = True)</SourceLine>
@@ -1701,9 +1722,17 @@
    <SourceLine>Dim iCurPos As Integer</SourceLine>
    <SourceLine>Dim bRunning As Boolean</SourceLine>
    <SourceLine>Dim bErrors As Boolean</SourceLine>
+   <SourceLine>Dim iScale As Integer</SourceLine>
+   <SourceLine>Dim dScaleBase As Double</SourceLine>
+   <SourceLine>Dim dOriginalScaleX As Double</SourceLine>
+   <SourceLine>Dim dOriginalScaleY As Double</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If Not IsNull(m_pic) Then</SourceLine>
+   <SourceLine>GetScaleFactor(iScale, dScaleBase)</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>g = m_pic.Graphics</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>If m_iSelStart &lt; 0 Then</SourceLine>
    <SourceLine>m_iSelStart = 0</SourceLine>
    <SourceLine>m_iSelP1 = 0</SourceLine>
@@ -1740,7 +1769,23 @@
    <SourceLine>iY1 = iY1 + m_rtf.GetTableCellTop(m_iSelStart)</SourceLine>
    <SourceLine>iY2 = iY2 + m_rtf.GetTableCellTop(m_iSelStart)</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>g.DrawLine(iX, iY1, iX, iY2)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>dOriginalScaleX = g.ScaleX</SourceLine>
+   <SourceLine>dOriginalScaleY = g.ScaleY</SourceLine>
+   <SourceLine>g.ScaleX = dScaleBase</SourceLine>
+   <SourceLine>g.ScaleY = dScaleBase</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>g.AntiAlias = False</SourceLine>
+   <SourceLine>For t = 1 To iScale</SourceLine>
+   <SourceLine>g.DrawLine((iX * iScale) + (t - 1), iY1 * iScale, (iX * iScale) + (t - 1), iY2 * iScale)</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine>g.AntiAlias = AntiAlias</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dOriginalScaleX</SourceLine>
+   <SourceLine>g.ScaleY = dOriginalScaleY</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>If Not m_bReadOnly And m_bLayoutBar Then</SourceLine>
    <SourceLine>DrawLayoutBar(g)</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -1784,6 +1829,7 @@
   <ItemName>InsertionPosAtXY</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>303497215</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function InsertionPosAtXY(iX As Integer, iY As Integer) As Integer</SourceLine>
@@ -1877,6 +1923,7 @@
   <ItemName>InsertChar</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1482070015</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub InsertChar(ByRef iPos As Integer, strKey As String, bWithRefresh As Boolean)</SourceLine>
@@ -1907,6 +1954,7 @@
   <ItemName>GetRTF</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>70236159</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetRTF() As String</SourceLine>
@@ -1924,6 +1972,7 @@
   <ItemName>SelectionChanging</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>695128063</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SelectionChanging()</SourceLine>
@@ -1984,6 +2033,7 @@
   <ItemName>ChangeSelectionBy</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>337407999</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ChangeSelectionBy(iChange As Integer)</SourceLine>
@@ -2041,6 +2091,7 @@
   <ItemName>DeleteCurrentSelection</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>561151999</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub DeleteCurrentSelection()</SourceLine>
@@ -2106,6 +2157,7 @@
   <ItemName>ActionSelectAll</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1977139199</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionSelectAll()</SourceLine>
@@ -2127,6 +2179,7 @@
   <ItemName>ActionBold</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1802463231</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionBold()</SourceLine>
@@ -2162,6 +2215,7 @@
   <ItemName>ActionUnderline</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1859350527</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionUnderline(iStyle As Integer = 0)</SourceLine>
@@ -2210,6 +2264,7 @@
   <ItemName>ActionItalic</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1934170111</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionItalic()</SourceLine>
@@ -2246,6 +2301,7 @@
   <ItemName>RefreshWithoutRecalculate</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>661618687</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub RefreshWithoutRecalculate(bHard As Boolean = False)</SourceLine>
@@ -2271,6 +2327,7 @@
   <ItemName>ActionCopy</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>910544895</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionCopy()</SourceLine>
@@ -2306,6 +2363,7 @@
   <ItemName>ActionPaste</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1789657087</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionPaste()</SourceLine>
@@ -2325,11 +2383,13 @@
    <SourceLine>If strText.Left(6) = "{\rtf1" And strText.Right(1) = "}" Then</SourceLine>
    <SourceLine>m_rtf.InsertRTF(m_iSelStart, strText)</SourceLine>
    <SourceLine>Else</SourceLine>
-   <SourceLine>strText = strText.ReplaceAll(Chr(13) + Chr(10), Chr(13)).ReplaceAll(Chr(10), Chr(13))</SourceLine>
-   <SourceLine>For t = 1 To strText.Len</SourceLine>
-   <SourceLine>m_rtf.InsertChar(m_iSelStart, strText.Mid(t, 1))</SourceLine>
-   <SourceLine>m_iSelStart = m_iSelStart + 1</SourceLine>
-   <SourceLine>Next t</SourceLine>
+   <SourceLine>m_rtf.InsertText(m_iSelStart, strText)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>'strText = strText.ReplaceAll(Chr(13) + Chr(10), Chr(13)).ReplaceAll(Chr(10), Chr(13))</SourceLine>
+   <SourceLine>'For t = 1 To strText.Len</SourceLine>
+   <SourceLine>'m_rtf.InsertChar(m_iSelStart, strText.Mid(t, 1))</SourceLine>
+   <SourceLine>'m_iSelStart = m_iSelStart + 1</SourceLine>
+   <SourceLine>'Next t</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>m_iSelP1 = m_iSelStart</SourceLine>
    <SourceLine>m_iSelP2 = m_iSelStart</SourceLine>
@@ -2359,6 +2419,7 @@
   <ItemName>ActionCut</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>389138431</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionCut()</SourceLine>
@@ -2404,6 +2465,7 @@
   <ItemName>ActionLayoutBar</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1284179967</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionLayoutBar()</SourceLine>
@@ -2425,6 +2487,7 @@
   <ItemName>DrawLayoutBar</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>279982079</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub DrawLayoutBar(g As Graphics)</SourceLine>
@@ -2439,13 +2502,22 @@
    <SourceLine>Dim iTS As Integer</SourceLine>
    <SourceLine>Dim iFactor As Integer</SourceLine>
    <SourceLine>Dim iScale As Integer</SourceLine>
+   <SourceLine>Dim dScaleBase As Double</SourceLine>
+   <SourceLine>Dim dScaleOriginalX As Double</SourceLine>
+   <SourceLine>Dim dScaleOriginalY As Double</SourceLine>
    <SourceLine>Dim tXY As Integer</SourceLine>
    <SourceLine>Dim iStartPos As Integer</SourceLine>
    <SourceLine>Dim iX1 As Integer</SourceLine>
    <SourceLine>Dim iX2 As Integer</SourceLine>
+   <SourceLine>Dim iY1 As Integer</SourceLine>
+   <SourceLine>Dim iY2 As Integer</SourceLine>
+   <SourceLine>Dim iMinus As Integer</SourceLine>
+   <SourceLine>Dim tScale As Integer</SourceLine>
    <SourceLine>Dim bCheckWithTimes As Boolean</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>iScale = GetScaleFactor</SourceLine>
+   <SourceLine>GetScaleFactor(iScale, dScaleBase)</SourceLine>
+   <SourceLine>dScaleOriginalX = g.ScaleX</SourceLine>
+   <SourceLine>dScaleOriginalY = g.ScaleY</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>LoadLayoutWidth</SourceLine>
    <SourceLine></SourceLine>
@@ -2456,9 +2528,9 @@
    <SourceLine>g.DrawRect(0, 0, Self.Width, m_iTopText + 1)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Tabstops</SourceLine>
-   <SourceLine>If iScale &lt;&gt; 1 Then</SourceLine>
-   <SourceLine>g.ScaleX = 1</SourceLine>
-   <SourceLine>g.ScaleY = 1</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleBase</SourceLine>
+   <SourceLine>g.ScaleY = dScaleBase</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>g.ForeColor = &amp;cBBBBBB</SourceLine>
@@ -2491,14 +2563,16 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>Next t</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>If iScale &lt;&gt; 1 Then</SourceLine>
-   <SourceLine>g.ScaleX = iScale</SourceLine>
-   <SourceLine>g.ScaleY = iScale</SourceLine>
-   <SourceLine>End If</SourceLine>
-   <SourceLine></SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSFONT), 1, m_iLayoutCtrlWidth(CTRLPOSFONT), 20)</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSFONTSIZE), 1, m_iLayoutCtrlWidth(CTRLPOSFONTSIZE), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSFONT) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSFONT) * iScale, 20 * iScale)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSFONTSIZE) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSFONTSIZE) * iScale, 20 * iScale)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleOriginalX</SourceLine>
+   <SourceLine>g.ScaleY = dScaleOriginalY</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Font</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
@@ -2539,16 +2613,26 @@
    <SourceLine>g.TextSize = 16</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Bold</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleBase</SourceLine>
+   <SourceLine>g.ScaleY = dScaleBase</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>If IsBold Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;c444444</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSBOLD), 1, m_iLayoutCtrlWidth(CTRLPOSBOLD), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSBOLD) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSBOLD) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;cFFFFFF</SourceLine>
    <SourceLine>iRelief = 1</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSBOLD), 1, m_iLayoutCtrlWidth(CTRLPOSBOLD), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSBOLD) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSBOLD) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
    <SourceLine>iRelief = 0</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleOriginalX</SourceLine>
+   <SourceLine>g.ScaleY = dScaleOriginalY</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>g.Bold = True</SourceLine>
    <SourceLine>g.Underline = False</SourceLine>
@@ -2556,16 +2640,26 @@
    <SourceLine>g.DrawString("B", GetLayoutStartPos(CTRLPOSBOLD) + 4 + iRelief, 17 + iRelief)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Italic</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleBase</SourceLine>
+   <SourceLine>g.ScaleY = dScaleBase</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>If IsItalic Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;c444444</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSITALIC), 1, m_iLayoutCtrlWidth(CTRLPOSITALIC), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSITALIC) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSITALIC) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;cFFFFFF</SourceLine>
    <SourceLine>iRelief = 1</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSITALIC), 1, m_iLayoutCtrlWidth(CTRLPOSITALIC), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSITALIC) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSITALIC) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
    <SourceLine>iRelief = 0</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleOriginalX</SourceLine>
+   <SourceLine>g.ScaleY = dScaleOriginalY</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>g.Bold = False</SourceLine>
    <SourceLine>g.Underline = False</SourceLine>
@@ -2573,16 +2667,26 @@
    <SourceLine>g.DrawString("I", GetLayoutStartPos(CTRLPOSITALIC) + 6 + iRelief, 17 + iRelief)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Underline</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleBase</SourceLine>
+   <SourceLine>g.ScaleY = dScaleBase</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>If IsUnderline Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;c444444</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSUNDERLINE), 1, m_iLayoutCtrlWidth(CTRLPOSUNDERLINE), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSUNDERLINE) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSUNDERLINE) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;cFFFFFF</SourceLine>
    <SourceLine>iRelief = 1</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSUNDERLINE), 1, m_iLayoutCtrlWidth(CTRLPOSUNDERLINE), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSUNDERLINE) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSUNDERLINE) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
    <SourceLine>iRelief = 0</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleOriginalX</SourceLine>
+   <SourceLine>g.ScaleY = dScaleOriginalY</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>g.Bold = False</SourceLine>
    <SourceLine>g.Underline = True</SourceLine>
@@ -2590,9 +2694,18 @@
    <SourceLine>g.DrawString("U", GetLayoutStartPos(CTRLPOSUNDERLINE) + 4 + iRelief, 17 + iRelief)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Knopje textcolor</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleBase</SourceLine>
+   <SourceLine>g.ScaleY = dScaleBase</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>clTextColor = GetColor</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSCOLOR), 1, m_iLayoutCtrlWidth(CTRLPOSCOLOR), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSCOLOR) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSCOLOR) * iScale, 20 * iScale)</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleOriginalX</SourceLine>
+   <SourceLine>g.ScaleY = dScaleOriginalY</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>g.ForeColor = clTextColor</SourceLine>
    <SourceLine>g.Bold = True</SourceLine>
    <SourceLine>g.Underline = True</SourceLine>
@@ -2600,62 +2713,108 @@
    <SourceLine>g.DrawString("C", GetLayoutStartPos(CTRLPOSCOLOR) + 4, 17)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Alignment</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleBase</SourceLine>
+   <SourceLine>g.ScaleY = dScaleBase</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>iAlign = GetAlignment</SourceLine>
    <SourceLine>If iAlign = clsRTFBox_Data.ALIGNLEFT Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;c444444</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNLEFT), 1, m_iLayoutCtrlWidth(CTRLPOSALIGNLEFT), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNLEFT) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSALIGNLEFT) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;cFFFFFF</SourceLine>
    <SourceLine>iRelief = 1</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNLEFT), 1, m_iLayoutCtrlWidth(CTRLPOSALIGNLEFT), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNLEFT) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSALIGNLEFT) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
    <SourceLine>iRelief = 0</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNLEFT) + 2, 4, GetLayoutStartPos(CTRLPOSALIGNLEFT) + 16, 4)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNLEFT) + 2, 7, GetLayoutStartPos(CTRLPOSALIGNLEFT) + 10, 7)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNLEFT) + 2, 10, GetLayoutStartPos(CTRLPOSALIGNLEFT) + 12, 10)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNLEFT) + 2, 13, GetLayoutStartPos(CTRLPOSALIGNLEFT) + 8, 13)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNLEFT) + 2, 16, GetLayoutStartPos(CTRLPOSALIGNLEFT) + 16, 16)</SourceLine>
+   <SourceLine>For t = 1 To 5</SourceLine>
+   <SourceLine>iX1 = (GetLayoutStartPos(CTRLPOSALIGNLEFT) + 2) * iScale</SourceLine>
+   <SourceLine>iY1 = (1 + (t * 3)) * iScale</SourceLine>
+   <SourceLine>If t = 1 Or t = 5 Then</SourceLine>
+   <SourceLine>iX2 = iX1 + (14 * iScale)</SourceLine>
+   <SourceLine>ElseIf t = 2 Then</SourceLine>
+   <SourceLine>iX2 = iX1 + (8 * iScale)</SourceLine>
+   <SourceLine>ElseIf t = 3 Then</SourceLine>
+   <SourceLine>iX2 = iX1 + (10 * iScale)</SourceLine>
+   <SourceLine>ElseIf t = 4 Then</SourceLine>
+   <SourceLine>iX2 = iX1 + (6 * iScale)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>iY2 = iY1</SourceLine>
+   <SourceLine>For tScale = 1 To iScale</SourceLine>
+   <SourceLine>g.DrawLine(iX1, iY1 + tScale - 1, iX2, iY2 + tScale - 1)</SourceLine>
+   <SourceLine>Next tScale</SourceLine>
+   <SourceLine>Next t</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If iAlign = clsRTFBox_Data.ALIGNCENTER Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;c444444</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNCENTER), 1, m_iLayoutCtrlWidth(CTRLPOSALIGNCENTER), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNCENTER) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSALIGNCENTER) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;cFFFFFF</SourceLine>
    <SourceLine>iRelief = 1</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNCENTER), 1, m_iLayoutCtrlWidth(CTRLPOSALIGNCENTER), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNCENTER) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSALIGNCENTER) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
    <SourceLine>iRelief = 0</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNCENTER) + 3, 4, GetLayoutStartPos(CTRLPOSALIGNCENTER) + 17, 4)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNCENTER) + 6, 7, GetLayoutStartPos(CTRLPOSALIGNCENTER) + 14, 7)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNCENTER) + 5, 10, GetLayoutStartPos(CTRLPOSALIGNCENTER) + 15, 10)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNCENTER) + 7, 13, GetLayoutStartPos(CTRLPOSALIGNCENTER) + 13, 13)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNCENTER) + 3, 16, GetLayoutStartPos(CTRLPOSALIGNCENTER) + 17, 16)</SourceLine>
+   <SourceLine>For t = 1 To 5</SourceLine>
+   <SourceLine>iX1 = (GetLayoutStartPos(CTRLPOSALIGNCENTER) + 10) * iScale</SourceLine>
+   <SourceLine>iY1 = (1 + (t * 3)) * iScale</SourceLine>
+   <SourceLine>iX2 = iX1</SourceLine>
+   <SourceLine>iY2 = iY1</SourceLine>
+   <SourceLine>If t = 1 Or t = 5 Then</SourceLine>
+   <SourceLine>iX1 = iX1 - (7 * iScale)</SourceLine>
+   <SourceLine>iX2 = iX2 + (7 * iScale)</SourceLine>
+   <SourceLine>ElseIf t = 2 Then</SourceLine>
+   <SourceLine>iX1 = iX1 - (4 * iScale)</SourceLine>
+   <SourceLine>iX2 = iX2 + (4 * iScale)</SourceLine>
+   <SourceLine>ElseIf t = 3 Then</SourceLine>
+   <SourceLine>iX1 = iX1 - (5 * iScale)</SourceLine>
+   <SourceLine>iX2 = iX2 + (5 * iScale)</SourceLine>
+   <SourceLine>ElseIf t = 4 Then</SourceLine>
+   <SourceLine>iX1 = iX1 - (3 * iScale)</SourceLine>
+   <SourceLine>iX2 = iX2 + (3 * iScale)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>For tScale = 1 To iScale</SourceLine>
+   <SourceLine>g.DrawLine(iX1, iY1 + tScale - 1, iX2, iY2 + tScale - 1)</SourceLine>
+   <SourceLine>Next tScale</SourceLine>
+   <SourceLine>Next t</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If iAlign = clsRTFBox_Data.ALIGNRIGHT Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;c444444</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNRIGHT), 1, m_iLayoutCtrlWidth(CTRLPOSALIGNRIGHT), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNRIGHT) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSALIGNRIGHT) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;cFFFFFF</SourceLine>
    <SourceLine>iRelief = 1</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNRIGHT), 1, m_iLayoutCtrlWidth(CTRLPOSALIGNRIGHT), 20)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSALIGNRIGHT) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSALIGNRIGHT) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
    <SourceLine>iRelief = 0</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 4, 4, GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 18, 4)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 10, 7, GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 18, 7)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 8, 10, GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 18, 10)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 12, 13, GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 18, 13)</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 4, 16, GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 18, 16)</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>If iScale &lt;&gt; 1 Then</SourceLine>
-   <SourceLine>g.ScaleX = 1</SourceLine>
-   <SourceLine>g.ScaleY = 1</SourceLine>
+   <SourceLine>For t = 1 To 5</SourceLine>
+   <SourceLine>iX1 = (GetLayoutStartPos(CTRLPOSALIGNRIGHT) + 18) * iScale</SourceLine>
+   <SourceLine>iY1 = (1 + (t * 3)) * iScale</SourceLine>
+   <SourceLine>If t = 1 Or t = 5 Then</SourceLine>
+   <SourceLine>iX2 = iX1 - (14 * iScale)</SourceLine>
+   <SourceLine>ElseIf t = 2 Then</SourceLine>
+   <SourceLine>iX2 = iX1 - (8 * iScale)</SourceLine>
+   <SourceLine>ElseIf t = 3 Then</SourceLine>
+   <SourceLine>iX2 = iX1 - (10 * iScale)</SourceLine>
+   <SourceLine>ElseIf t = 4 Then</SourceLine>
+   <SourceLine>iX2 = iX1 - (6 * iScale)</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine>iY2 = iY1</SourceLine>
+   <SourceLine>For tScale = 1 To iScale</SourceLine>
+   <SourceLine>g.DrawLine(iX1, iY1 + tScale - 1, iX2, iY2 + tScale - 1)</SourceLine>
+   <SourceLine>Next tScale</SourceLine>
+   <SourceLine>Next t</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Inspringen</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
@@ -2709,98 +2868,40 @@
    <SourceLine></SourceLine>
    <SourceLine>'Undo</SourceLine>
    <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
-   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSUNDO) * iScale, iScale, m_iLayoutCtrlWidth(CTRLPOSUNDO) * iScale, 20 * iScale)</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSUNDO) * iScale, iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSUNDO) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>If IsUndoPossible Then</SourceLine>
    <SourceLine>g.ForeColor = &amp;c0000CC</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>g.ForeColor = &amp;c888888</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>iStartPos = GetLayoutStartPos(CTRLPOSUNDO) * iScale</SourceLine>
-   <SourceLine>If iScale = 1 Then</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 8, 7, iStartPos + 13, 7)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 6, 8, iStartPos + 15, 8)</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 5, 9, iStartPos + 7, 9)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 4, 10, iStartPos + 6, 10)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 4, 11, iStartPos + 5, 11)</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 14, 9, iStartPos + 16, 9)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 15, 10, iStartPos + 17, 10)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 16, 11, iStartPos + 17, 11)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 16, 12, iStartPos + 17, 12)</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 2, 12, iStartPos + 7, 12)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 3, 13, iStartPos + 6, 13)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 4, 14, iStartPos + 5, 14)</SourceLine>
-   <SourceLine>ElseIf iScale = 2 Then</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 16, 14, iStartPos + 26, 14)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 14, 15, iStartPos + 28, 15)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 12, 16, iStartPos + 30, 16)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 11, 17, iStartPos + 30, 17)</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 10, 18, iStartPos + 16, 18)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 9, 19, iStartPos + 14, 19)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 9, 20, iStartPos + 12, 20)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 8, 21, iStartPos + 11, 21)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 8, 22, iStartPos + 10, 22)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 8, 23, iStartPos + 10, 23)</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 26, 18, iStartPos + 32, 18)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 28, 19, iStartPos + 33, 19)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 30, 20, iStartPos + 34, 20)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 31, 21, iStartPos + 34, 21)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 32, 22, iStartPos + 35, 22)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 32, 23, iStartPos + 35, 23)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 32, 24, iStartPos + 35, 24)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 32, 25, iStartPos + 35, 25)</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 4, 24, iStartPos + 14, 24)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 5, 25, iStartPos + 13, 25)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 6, 26, iStartPos + 12, 26)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 7, 27, iStartPos + 11, 27)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 8, 28, iStartPos + 10, 28)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 9, 29, iStartPos + 9, 29)</SourceLine>
-   <SourceLine>ElseIf iScale = 3 Then</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 24, 21, iStartPos + 39, 21)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 22, 22, iStartPos + 41, 22)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 20, 23, iStartPos + 43, 23)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 18, 24, iStartPos + 45, 24)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 17, 25, iStartPos + 46, 25)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 16, 26, iStartPos + 47, 26)</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 15, 27, iStartPos + 21, 27)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 14, 28, iStartPos + 20, 28)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 14, 29, iStartPos + 19, 29)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 13, 30, iStartPos + 18, 30)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 13, 31, iStartPos + 17, 31)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 12, 32, iStartPos + 16, 32)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 12, 33, iStartPos + 16, 33)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 12, 34, iStartPos + 15, 34)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 12, 35, iStartPos + 15, 35)</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 42, 27, iStartPos + 48, 27)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 43, 28, iStartPos + 49, 28)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 44, 29, iStartPos + 49, 29)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 45, 30, iStartPos + 50, 30)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 46, 31, iStartPos + 50, 31)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 47, 32, iStartPos + 50, 32)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 47, 33, iStartPos + 51, 33)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 48, 34, iStartPos + 51, 34)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 48, 35, iStartPos + 51, 35)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 48, 36, iStartPos + 51, 36)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 48, 37, iStartPos + 51, 37)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 48, 38, iStartPos + 51, 38)</SourceLine>
-   <SourceLine></SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 6, 36, iStartPos + 22, 36)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 7, 37, iStartPos + 21, 37)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 8, 38, iStartPos + 20, 38)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 9, 39, iStartPos + 19, 39)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 10, 40, iStartPos + 18, 40)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 11, 41, iStartPos + 17, 41)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 12, 42, iStartPos + 16, 42)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 13, 43, iStartPos + 15, 43)</SourceLine>
-   <SourceLine>g.DrawLine(iStartPos + 14, 44, iStartPos + 14, 44)</SourceLine>
+   <SourceLine>g.PenWidth = iScale * 2</SourceLine>
+   <SourceLine>g.PenHeight = iScale * 2</SourceLine>
+   <SourceLine>iX1 = iStartPos + (6 * iScale)</SourceLine>
+   <SourceLine>iY1 = (7 * iScale)</SourceLine>
+   <SourceLine>g.DrawOval(iX1, iY1, (12 * iScale), (8 * iScale))</SourceLine>
+   <SourceLine>g.PenWidth = 1</SourceLine>
+   <SourceLine>g.PenHeight = 1</SourceLine>
+   <SourceLine>iY1 = iY1 + (4 * iScale) + 1 </SourceLine>
+   <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
+   <SourceLine>g.FillRect(iX1, iY1, (12 * iScale), (4 * iScale))</SourceLine>
+   <SourceLine>If IsUndoPossible Then</SourceLine>
+   <SourceLine>g.ForeColor = &amp;c0000CC</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>g.ForeColor = &amp;c888888</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine>iX2 = iX1 + (2 * iScale)</SourceLine>
+   <SourceLine>iX1 = iX1 - (iScale * 2) - 1</SourceLine>
+   <SourceLine>iX2 = iX2 + (iScale * 2)</SourceLine>
+   <SourceLine>iMinus = 0</SourceLine>
+   <SourceLine>Do</SourceLine>
+   <SourceLine>g.DrawLine(iX1 + iMinus, iY1 + iMinus, iX2 - iMinus, iY1 + iMinus)</SourceLine>
+   <SourceLine>iMinus = iMinus + 1</SourceLine>
+   <SourceLine>Loop Until iX2 - iMinus &lt; iX1 + iMinus</SourceLine>
+   <SourceLine>iMinus = iMinus - 1</SourceLine>
+   <SourceLine>g.DrawLine(iX1, iY1, iX1 + iMinus, iY1 + iMinus)</SourceLine>
+   <SourceLine>g.DrawLine(iX2, iY1, iX2 - iMinus, iY1 + iMinus)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Piekje Font</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
@@ -2824,16 +2925,17 @@
    <SourceLine>iStartPos - ((6 * iScale) + (((11 * iScale) + (iScale - 1)) - tXY)), tXY)</SourceLine>
    <SourceLine>Next tXY</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>If iScale &lt;&gt; 1 Then</SourceLine>
-   <SourceLine>g.ScaleX = iScale</SourceLine>
-   <SourceLine>g.ScaleY = iScale</SourceLine>
-   <SourceLine>End If</SourceLine>
-   <SourceLine></SourceLine>
    <SourceLine>'Lijntjes tussen de knoppen</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
    <SourceLine>For t = 1 To CTRLPOSAAA_LAST</SourceLine>
-   <SourceLine>g.DrawLine(GetLayoutStopPos(t), 1, GetLayoutStopPos(t), 20)</SourceLine>
+   <SourceLine>g.DrawLine(GetLayoutStopPos(t) * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>GetLayoutStopPos(t) * iScale, 20 * iScale)</SourceLine>
    <SourceLine>Next t</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleOriginalX</SourceLine>
+   <SourceLine>g.ScaleY = dScaleOriginalY</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>End Sub</SourceLine>
   </ItemSource>
@@ -2848,6 +2950,7 @@
   <ItemName>GetFontMenu</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1082390527</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetFontMenu() As MenuItem</SourceLine>
@@ -2979,6 +3082,7 @@
   <ItemName>GetFontSizeMenu</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>891525119</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetFontSizeMenu() As MenuItem</SourceLine>
@@ -3034,6 +3138,7 @@
   <ItemName>GetFontSizeMenu_AddSize</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1111185407</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub GetFontSizeMenu_AddSize(ByRef mnuBase As MenuItem, iSize As Integer, iCurrentSize As Integer)</SourceLine>
@@ -3058,6 +3163,7 @@
   <ItemName>ActionFont</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2116399103</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionFont(strFont As String)</SourceLine>
@@ -3091,6 +3197,7 @@
   <ItemName>ActionFontSize</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>87193599</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionFontSize(iSize As Integer)</SourceLine>
@@ -3124,6 +3231,7 @@
   <ItemName>IsItalic</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>181503999</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsItalic() As Boolean</SourceLine>
@@ -3153,6 +3261,7 @@
   <ItemName>IsBold</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1492295679</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsBold() As Boolean</SourceLine>
@@ -3182,6 +3291,7 @@
   <ItemName>IsUnderline</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1445109759</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsUnderline(iStyle As Integer = 0) As Boolean</SourceLine>
@@ -3212,6 +3322,7 @@
   <ItemName>GetFont</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>904560639</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetFont() As String</SourceLine>
@@ -3241,6 +3352,7 @@
   <ItemName>GetFontSize</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>332974079</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetFontSize() As Double</SourceLine>
@@ -3271,6 +3383,7 @@
   <ItemName>GetColor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1019772927</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetColor() As Color</SourceLine>
@@ -3300,6 +3413,7 @@
   <ItemName>ActionColor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2128496639</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionColor(clColor As Color)</SourceLine>
@@ -3333,6 +3447,7 @@
   <ItemName>GetColorMenu</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1551908863</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetColorMenu(strTag As String, clCurrentColor As Color) As MenuItem</SourceLine>
@@ -3392,16 +3507,30 @@
   <ItemName>GetColorMenu_AddColor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>895035391</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub GetColorMenu_AddColor(ByRef mnuBase As MenuItem, clColor As Color, clCurrentColor As Color)</SourceLine>
    <SourceLine>Dim mnu As MenuItem</SourceLine>
    <SourceLine>Dim pic As Picture</SourceLine>
+   <SourceLine>Dim iScale As Integer</SourceLine>
+   <SourceLine>Dim dScaleBase As Double</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>mnu = New MenuItem</SourceLine>
+   <SourceLine>GetScaleFactor(iScale, dScaleBase)</SourceLine>
+   <SourceLine>If IsNull(Window) Or (iScale = 1 And dScaleBase = 1) Then</SourceLine>
    <SourceLine>pic = New Picture(10, 10)</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>pic = Window.BitmapForCaching(10, 10)</SourceLine>
+   <SourceLine>pic.Graphics.ScaleX = dScaleBase</SourceLine>
+   <SourceLine>pic.Graphics.ScaleY = dScaleBase</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>pic.Graphics.ForeColor = clColor</SourceLine>
-   <SourceLine>pic.Graphics.FillRoundRect(1, 1, 8, 8, 2, 2)</SourceLine>
+   <SourceLine>pic.Graphics.FillRoundRect(1 * iScale, 1 * iScale, _</SourceLine>
+   <SourceLine>8 * iScale, 8 * iScale, _</SourceLine>
+   <SourceLine>2 * iScale, 2 * iScale)</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>mnu.Icon = pic</SourceLine>
    <SourceLine>mnu.Checked = (clColor = clCurrentColor)</SourceLine>
    <SourceLine>mnu.Tag = mnuBase.Tag + "." + Format(clColor.Red, "0") + "." + Format(clColor.Green, "0") + "." + Format(clColor.Blue, "0")</SourceLine>
@@ -3420,6 +3549,7 @@
   <ItemName>GetAlignment</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1069936639</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetAlignment() As Integer</SourceLine>
@@ -3437,6 +3567,7 @@
   <ItemName>ActionAlignLeft</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1597960191</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionAlignLeft()</SourceLine>
@@ -3481,6 +3612,7 @@
   <ItemName>ActionAlignCenter</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1560928255</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionAlignCenter()</SourceLine>
@@ -3525,6 +3657,7 @@
   <ItemName>ActionAlignRight</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1227792383</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionAlignRight()</SourceLine>
@@ -3569,6 +3702,7 @@
   <ItemName>GetTabstops</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>444440575</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetTabstops() As Integer()</SourceLine>
@@ -3586,6 +3720,7 @@
   <ItemName>ActionTabstop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>24225791</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionTabstop(iTabstopPos As Integer)</SourceLine>
@@ -3633,6 +3768,7 @@
   <ItemName>GetLayoutStartPos</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>159066111</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetLayoutStartPos(iCtrl As Integer) As Integer</SourceLine>
@@ -3658,6 +3794,7 @@
   <ItemName>LoadLayoutWidth</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>69218303</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub LoadLayoutWidth(bInitial As Boolean = False)</SourceLine>
@@ -3715,6 +3852,7 @@
   <ItemName>GetLayoutStopPos</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>489822207</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetLayoutStopPos(iCtrl As Integer) As Integer</SourceLine>
@@ -3740,6 +3878,7 @@
   <ItemName>ActionJumpIn</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>347033599</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionJumpIn()</SourceLine>
@@ -3793,6 +3932,7 @@
   <ItemName>ActionJumpOut</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>957112319</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionJumpOut()</SourceLine>
@@ -3844,6 +3984,7 @@
   <ItemName>RunBulletProcedure</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>170033151</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub RunBulletProcedure(ByRef iPos As Integer)</SourceLine>
@@ -4068,6 +4209,7 @@
   <ItemName>RunUndoBulletProcedure</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1199464447</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function RunUndoBulletProcedure() As Boolean</SourceLine>
@@ -4261,6 +4403,7 @@
   <ItemName>SplitBullet</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1456805887</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SplitBullet(strPossibleBullet As String, ByRef strBulletPrefix As String, ByRef strBullet As String, ByRef strBulletTerminator As String)</SourceLine>
@@ -4305,6 +4448,7 @@
   <ItemName>GetHtml</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>805392383</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetHtml() As String</SourceLine>
@@ -4322,6 +4466,7 @@
   <ItemName>Event_FillFunctionValue</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1193785343</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function Event_FillFunctionValue(rtf As clsRTFBox_Data, strFunction As String, ByRef strValue As String) As Boolean</SourceLine>
@@ -4341,6 +4486,7 @@
   <ItemName>Destructor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1927442431</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Destructor()</SourceLine>
@@ -4362,6 +4508,7 @@
   <ItemName>RemoveMySelf</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>995143679</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared Sub RemoveMySelf(iIndex As Integer)</SourceLine>
@@ -4393,6 +4540,7 @@
   <ItemName>ActionUpdateFunctions</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1854666751</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionUpdateFunctions()</SourceLine>
@@ -4416,6 +4564,7 @@
   <ItemName>GetFunctionsMenu</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1535088639</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetFunctionsMenu() As MenuItem</SourceLine>
@@ -4464,6 +4613,7 @@
   <ItemName>ActionInsertFunctie</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>177018879</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionInsertFunctie(strFunctie As String)</SourceLine>
@@ -4501,6 +4651,7 @@
   <ItemName>CorrectPositionUpIfFunction</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1230655487</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub CorrectPositionUpIfFunction(ByRef iPos As Integer)</SourceLine>
@@ -4525,6 +4676,7 @@
   <ItemName>CorrectPositionDownIfFunction</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1873682431</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub CorrectPositionDownIfFunction(ByRef iPos As Integer)</SourceLine>
@@ -4549,6 +4701,7 @@
   <ItemName>ChangeCursorBy</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>910864383</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ChangeCursorBy(iChange As Integer)</SourceLine>
@@ -4616,6 +4769,7 @@
   <ItemName>SetDirty</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>497162239</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetDirty()</SourceLine>
@@ -4637,6 +4791,7 @@
   <ItemName>IsUndoPossible</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1982099455</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsUndoPossible() As Boolean</SourceLine>
@@ -4654,6 +4809,7 @@
   <ItemName>ActionUndo</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>302901247</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionUndo()</SourceLine>
@@ -4692,6 +4848,7 @@
   <ItemName>RequestRefresh</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>272803839</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub RequestRefresh()</SourceLine>
@@ -4713,6 +4870,7 @@
   <ItemName>Event_GetDefaultStyle</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>339304447</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Event_GetDefaultStyle(rtf As clsRTFBox_Data, ByRef strFont As String, ByRef iFontSize As Integer, ByRef bBold As Boolean, ByRef bItalic As Boolean, ByRef bUnderline As Boolean)</SourceLine>
@@ -4732,6 +4890,7 @@
   <ItemName>CheckSelectionBounds</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>858058751</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub CheckSelectionBounds()</SourceLine>
@@ -4772,6 +4931,7 @@
   <ItemName>ActionShadow</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>911468543</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionShadow()</SourceLine>
@@ -4808,6 +4968,7 @@
   <ItemName>ActionStrikeThrough</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1741119487</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionStrikeThrough()</SourceLine>
@@ -4844,6 +5005,7 @@
   <ItemName>IsShadow</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2119999487</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsShadow() As Boolean</SourceLine>
@@ -4873,6 +5035,7 @@
   <ItemName>IsStrikeThrough</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1485926399</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsStrikeThrough() As Boolean</SourceLine>
@@ -4902,6 +5065,7 @@
   <ItemName>ActionZoomIn</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>539394047</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionZoomIn()</SourceLine>
@@ -4925,6 +5089,7 @@
   <ItemName>ActionZoomOut</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1884778495</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionZoomOut()</SourceLine>
@@ -4948,6 +5113,7 @@
   <ItemName>GetText</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1146058751</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetText() As String</SourceLine>
@@ -4965,6 +5131,7 @@
   <ItemName>ActionInsertPageBreak</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>293904383</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionInsertPageBreak()</SourceLine>
@@ -5002,6 +5169,7 @@
   <ItemName>GetTableMenu</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2008121343</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetTableMenu(iX As Integer, iY As Integer) As MenuItem</SourceLine>
@@ -5107,6 +5275,7 @@
   <ItemName>ActionTable</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1573335039</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionTable(strAction As String, iX As Integer, iY As Integer)</SourceLine>
@@ -5253,10 +5422,11 @@
   <ItemName>DrawRTF_GetArray</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>442310655</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function DrawRTF_GetArray(iWidth As Integer, iHeightFirstPage As Integer, iHeightOtherPages As Integer) As Picture()</SourceLine>
-   <SourceLine>Return m_rtf.DrawRTF_GetArray(iWidth, iHeightFirstPage, iHeightOtherPages, False, Nil, 0) </SourceLine>
+   <SourceLine>Return m_rtf.DrawRTF_GetArray(iWidth, iHeightFirstPage, iHeightOtherPages, (256 * 256 * 256), Nil, 0) </SourceLine>
    <SourceLine>End Function</SourceLine>
   </ItemSource>
   <TextEncoding>134217984</TextEncoding>
@@ -5270,6 +5440,7 @@
   <ItemName>ActionInsertPicture</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1311051775</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionInsertPicture()</SourceLine>
@@ -5327,6 +5498,7 @@
   <ItemName>InsertPicture</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>744245247</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub InsertPicture(pic As Picture, iPictureFormat As Integer = 0)</SourceLine>
@@ -5365,6 +5537,7 @@
   <ItemName>ActionResizePicture</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>851277823</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionResizePicture(iPicture As Integer)</SourceLine>
@@ -5416,6 +5589,7 @@
   <ItemName>ActionInsertCheckBox</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>662943743</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionInsertCheckBox()</SourceLine>
@@ -5462,6 +5636,7 @@
   <ItemName>ShowRTFTouchbar</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1743190015</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ShowRTFTouchbar(bShow As Boolean)</SourceLine>
@@ -5518,6 +5693,7 @@
   <ItemName>UpdateRTFTouchbar</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1089857535</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub UpdateRTFTouchbar()</SourceLine>
@@ -5537,38 +5713,74 @@
   <ItemName>GetScaleFactor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>339787775</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Function GetScaleFactor() As Double</SourceLine>
-   <SourceLine>Dim dRtVal As Double</SourceLine>
+   <SourceLine>Sub GetScaleFactor(ByRef iScale As Integer, ByRef dScaleBase As Double)</SourceLine>
+   <SourceLine>Dim dScale As Double</SourceLine>
+   <SourceLine>Dim iScaleBase As Integer</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If App.SupportsHiDPI Then</SourceLine>
    <SourceLine>If IsNull(Window) Then</SourceLine>
-   <SourceLine>dRtVal = 1</SourceLine>
+   <SourceLine>dScale = 1</SourceLine>
    <SourceLine>Else</SourceLine>
-   <SourceLine>dRtVal = Window.ScaleFactor</SourceLine>
-   <SourceLine>If dRtVal &lt; 1 Then</SourceLine>
-   <SourceLine>dRtVal = 1</SourceLine>
+   <SourceLine>dScale = Window.ScaleFactor</SourceLine>
+   <SourceLine>If dScale &lt; 1 Then</SourceLine>
+   <SourceLine>dScale = 1</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>Else</SourceLine>
-   <SourceLine>dRtVal = 1</SourceLine>
+   <SourceLine>dScale = 1</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>Return dRtVal</SourceLine>
-   <SourceLine>End Function</SourceLine>
+   <SourceLine>iScale = Round(dScale * 100)</SourceLine>
+   <SourceLine>iScaleBase = 100</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iScale Mod 100 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 100</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 100</SourceLine>
+   <SourceLine>ElseIf iScale Mod 50 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 50</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 50</SourceLine>
+   <SourceLine>ElseIf iScale Mod 25 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 25</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 25</SourceLine>
+   <SourceLine>ElseIf iScale Mod 20 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 20</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 20</SourceLine>
+   <SourceLine>ElseIf iScale Mod 10 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 10</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 10</SourceLine>
+   <SourceLine>ElseIf iScale Mod 5 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 5</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 5</SourceLine>
+   <SourceLine>ElseIf iScale Mod 4 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 4</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 4</SourceLine>
+   <SourceLine>ElseIf iScale Mod 2 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 2</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 2</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iScaleBase = 1 Then</SourceLine>
+   <SourceLine>dScaleBase = 1</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>dScaleBase = 1 / iScaleBase</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Sub</SourceLine>
   </ItemSource>
   <TextEncoding>134217984</TextEncoding>
   <AliasName></AliasName>
   <ItemFlags>33</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams></ItemParams>
-  <ItemResult>Double</ItemResult>
+  <ItemParams>ByRef iScale As Integer, ByRef dScaleBase As Double</ItemParams>
+  <ItemResult></ItemResult>
  </Method>
  <Method>
   <ItemName>ActionInvisible</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>410097663</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionInvisible()</SourceLine>
@@ -5605,6 +5817,7 @@
   <ItemName>IsInvisible</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>278771711</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsInvisible() As Boolean</SourceLine>
@@ -5634,6 +5847,7 @@
   <ItemName>ActionSpellCheck</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>209790975</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionSpellCheck()</SourceLine>
@@ -5651,6 +5865,7 @@
   <ItemName>GetSpellCheckerMenu</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>599707647</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetSpellCheckerMenu(iPos As Integer) As MenuItem</SourceLine>
@@ -5762,6 +5977,7 @@
   <ItemName>ActionSpellCheck_Action</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1633071103</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionSpellCheck_Action(strFunction As String, strText As String, iPosClicked As Integer)</SourceLine>
@@ -5821,6 +6037,7 @@
   <ItemName>GetWord</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1686747135</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetWord(iPos As Integer, ByRef iStartWord As Integer, ByRef iLengthWord As Integer) As String</SourceLine>
@@ -5866,6 +6083,7 @@
   <ItemName>Print</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>233308159</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Print()</SourceLine>
@@ -5883,6 +6101,7 @@
   <ItemName>ActionHyperlink</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1285861375</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionHyperlink(iPos As Integer)</SourceLine>
@@ -5939,6 +6158,7 @@
   <ItemName>ActionHTMLCode</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>208683007</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActionHTMLCode(iPos As Integer)</SourceLine>
@@ -5993,6 +6213,7 @@
   <ItemName>Event_ShowURL</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2041548799</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function Event_ShowURL(rtf As clsRTFBox_Data, strURL As String) As Boolean</SourceLine>
@@ -6082,6 +6303,7 @@
   <ItemName>Value</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1565122559</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Value As String</SourceLine>
@@ -6117,6 +6339,7 @@
   <ItemName>m_pic</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>194115583</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_pic As Picture</SourceLine>
@@ -6131,6 +6354,7 @@
   <ItemName>m_iSelLen</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>751314943</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iSelLen As Integer</SourceLine>
@@ -6145,6 +6369,7 @@
   <ItemName>m_bReadOnly</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1980829695</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bReadOnly As Boolean</SourceLine>
@@ -6159,6 +6384,7 @@
   <ItemName>m_iSelP1</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>813051903</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iSelP1 As Integer</SourceLine>
@@ -6173,6 +6399,7 @@
   <ItemName>m_iSelP2</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>736968703</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iSelP2 As Integer</SourceLine>
@@ -6187,6 +6414,7 @@
   <ItemName>m_tmr</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>155224063</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared m_tmr As Timer</SourceLine>
@@ -6201,6 +6429,7 @@
   <ItemName>m_rtfArr()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>436854783</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared m_rtfArr() As clsRTFBox</SourceLine>
@@ -6215,6 +6444,7 @@
   <ItemName>m_bGotFocus</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1696618495</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bGotFocus As Boolean</SourceLine>
@@ -6229,6 +6459,7 @@
   <ItemName>m_bCursorVisible</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1539706879</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bCursorVisible As Boolean</SourceLine>
@@ -6243,6 +6474,7 @@
   <ItemName>m_iKlikStart</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>432867327</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iKlikStart As Integer</SourceLine>
@@ -6257,6 +6489,7 @@
   <ItemName>m_rtf</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>197552127</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_rtf As clsRTFBox_Data</SourceLine>
@@ -6271,6 +6504,7 @@
   <ItemName>m_iRedrawFromPos</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1380044799</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iRedrawFromPos As Integer</SourceLine>
@@ -6285,6 +6519,7 @@
   <ItemName>m_iScrollValue</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>658954239</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iScrollValue As Integer</SourceLine>
@@ -6299,6 +6534,7 @@
   <ItemName>m_iScrollMaximum</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>50860031</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iScrollMaximum As Integer</SourceLine>
@@ -6313,6 +6549,7 @@
   <ItemName>m_bMinActive</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1775839231</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bMinActive As Boolean</SourceLine>
@@ -6327,6 +6564,7 @@
   <ItemName>m_bPlusActive</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>361181183</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bPlusActive As Boolean</SourceLine>
@@ -6341,6 +6579,7 @@
   <ItemName>m_iTicksDoubleClick</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>754737151</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iTicksDoubleClick As Integer</SourceLine>
@@ -6355,6 +6594,7 @@
   <ItemName>m_iSelectingCurrentStop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>901292031</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iSelectingCurrentStop As Integer</SourceLine>
@@ -6369,6 +6609,7 @@
   <ItemName>m_iSelectingXDiff</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>858329087</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iSelectingXDiff As Integer</SourceLine>
@@ -6383,6 +6624,7 @@
   <ItemName>m_iSelectingYDiff</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1477818367</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iSelectingYDiff As Integer</SourceLine>
@@ -6397,6 +6639,7 @@
   <ItemName>m_iTicksLastCursorUpdate</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>255565823</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared m_iTicksLastCursorUpdate As Integer</SourceLine>
@@ -6411,6 +6654,7 @@
   <ItemName>m_bLayoutBar</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>376309759</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bLayoutBar As Boolean = True</SourceLine>
@@ -6425,6 +6669,7 @@
   <ItemName>m_iTopText</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>841826303</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iTopText As Integer</SourceLine>
@@ -6439,6 +6684,7 @@
   <ItemName>m_strArrVoorkeurFonts()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1797603327</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared m_strArrVoorkeurFonts() As String</SourceLine>
@@ -6453,6 +6699,7 @@
   <ItemName>m_strArrFonts()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1108051967</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared m_strArrFonts() As String</SourceLine>
@@ -6467,6 +6714,7 @@
   <ItemName>m_iLayoutCtrlWidth()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>433696767</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iLayoutCtrlWidth() As Integer</SourceLine>
@@ -6481,6 +6729,7 @@
   <ItemName>m_iArrChangedBullets()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1715976191</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iArrChangedBullets() As Integer</SourceLine>
@@ -6495,6 +6744,7 @@
   <ItemName>m_strBullet</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1378172927</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strBullet As String</SourceLine>
@@ -6509,6 +6759,7 @@
   <ItemName>m_bAutoScroll</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>349433855</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bAutoScroll As Boolean</SourceLine>
@@ -6523,6 +6774,7 @@
   <ItemName>m_iTicksTripleClick</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1909848063</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iTicksTripleClick As Integer</SourceLine>
@@ -6537,6 +6789,7 @@
   <ItemName>m_iArrRTFId()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>249092095</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared m_iArrRTFId() As Integer</SourceLine>
@@ -6551,6 +6804,7 @@
   <ItemName>m_iLastRTFId</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>453578751</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared m_iLastRTFId As Integer</SourceLine>
@@ -6565,6 +6819,7 @@
   <ItemName>m_iIndex</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1717825535</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iIndex As Integer</SourceLine>
@@ -6579,6 +6834,7 @@
   <ItemName>m_strArrUndoRTF()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1161471999</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strArrUndoRTF() As String</SourceLine>
@@ -6593,6 +6849,7 @@
   <ItemName>m_iTicksLastUndo</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1363365887</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iTicksLastUndo As Integer</SourceLine>
@@ -6607,6 +6864,7 @@
   <ItemName>m_bChangedSinceUndo</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>579475455</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bChangedSinceUndo As Boolean</SourceLine>
@@ -6621,6 +6879,7 @@
   <ItemName>m_bRequestRefresh</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1867501567</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bRequestRefresh As Boolean</SourceLine>
@@ -6635,6 +6894,7 @@
   <ItemName>m_iCurrentDrawingSpeed</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>867880959</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iCurrentDrawingSpeed As Integer</SourceLine>
@@ -6649,6 +6909,7 @@
   <ItemName>m_iTicksLastDirtyAction</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1211801599</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iTicksLastDirtyAction As Integer</SourceLine>
@@ -6663,6 +6924,7 @@
   <ItemName>m_iRedrawToPos</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1134520319</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iRedrawToPos As Integer</SourceLine>
@@ -6677,6 +6939,7 @@
   <ItemName>m_iSelStart</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>416823295</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iSelStart As Integer</SourceLine>
@@ -6691,6 +6954,7 @@
   <ItemName>m_bAddPuntjesToNextKeydown</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1374140415</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bAddPuntjesToNextKeydown As Boolean</SourceLine>
@@ -6705,6 +6969,7 @@
   <ItemName>m_bAddKaptjeToNextKeydown</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>481398783</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bAddKaptjeToNextKeydown As Boolean</SourceLine>
@@ -6719,6 +6984,7 @@
   <ItemName>Readonly</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1606955007</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Readonly As Boolean</SourceLine>
@@ -6747,6 +7013,7 @@
   <ItemName>m_touchbar</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1093988351</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_touchbar As Object</SourceLine>
@@ -6761,6 +7028,7 @@
   <ItemName>m_bTouchbarUnavailable</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>572663807</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared m_bTouchbarUnavailable As Boolean</SourceLine>
@@ -6775,6 +7043,7 @@
   <ItemName>m_strLanguage</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>252317695</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strLanguage As String</SourceLine>
@@ -6789,6 +7058,7 @@
   <ItemName>Language</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>105228287</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Language As String</SourceLine>
@@ -6836,6 +7106,7 @@
   <ItemName>m_strPreviousSeperateBulletFromTextWith</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2134839295</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strPreviousSeperateBulletFromTextWith As String</SourceLine>
@@ -6850,6 +7121,7 @@
   <ItemName>m_strPreviousBullet</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2126841855</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strPreviousBullet As String</SourceLine>
@@ -6864,6 +7136,7 @@
   <ItemName>m_bScrollbar</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>645511167</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bScrollbar As Boolean = True</SourceLine>
@@ -6878,6 +7151,7 @@
   <ItemName>Scrollbar</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>159961087</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Scrollbar As Boolean</SourceLine>
@@ -6897,6 +7171,55 @@
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Get</SourceLine>
    <SourceLine>Return m_bScrollbar</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
+ </Property>
+ <Property>
+  <ItemName>m_bAntiAliasing</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>802564095</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_bAntiAliasing As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_bAntiAliasing As Boolean</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>AntiAlias</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1959995391</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>AntiAlias As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>AntiAlias As Boolean</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine>If Not IsNull(m_rtf) And m_rtf.AntiAlias &lt;&gt; value Then</SourceLine>
+   <SourceLine>m_rtf.AntiAlias = value</SourceLine>
+   <SourceLine>Refresh</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>If Not IsNull(m_rtf) Then</SourceLine>
+   <SourceLine>Return m_rtf.AntiAlias</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>Return False</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>End Get</SourceLine>
   </GetAccessor>
  </Property>
@@ -7059,6 +7382,7 @@
    <PropertyGroup>Behavior</PropertyGroup>
    <PropertyValue>True</PropertyValue>
    <ItemType>Boolean</ItemType>
+   <EditorType>Boolean</EditorType>
   </ViewProperty>
   <ViewProperty>
    <ObjName>Transparent</ObjName>
@@ -7094,11 +7418,17 @@
    <PropertyGroup>Behavior</PropertyGroup>
    <ItemType>Boolean</ItemType>
   </ViewProperty>
+  <ViewProperty>
+   <ObjName>AntiAlias</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>Boolean</ItemType>
+  </ViewProperty>
  </ViewBehavior>
  <Constant>
   <ItemName>CURSORTICKS</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2015813631</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>42</ItemDef>
@@ -7108,6 +7438,7 @@
   <ItemName>CTRLPOSBOLD</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>846831615</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>4</ItemDef>
@@ -7117,6 +7448,7 @@
   <ItemName>CTRLPOSITALIC</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1693302783</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>5</ItemDef>
@@ -7126,6 +7458,7 @@
   <ItemName>CTRLPOSUNDERLINE</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1750102015</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>6</ItemDef>
@@ -7135,6 +7468,7 @@
   <ItemName>CTRLPOSFONT</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1846972415</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>1</ItemDef>
@@ -7144,6 +7478,7 @@
   <ItemName>CTRLPOSFONTSIZE</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>287139839</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>2</ItemDef>
@@ -7153,6 +7488,7 @@
   <ItemName>CTRLPOSAAA_LAST</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>485773311</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>17</ItemDef>
@@ -7162,6 +7498,7 @@
   <ItemName>CTRLPOSCOLOR</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1937680383</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>8</ItemDef>
@@ -7171,6 +7508,7 @@
   <ItemName>CTRLPOSALIGNLEFT</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>447737855</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>10</ItemDef>
@@ -7180,6 +7518,7 @@
   <ItemName>CTRLPOSALIGNCENTER</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>775163903</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>11</ItemDef>
@@ -7189,6 +7528,7 @@
   <ItemName>CTRLPOSALIGNRIGHT</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>870828031</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>12</ItemDef>
@@ -7198,6 +7538,7 @@
   <ItemName>CTRLPOSJUMPIN</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1629186047</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>15</ItemDef>
@@ -7207,6 +7548,7 @@
   <ItemName>CTRLPOSJUMPOUT</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1090744319</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>14</ItemDef>
@@ -7216,6 +7558,7 @@
   <ItemName>CTRLPOSUNDO</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>150745087</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>17</ItemDef>

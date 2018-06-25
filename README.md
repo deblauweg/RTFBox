@@ -1,7 +1,6 @@
 # RTFBox
 
-This is the short explication of the license what you can do, can’t do and must do:
-https://tldrlegal.com/license/eclipse-public-license-1.0-(epl-1.0)
+These classes fall under lgpl v3. https://tldrlegal.com/license/gnu-lesser-general-public-license-v3-(lgpl-3)
 
 How to add this in your application?
 

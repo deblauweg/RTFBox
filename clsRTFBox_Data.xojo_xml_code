@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RBProject version="2017r1.1" FormatVersion="2" MinIDEVersion="20070100">
+<RBProject version="2018r1.1" FormatVersion="2" MinIDEVersion="20070100">
 <block type="Module" ID="640943054">
  <ObjName>clsRTFBox_Data</ObjName>
  <ObjContainerID>0</ObjContainerID>
@@ -11,6 +11,7 @@
   <ItemName>ParseRTF_SplitParagraphs</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>727078911</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ParseRTF_SplitParagraphs(strValue As String, ByRef strArrParagraphs() As String, ByRef iArrParagraphAlignment() As Integer, ByRef bArrParagraphStartsDefault() As Boolean, ByRef bArrParagraphNewLine() As Boolean, ByRef iArrTableCell() As Integer)</SourceLine>
@@ -352,6 +353,7 @@
   <ItemName>Parse</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1756549119</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Parse(strValue As String, bForcePlainText As Boolean)</SourceLine>
@@ -485,6 +487,7 @@
   <ItemName>ParseRTF_AndereAccoladeToestanden</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1539467263</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ParseRTF_AndereAccoladeToestanden(ByRef strValue As String)</SourceLine>
@@ -534,6 +537,7 @@
   <ItemName>ParseRTF_CutOutUnknownCommand</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>793819135</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function ParseRTF_CutOutUnknownCommand(strValue As String) As String</SourceLine>
@@ -707,6 +711,7 @@
   <ItemName>ParseRTF_Explode</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>731551743</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ParseRTF_Explode(ByRef strArrParagraphs() As String, ByRef iArrParagraphAlignment() As Integer, ByRef bArrParagraphStartsDefault() As Boolean, ByRef bArrParagraphNewLine() As Boolean, ByRef iArrTableCell() As Integer)</SourceLine>
@@ -1170,6 +1175,7 @@
   <ItemName>ParseRTF_LoadColors</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>257585151</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ParseRTF_LoadColors(ByRef strValue As String)</SourceLine>
@@ -1273,6 +1279,7 @@
   <ItemName>ParseRTF_LoadFonts</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>810655743</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ParseRTF_LoadFonts(ByRef strValue As String)</SourceLine>
@@ -1356,6 +1363,7 @@
   <ItemName>GetRTF</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>453814271</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetRTF(bWithNISDisable As Boolean = True) As String</SourceLine>
@@ -1391,6 +1399,7 @@
    <SourceLine>Optimize(bWithNISDisable)</SourceLine>
    <SourceLine>dMSStart = Microseconds</SourceLine>
    <SourceLine></SourceLine>
+   <SourceLine>If m_cpArr.Ubound &gt; 0 Then</SourceLine>
    <SourceLine>iCurrentFont = -1</SourceLine>
    <SourceLine>dCurrentFontSize = -1</SourceLine>
    <SourceLine>iCurrentColor = -1</SourceLine>
@@ -1580,7 +1589,9 @@
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>strRTF = strRTF + "}"</SourceLine>
-   <SourceLine>'strRTF = strRTF.ReplaceAll("{\field{\*\fldinst page}{\fldrslt\par &lt;PageBreak&gt;\par}}", "\page")</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>strRTF = ""</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>System.DebugLog "GetRTF (" + Format(strRTF.Len, "0") + " byte) uitgevoerd in " + Format(Round(((Microseconds - dMsStart) / 1000.0)), "0") + " ms"</SourceLine>
    <SourceLine></SourceLine>
@@ -1598,6 +1609,7 @@
   <ItemName>Optimize</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>285200383</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Optimize(bWithNISDisable As Boolean)</SourceLine>
@@ -1970,6 +1982,7 @@
   <ItemName>SetRTF</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>758276095</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetRTF(strValue As String)</SourceLine>
@@ -1988,6 +2001,7 @@
   <ItemName>InsertChar</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1675948031</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub InsertChar(ByRef iPos As Integer, strKey As String)</SourceLine>
@@ -2166,6 +2180,7 @@
   <ItemName>GetAlignment</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1032964095</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetAlignment(iPos As Integer) As Integer</SourceLine>
@@ -2201,6 +2216,7 @@
   <ItemName>GetNextTabstop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>36120575</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetNextTabstop(iPos As Integer, iWidth As Integer) As Integer</SourceLine>
@@ -2236,6 +2252,7 @@
   <ItemName>GetFont</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>155183103</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetFont(iPos As Integer, bVolgendTeTypenCharacter As Boolean) As String</SourceLine>
@@ -2281,6 +2298,7 @@
   <ItemName>GetColor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>229953535</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetColor(iPos As Integer, bVolgendTeTypenCharacter As Boolean) As Color</SourceLine>
@@ -2335,6 +2353,7 @@
   <ItemName>IsBold</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1340010495</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsBold(iPos As Integer, bVolgendTeTypenCharacter As Boolean) As Boolean</SourceLine>
@@ -2353,6 +2372,7 @@
   <ItemName>IsStyle</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1675360255</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsStyle(iPos As Integer, bVolgendTeTypenCharacter As Boolean, btStyle As Byte) As Boolean</SourceLine>
@@ -2377,6 +2397,7 @@
   <ItemName>IsItalic</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1616007167</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsItalic(iPos As Integer, bVolgendTeTypenCharacter As Boolean) As Boolean</SourceLine>
@@ -2395,6 +2416,7 @@
   <ItemName>IsUnderline</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>15642623</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsUnderline(iPos As Integer, bVolgendTeTypenCharacter As Boolean, iStyle As Integer = 0) As Boolean</SourceLine>
@@ -2423,6 +2445,7 @@
   <ItemName>SetStyle</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>381460479</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetStyle(ByRef cp As CharPos, btStyle As Byte, bValue As Boolean)</SourceLine>
@@ -2450,6 +2473,7 @@
   <ItemName>SetBold</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1730310143</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetBold(iPos As Integer, Assigns bValue As Boolean)</SourceLine>
@@ -2475,6 +2499,7 @@
   <ItemName>SetItalic</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1850157055</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetItalic(iPos As Integer, Assigns bValue As Boolean)</SourceLine>
@@ -2500,6 +2525,7 @@
   <ItemName>SetUnderline</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1217890303</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetUnderline(iPos As Integer, Assigns iStyle As Integer)</SourceLine>
@@ -2531,6 +2557,7 @@
   <ItemName>Optimize_WisselParagraaf</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1659273215</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Optimize_WisselParagraaf(iA As Integer, iB As Integer)</SourceLine>
@@ -2566,6 +2593,7 @@
   <ItemName>SetNextBold</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1670113279</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetNextBold(iPos As Integer, bValue As Boolean)</SourceLine>
@@ -2591,6 +2619,7 @@
   <ItemName>ActivateNIS</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>81768447</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ActivateNIS(iPos As Integer)</SourceLine>
@@ -2621,6 +2650,7 @@
   <ItemName>Constructor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2097557503</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Constructor()</SourceLine>
@@ -2638,6 +2668,7 @@
   <ItemName>SetNextItalic</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1728055295</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetNextItalic(iPos As Integer, bValue As Boolean)</SourceLine>
@@ -2663,6 +2694,7 @@
   <ItemName>SetNextUnderline</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>955451391</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetNextUnderline(iPos As Integer, iStyle As Integer)</SourceLine>
@@ -2687,6 +2719,7 @@
   <ItemName>SetNextColor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>277540863</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetNextColor(iPos As Integer, clColor As Color)</SourceLine>
@@ -2715,6 +2748,7 @@
   <ItemName>SetNextFont</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1112100863</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetNextFont(iPos As Integer, strFont As String)</SourceLine>
@@ -2743,6 +2777,7 @@
   <ItemName>SetNextFontSize</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1371594751</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetNextFontSize(iPos As Integer, dSize As Double)</SourceLine>
@@ -2762,6 +2797,7 @@
   <ItemName>GetIndent</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1980497919</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetIndent(iPos As Integer) As Integer</SourceLine>
@@ -2807,6 +2843,7 @@
   <ItemName>GetFontSize</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1719054335</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetFontSize(iPos As Integer, bVolgendTeTypenCharacter As Boolean) As Double</SourceLine>
@@ -2846,6 +2883,7 @@
   <ItemName>IsFontUsed</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1834766335</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsFontUsed(strFont As String) As Boolean</SourceLine>
@@ -2863,6 +2901,7 @@
   <ItemName>SetFont</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>386799615</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetFont(iPos As Integer, Assigns strFont As String)</SourceLine>
@@ -2895,6 +2934,7 @@
   <ItemName>SetFontSize</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1133043711</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetFontSize(iPos As Integer, Assigns iSize As Integer)</SourceLine>
@@ -2918,6 +2958,7 @@
   <ItemName>MeetCP</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1705736191</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub MeetCP(iPos As Integer)</SourceLine>
@@ -2967,6 +3008,7 @@
   <ItemName>ChPlainToRTFCode</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>996208639</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function ChPlainToRTFCode(chPlain As String, ByRef bUnicodeInitialized As Boolean) As String</SourceLine>
@@ -3000,6 +3042,7 @@
   <ItemName>ChRTFCodeToPlain</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>879243263</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function ChRTFCodeToPlain(strRTFCode As String) As String</SourceLine>
@@ -3297,6 +3340,7 @@
   <ItemName>SetColor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>313448447</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetColor(iPos As Integer, Assigns clColor As Color)</SourceLine>
@@ -3327,6 +3371,7 @@
   <ItemName>SetAlignment</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>387158015</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function SetAlignment(iPos As Integer, iAlign As Integer) As Integer</SourceLine>
@@ -3382,6 +3427,7 @@
   <ItemName>NumbersOnly</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2125598719</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared Function NumbersOnly(strIn As String, ParamArray strArrExceptions() As String) As String</SourceLine>
@@ -3423,6 +3469,7 @@
   <ItemName>GetParagraphMap</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1817919487</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub GetParagraphMap(ByRef iArrParagraph() As Integer, ByRef strArrParagraphDefinition() As String, ByRef strArrTekst() As String)</SourceLine>
@@ -3462,6 +3509,7 @@
   <ItemName>GetTabstops</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1551210495</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetTabstops(iPos As Integer, iWidth As Integer) As Integer()</SourceLine>
@@ -3522,6 +3570,7 @@
   <ItemName>SetTabstop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2044911615</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function SetTabstop(iPos As Integer, iTabstopPos As Integer, bTabstop As Boolean) As Integer</SourceLine>
@@ -3575,6 +3624,7 @@
   <ItemName>IsTabStop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>987803647</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsTabStop(iPos As Integer, iTabstopPos As Integer) As Boolean</SourceLine>
@@ -3610,6 +3660,7 @@
   <ItemName>GetNextInsprong</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2049304575</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetNextInsprong(iPos As Integer) As Integer</SourceLine>
@@ -3645,6 +3696,7 @@
   <ItemName>GetPreviousInsprong</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1602299903</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetPreviousInsprong(iPos As Integer) As Integer</SourceLine>
@@ -3679,6 +3731,7 @@
   <ItemName>SetIndent</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>474738687</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function SetIndent(iPos As Integer, iIndent As Integer, iFirstIndent As Integer = 0) As Integer</SourceLine>
@@ -3733,6 +3786,7 @@
   <ItemName>ParseRTF_LoadStyleSheets</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1896009727</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ParseRTF_LoadStyleSheets(ByRef strValue As String)</SourceLine>
@@ -3857,6 +3911,7 @@
   <ItemName>ParseRTF_CutOutUnwantedBlocks</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>59340799</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ParseRTF_CutOutUnwantedBlocks(ByRef strValue As String)</SourceLine>
@@ -3958,6 +4013,7 @@
   <ItemName>GetText</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>605779967</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetText() As String</SourceLine>
@@ -4009,6 +4065,7 @@
   <ItemName>AppendRTF</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2027606015</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub AppendRTF(strRTF As String)</SourceLine>
@@ -4026,6 +4083,7 @@
   <ItemName>GetHtml</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1232130047</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetHtml() As String</SourceLine>
@@ -4426,6 +4484,7 @@
   <ItemName>GetHtml_Color</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1821468671</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetHtml_Color(clColor As Color) As String</SourceLine>
@@ -4462,6 +4521,7 @@
   <ItemName>ChPlainToHtmlCode</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>794734591</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function ChPlainToHtmlCode(ch As String) As String</SourceLine>
@@ -4838,6 +4898,7 @@
   <ItemName>GetHtml_Tabs</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>370253823</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetHtml_Tabs(iNrTabs As Integer) As String</SourceLine>
@@ -4869,6 +4930,7 @@
   <ItemName>ParseRTF_LoadFields</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1183139839</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ParseRTF_LoadFields(ByRef strValue As String)</SourceLine>
@@ -4960,6 +5022,7 @@
   <ItemName>ParseRTF_LoadFields_AnalyzeField</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>478672895</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ParseRTF_LoadFields_AnalyzeField(ByRef strField As String)</SourceLine>
@@ -5072,6 +5135,7 @@
   <ItemName>GetFunctieValue</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1485961215</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetFunctieValue(strFunctie As String, strOriginalValue As String) As String</SourceLine>
@@ -5114,6 +5178,7 @@
   <ItemName>Event_FillFunctionValue</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>748376063</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function Event_FillFunctionValue(rtf As clsRTFBox_Data, strFunction As String, ByRef strValue As String) As Boolean</SourceLine>
@@ -5133,6 +5198,7 @@
   <ItemName>HasUsedFunctions</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1147435007</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function HasUsedFunctions() As Boolean</SourceLine>
@@ -5162,6 +5228,7 @@
   <ItemName>GetFunctie</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1248516095</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetFunctie(iFunctie As Integer) As String</SourceLine>
@@ -5181,6 +5248,7 @@
   <ItemName>UpdateFunctions</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>196386815</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function UpdateFunctions() As Boolean</SourceLine>
@@ -5286,6 +5354,7 @@
   <ItemName>InsertFunctie</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1000421375</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub InsertFunctie(ByRef iPos As Integer, strFunctie As String)</SourceLine>
@@ -5337,6 +5406,7 @@
   <ItemName>IsEmailAdres</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>897603583</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared Function IsEmailAdres(strPossibleAdres As String) As Boolean</SourceLine>
@@ -5367,6 +5437,7 @@
   <ItemName>GetRTF_AddLayout</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1882161151</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetRTF_AddLayout(iPos As Integer, ByRef iCurrentFont As Integer, ByRef dCurrentFontSize As Double, ByRef iCurrentColor As Integer, ByRef iCurrentBold As Integer, ByRef iCurrentInvisible As Integer, ByRef iCurrentItalic As Integer, ByRef iCurrentUnderline As Integer, ByRef iCurrentStrikeThrough As Integer, ByRef iCurrentShadow As Integer) As String</SourceLine>
@@ -5500,6 +5571,7 @@
   <ItemName>SetUnderlineStyle</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>285999103</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetUnderlineStyle(ByRef cp As CharPos, iUnderlineStyle As Integer)</SourceLine>
@@ -5523,6 +5595,7 @@
   <ItemName>GetBtStyle</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1736818687</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetBtStyle(iPos As Integer, bVolgendTeTypenCharacter As Boolean) As Byte</SourceLine>
@@ -5562,6 +5635,7 @@
   <ItemName>GetUnderlineStyle</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1897558015</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetUnderlineStyle(iPos As Integer, bVolgendTeTypenCharacter As Boolean) As Integer</SourceLine>
@@ -5586,6 +5660,7 @@
   <ItemName>IsStrikeThrough</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1675943935</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsStrikeThrough(iPos As Integer, bVolgendTeTypenCharacter As Boolean) As Boolean</SourceLine>
@@ -5604,6 +5679,7 @@
   <ItemName>IsShadow</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>190750719</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsShadow(iPos As Integer, bVolgendTeTypenCharacter As Boolean) As Boolean</SourceLine>
@@ -5622,6 +5698,7 @@
   <ItemName>SetStrikeThrough</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>210143231</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetStrikeThrough(iPos As Integer, Assigns bValue As Boolean)</SourceLine>
@@ -5646,6 +5723,7 @@
   <ItemName>SetShadow</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1909772287</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetShadow(iPos As Integer, Assigns bValue As Boolean)</SourceLine>
@@ -5670,6 +5748,7 @@
   <ItemName>SetNextStrikeThrough</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1758568447</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetNextStrikeThrough(iPos As Integer, bValue As Boolean)</SourceLine>
@@ -5695,6 +5774,7 @@
   <ItemName>SetNextShadow</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>197609471</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetNextShadow(iPos As Integer, bValue As Boolean)</SourceLine>
@@ -5720,6 +5800,7 @@
   <ItemName>ChRTFOriginalToScale</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>474411007</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function ChRTFOriginalToScale(dSize As Double, bFloat As Boolean = True) As Double</SourceLine>
@@ -5749,6 +5830,7 @@
   <ItemName>NextRedrawWithMask</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>548292607</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function NextRedrawWithMask() As Boolean</SourceLine>
@@ -5771,6 +5853,7 @@
   <ItemName>SetNextRedrawWithMask</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1929658367</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetNextRedrawWithMask()</SourceLine>
@@ -5788,6 +5871,7 @@
   <ItemName>InsertText</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1095598079</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub InsertText(iPos As Integer, strText As String)</SourceLine>
@@ -5805,6 +5889,7 @@
   <ItemName>InsertRTF</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>679649279</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub InsertRTF(iPos As Integer, strRTF As String)</SourceLine>
@@ -5822,6 +5907,7 @@
   <ItemName>InsertRTF_Intern</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>316411903</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub InsertRTF_Intern(iPos As Integer, strRTF As String, bForcePlaintext As Boolean)</SourceLine>
@@ -6086,6 +6172,7 @@
   <ItemName>SetText</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1439844351</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetText(strValue As String)</SourceLine>
@@ -6104,6 +6191,7 @@
   <ItemName>DeleteAllAndSetStartData</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1231495167</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub DeleteAllAndSetStartData(iPos As Integer)</SourceLine>
@@ -6176,6 +6264,7 @@
   <ItemName>GetRTFFont</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1091610623</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared Function GetRTFFont(strFont As String) As String</SourceLine>
@@ -6219,6 +6308,7 @@
   <ItemName>ChRTFScaleToOriginal</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>512538623</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function ChRTFScaleToOriginal(dSize As Double, bFloat As Boolean = True) As Double</SourceLine>
@@ -6248,6 +6338,7 @@
   <ItemName>SetScale</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>962220031</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function SetScale(dScale As Double) As Boolean</SourceLine>
@@ -6290,6 +6381,7 @@
   <ItemName>GetScale</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>933976063</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetScale() As Double</SourceLine>
@@ -6311,6 +6403,7 @@
   <ItemName>SetTableCellAlsTeHermeten</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>714805247</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetTableCellAlsTeHermeten(iCell As Integer)</SourceLine>
@@ -6342,6 +6435,7 @@
   <ItemName>GetRTF_AddTableCell</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>781160447</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetRTF_AddTableCell(iPar As Integer, ByRef iCurrentCell As Integer, ByRef iCurrentRow As Integer, ByRef iCurrentCol As Integer) As String</SourceLine>
@@ -6426,6 +6520,7 @@
   <ItemName>UpdateFunctions</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1414516735</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub UpdateFunctions()</SourceLine>
@@ -6445,6 +6540,7 @@
   <ItemName>GetTableCellTop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1373880319</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetTableCellTop(iChar As Integer) As Integer</SourceLine>
@@ -6470,6 +6566,7 @@
   <ItemName>GetTableCellLeft</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1594185727</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetTableCellLeft(iChar As Integer) As Integer</SourceLine>
@@ -6494,6 +6591,7 @@
   <ItemName>ExportMemoryMap</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1816805375</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ExportMemoryMap(strName As String)</SourceLine>
@@ -6604,6 +6702,7 @@
   <ItemName>Table_AddCell</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1796192255</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function Table_AddCell(iInsertAfter As Integer) As Integer</SourceLine>
@@ -6715,6 +6814,7 @@
   <ItemName>Table_AddRow</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>339214335</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function Table_AddRow(iInsertAfter As Integer) As Integer</SourceLine>
@@ -7006,6 +7106,7 @@
   <ItemName>Table_DelCell</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1088937983</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Table_DelCell(iPos As Integer, bEntireRow As Boolean)</SourceLine>
@@ -7133,9 +7234,10 @@
   <ItemName>DrawRTF_GetArray</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>557713407</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Function DrawRTF_GetArray(iWidth As Integer, iHeightFirstPage As Integer, iHeightOtherPages As Integer, bTransparent As Boolean, gPrinter As Graphics, iPageNr As Integer) As Picture()</SourceLine>
+   <SourceLine>Function DrawRTF_GetArray(iWidth As Integer, iHeightFirstPage As Integer, iHeightOtherPages As Integer, iBkColor As Integer, gPrinter As Graphics, iPageNr As Integer) As Picture()</SourceLine>
    <SourceLine>Dim picArr() As Picture</SourceLine>
    <SourceLine>Dim pic As Picture</SourceLine>
    <SourceLine>Dim tPage As Integer</SourceLine>
@@ -7195,11 +7297,11 @@
    <SourceLine>If IsNull(gPrinter) Then</SourceLine>
    <SourceLine>g.DrawPicture(DrawRTF(iWidth, iHeight, _</SourceLine>
    <SourceLine>iFrom, iTo, iScrollValue, 0, 0, _</SourceLine>
-   <SourceLine>True, True, bTransparent, bResizedPictures, Nil, Nil), 0, 0)</SourceLine>
+   <SourceLine>True, True, iBkColor, bResizedPictures, Nil, Nil), 0, 0)</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>g.DrawPicture(DrawRTF(iWidth, iHeight, _</SourceLine>
    <SourceLine>iFrom, iTo, iScrollValue, 0, 0, _</SourceLine>
-   <SourceLine>True, True, bTransparent, bResizedPictures, Nil, g), 0, 0)</SourceLine>
+   <SourceLine>True, True, iBkColor, bResizedPictures, Nil, g), 0, 0)</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>'ExportMemoryMap("print_during_testflight.csv")</SourceLine>
    <SourceLine>If bResizedPictures Then</SourceLine>
@@ -7331,7 +7433,7 @@
    <SourceLine>iHeight = iHeight + iGrace</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>If bTransparent Then</SourceLine>
+   <SourceLine>If iBkColor &lt; 0 Then 'Transparent</SourceLine>
    <SourceLine>pic = New Picture(iWidth, iHeight)</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>pic = New Picture(iWidth, iHeight, 32)</SourceLine>
@@ -7340,13 +7442,13 @@
    <SourceLine></SourceLine>
    <SourceLine>g.DrawPicture(DrawRTF(iWidth, iHeight, _</SourceLine>
    <SourceLine>iFrom, iTo, iScrollValue, 0, 0, _</SourceLine>
-   <SourceLine>True, True, bTransparent, bResizedPictures, Nil, Nil), 0, 0)</SourceLine>
+   <SourceLine>True, True, iBkColor, bResizedPictures, Nil, Nil), 0, 0)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>picArr.Append(pic)</SourceLine>
    <SourceLine>ElseIf tPage + 1 = iPageNr Then</SourceLine>
    <SourceLine>pic = DrawRTF(iWidth, iHeight, _</SourceLine>
    <SourceLine>iFrom, iTo, iScrollValue, 0, 0, _</SourceLine>
-   <SourceLine>True, True, bTransparent, bResizedPictures, Nil, gPrinter)</SourceLine>
+   <SourceLine>True, True, iBkColor, bResizedPictures, Nil, gPrinter)</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>picArr.Append(Nil)</SourceLine>
@@ -7378,13 +7480,14 @@
   <AliasName></AliasName>
   <ItemFlags>0</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>iWidth As Integer, iHeightFirstPage As Integer, iHeightOtherPages As Integer, bTransparent As Boolean, gPrinter As Graphics, iPageNr As Integer</ItemParams>
+  <ItemParams>iWidth As Integer, iHeightFirstPage As Integer, iHeightOtherPages As Integer, iBkColor As Integer, gPrinter As Graphics, iPageNr As Integer</ItemParams>
   <ItemResult>Picture()</ItemResult>
  </Method>
  <Method>
   <ItemName>CheckEnMeetRTF_Tables_MeetCell</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>572991487</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub CheckEnMeetRTF_Tables_MeetCell(iStartChar As Integer, iStopChar As Integer, iTableCell As Integer, iCharTo As Integer, bPrint As Boolean)</SourceLine>
@@ -7530,6 +7633,7 @@
   <ItemName>CheckEnMeetRTF_Tables</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>191102975</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub CheckEnMeetRTF_Tables(iParentCell As Integer, iMaxWidth As Integer, iCharTo As Integer, bPrint As Boolean)</SourceLine>
@@ -7672,6 +7776,7 @@
   <ItemName>CheckEnMeetRTF</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>482555903</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub CheckEnMeetRTF(iMaxWidth As Integer, ByRef iCharFrom As Integer, ByRef iCharTo As Integer, bPrint As Boolean)</SourceLine>
@@ -7910,9 +8015,10 @@
   <ItemName>DrawRTF</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>628830207</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Function DrawRTF(iWidth As Integer, iHeight As Integer, iFrom As Integer, iTo As Integer, iScrollValue As Integer, iSelFrom As Integer, iSelTo As Integer, bPrint As Boolean, bReadOnly As Boolean, bTransparent As Boolean, ByRef bResizedPictures As Boolean, wnd As Window, gPrint As Graphics) As Picture</SourceLine>
+   <SourceLine>Function DrawRTF(iWidth As Integer, iHeight As Integer, iFrom As Integer, iTo As Integer, iScrollValue As Integer, iSelFrom As Integer, iSelTo As Integer, bPrint As Boolean, bReadOnly As Boolean, iBkColor As Integer, ByRef bResizedPictures As Boolean, oWnd As Object, gPrint As Graphics) As Picture</SourceLine>
    <SourceLine>Dim t As Integer</SourceLine>
    <SourceLine>Dim tLine As Integer</SourceLine>
    <SourceLine>Dim pic As Picture</SourceLine>
@@ -7957,18 +8063,24 @@
    <SourceLine>Dim tB As Integer</SourceLine>
    <SourceLine>Dim strWord As String</SourceLine>
    <SourceLine>Dim iPos As Integer</SourceLine>
+   <SourceLine>Dim bTransparent As Boolean</SourceLine>
+   <SourceLine>Dim iRed As Integer</SourceLine>
+   <SourceLine>Dim iGreen As Integer</SourceLine>
+   <SourceLine>Dim iBlue As Integer</SourceLine>
    <SourceLine>Dim dMsDrawingTime As Double</SourceLine>
+   <SourceLine>Dim bHiDPI As Boolean</SourceLine>
+   <SourceLine>Dim dScaleBase As Double</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>dMsTussenStop = Microseconds</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>If App.SupportsHiDPI And Not IsNull(wnd) Then</SourceLine>
-   <SourceLine>iScale = wnd.ScaleFactor</SourceLine>
-   <SourceLine>If iScale &lt; 1 Then </SourceLine>
-   <SourceLine>iScale = 1</SourceLine>
-   <SourceLine>End If</SourceLine>
+   <SourceLine>If iBkColor &lt; 0 Then</SourceLine>
+   <SourceLine>bTransparent = True</SourceLine>
    <SourceLine>Else</SourceLine>
-   <SourceLine>iScale = 1</SourceLine>
+   <SourceLine>bTransparent = False</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>GetScaleFactor(oWnd, iScale, dScaleBase, bHiDPI)</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>bRedrawWithMask = (Not bPrint And NextRedrawWithMask)</SourceLine>
    <SourceLine>For t = 0 To iFrom - 1</SourceLine>
    <SourceLine>m_cpArr(t).iScreenX = 0</SourceLine>
@@ -7986,44 +8098,44 @@
    <SourceLine>m_cpArr(t).iScreenX = 0</SourceLine>
    <SourceLine>m_cpArr(t).iScreenY = 0</SourceLine>
    <SourceLine>Next t</SourceLine>
-   <SourceLine>ElseIf IsNull(m_picRTFBuffer) Or m_picRTFBuffer.Width &lt;&gt; iWidth Or m_picRTFBuffer.Height &lt;&gt; iHeight Or _</SourceLine>
+   <SourceLine>Elseif IsNull(m_picRTFBuffer) Or m_picRTFBuffer.Width &lt;&gt; iWidth Or m_picRTFBuffer.Height &lt;&gt; iHeight Or _</SourceLine>
    <SourceLine>(TargetWin32 And bRedrawWithMask) Or bPrint Or m_tcArr.Ubound &gt;= 0 Or m_rpicArr.UBound &gt;= 0 Then </SourceLine>
-   <SourceLine>#if TargetConsole</SourceLine>
+   <SourceLine>#If TargetConsole</SourceLine>
    <SourceLine>If iWidth &lt; 1 Or iHeight &lt; 1 Then</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(1, 1)</SourceLine>
-   <SourceLine>ElseIf TargetWindows And (bPrint Or m_dLargestDrawingTime &lt; DRAWINGTIMETHRESHOLD) Then</SourceLine>
+   <SourceLine>Elseif TargetWindows And (bPrint Or m_dLargestDrawingTime &lt; DRAWINGTIMETHRESHOLD) Then</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(iWidth, iHeight, 32)</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(iWidth, iHeight)</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>#else</SourceLine>
+   <SourceLine>#Else</SourceLine>
    <SourceLine>If iWidth &lt; 1 Or iHeight &lt; 1 Then</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(1, 1)</SourceLine>
-   <SourceLine>ElseIf App.SupportsHiDPI And Not IsNull(wnd) Then</SourceLine>
-   <SourceLine>m_picRTFBuffer = wnd.BitmapForCaching(iWidth, iHeight)</SourceLine>
-   <SourceLine>ElseIf TargetWindows And (bPrint Or m_dLargestDrawingTime &lt; DRAWINGTIMETHRESHOLD) Then</SourceLine>
+   <SourceLine>Elseif bHiDPI Then</SourceLine>
+   <SourceLine>m_picRTFBuffer = Window(oWnd).BitmapForCaching(iWidth, iHeight)</SourceLine>
+   <SourceLine>Elseif TargetWindows And (bPrint Or m_dLargestDrawingTime &lt; DRAWINGTIMETHRESHOLD) Then</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(iWidth, iHeight, 32)</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(iWidth, iHeight)</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>#endif</SourceLine>
+   <SourceLine>#EndIf</SourceLine>
    <SourceLine>For t = iFrom To iTo </SourceLine>
    <SourceLine>m_cpArr(t).iScreenX = 0</SourceLine>
    <SourceLine>m_cpArr(t).iScreenY = 0</SourceLine>
    <SourceLine>Next t</SourceLine>
    <SourceLine>picMask = Nil</SourceLine>
-   <SourceLine>ElseIf bRedrawWithMask Then</SourceLine>
-   <SourceLine>#if TargetConsole</SourceLine>
+   <SourceLine>Elseif bRedrawWithMask Then</SourceLine>
+   <SourceLine>#If TargetConsole</SourceLine>
    <SourceLine>picMask = New Picture(m_picRTFBuffer.Width, m_picRTFBuffer.Height, 32)</SourceLine>
-   <SourceLine>#else</SourceLine>
-   <SourceLine>If App.SupportsHiDPI And Not IsNull(wnd) Then</SourceLine>
-   <SourceLine>picMask = wnd.BitmapForCaching(m_picRTFBuffer.Width, m_picRTFBuffer.Height)</SourceLine>
-   <SourceLine>ElseIf TargetWindows And (bPrint Or m_dLargestDrawingTime &lt; DRAWINGTIMETHRESHOLD) Then</SourceLine>
+   <SourceLine>#Else</SourceLine>
+   <SourceLine>If bHiDPI Then</SourceLine>
+   <SourceLine>picMask = Window(oWnd).BitmapForCaching(m_picRTFBuffer.Width, m_picRTFBuffer.Height)</SourceLine>
+   <SourceLine>Elseif TargetWindows And (bPrint Or m_dLargestDrawingTime &lt; DRAWINGTIMETHRESHOLD) Then</SourceLine>
    <SourceLine>picMask = New Picture(m_picRTFBuffer.Width, m_picRTFBuffer.Height, 32)</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>picMask = New Picture(m_picRTFBuffer.Width, m_picRTFBuffer.Height)</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>#endif</SourceLine>
+   <SourceLine>#EndIf</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>gMask = picMask.Graphics</SourceLine>
    <SourceLine>gMask.ForeColor = &amp;cFFFFFF</SourceLine>
@@ -8032,13 +8144,13 @@
    <SourceLine></SourceLine>
    <SourceLine>System.DebugLog "GetImage.DrawRTF_Internal_GetImage uitgevoerd in " + Format(Round(((Microseconds - dMsTussenStop) / 1000.0)), "0") + " ms " + _</SourceLine>
    <SourceLine>"(Print = " + CStr(bPrint) + ", Mask = " + CStr(bRedrawWithMask) + ", " + _</SourceLine>
-   <SourceLine>"Transparent = " + CStr(bTransparent) + ", " + _</SourceLine>
+   <SourceLine>"BkColor = " + CStr(iBkColor) + ", " + _</SourceLine>
    <SourceLine>"From = " + Format(iFrom, "0") + ", To = " + Format(iTo, "0") + ")"</SourceLine>
    <SourceLine>dMsTussenStop = Microseconds</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If Not IsNull(gPrint) Then</SourceLine>
    <SourceLine>g = gPrint</SourceLine>
-   <SourceLine>ElseIf bPrint Then</SourceLine>
+   <SourceLine>Elseif bPrint Then</SourceLine>
    <SourceLine>If bTransparent Or Not TargetWindows Then</SourceLine>
    <SourceLine>pic = New Picture(iWidth, iHeight)</SourceLine>
    <SourceLine>Else</SourceLine>
@@ -8049,6 +8161,21 @@
    <SourceLine>pic = m_picRTFBuffer</SourceLine>
    <SourceLine>g = pic.Graphics</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine>g.AntiAlias = m_bAntiAlias</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iBkColor &gt;= 0 And iBkColor &lt; (256 * 256 * 256) Then</SourceLine>
+   <SourceLine>iBlue = iBkColor</SourceLine>
+   <SourceLine>iRed = iBlue Mod 256</SourceLine>
+   <SourceLine>iBlue = (iBlue - iRed) / 256</SourceLine>
+   <SourceLine>iGreen = iBlue Mod 256</SourceLine>
+   <SourceLine>iBlue = (iBlue - iGreen) / 256</SourceLine>
+   <SourceLine>clBackColor = RGB(iRed, iGreen, iBlue)</SourceLine>
+   <SourceLine>g.ForeColor = clBackColor</SourceLine>
+   <SourceLine>g.FillRect(0, 0, iWidth, iHeight)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>bTransparent = True</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>strOldFont = g.TextFont</SourceLine>
    <SourceLine>dOldSize = 0</SourceLine>
    <SourceLine>iOldStyle = -1</SourceLine>
@@ -8496,13 +8623,14 @@
   <AliasName></AliasName>
   <ItemFlags>0</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>iWidth As Integer, iHeight As Integer, iFrom As Integer, iTo As Integer, iScrollValue As Integer, iSelFrom As Integer, iSelTo As Integer, bPrint As Boolean, bReadOnly As Boolean, bTransparent As Boolean, ByRef bResizedPictures As Boolean, wnd As Window, gPrint As Graphics</ItemParams>
+  <ItemParams>iWidth As Integer, iHeight As Integer, iFrom As Integer, iTo As Integer, iScrollValue As Integer, iSelFrom As Integer, iSelTo As Integer, bPrint As Boolean, bReadOnly As Boolean, iBkColor As Integer, ByRef bResizedPictures As Boolean, oWnd As Object, gPrint As Graphics</ItemParams>
   <ItemResult>Picture</ItemResult>
  </Method>
  <Method>
   <ItemName>ClearRTFBuffer</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1983553535</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ClearRTFBuffer()</SourceLine>
@@ -8520,6 +8648,7 @@
   <ItemName>Table_AddRow_CopyAlignmentAndColors</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1897566207</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Table_AddRow_CopyAlignmentAndColors(iFromRow As Integer, iToRow As Integer, iCol As Integer)</SourceLine>
@@ -8577,6 +8706,7 @@
   <ItemName>Table_GetCellColor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>346304511</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function Table_GetCellColor(iCell As Integer) As Color</SourceLine>
@@ -8602,6 +8732,7 @@
   <ItemName>Table_SetCellColor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1588232191</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Table_SetCellColor(iCell As Integer, clColor As Color)</SourceLine>
@@ -8633,6 +8764,7 @@
   <ItemName>ParseRTF_LoadPictures</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1016690687</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ParseRTF_LoadPictures(ByRef strValue As String)</SourceLine>
@@ -8790,6 +8922,7 @@
   <ItemName>GetRTF_AddPicture</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2058653695</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetRTF_AddPicture(iPos As Integer) As String</SourceLine>
@@ -8822,6 +8955,7 @@
   <ItemName>GetHtml_Image</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>417464319</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetHtml_Image(iPicturePos As Integer) As String</SourceLine>
@@ -8859,6 +8993,7 @@
   <ItemName>InsertPicture</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1508513791</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub InsertPicture(ByRef iPos As Integer, pic As Picture, iPictureFormat As Integer = 0)</SourceLine>
@@ -8949,6 +9084,7 @@
   <ItemName>ClickOnFunction</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1152237567</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function ClickOnFunction(iPos As Integer) As Boolean</SourceLine>
@@ -9021,6 +9157,7 @@
   <ItemName>GetScaleFactorPrinting</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>318607359</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared Function GetScaleFactorPrinting() As Double</SourceLine>
@@ -9038,6 +9175,7 @@
   <ItemName>GetScaleFactorPrinting_Intern</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1235802111</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared Function GetScaleFactorPrinting_Intern(bResolutionScale As Boolean) As Double</SourceLine>
@@ -9059,6 +9197,7 @@
   <ItemName>GetTableCellOnXY</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>620371967</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetTableCellOnXY(iX As Integer, iY As Integer) As Integer</SourceLine>
@@ -9096,6 +9235,7 @@
   <ItemName>Table_GetFirstCharacterInThisTableCell</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>111192063</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function Table_GetFirstCharacterInThisTableCell(iCell As Integer) As Integer</SourceLine>
@@ -9142,6 +9282,7 @@
   <ItemName>Table_GetLastCharacterInThisTableCell</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>69941247</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function Table_GetLastCharacterInThisTableCell(iCell As Integer) As Integer</SourceLine>
@@ -9188,6 +9329,7 @@
   <ItemName>Table_DelTable</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1442441215</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Table_DelTable(iPos As Integer)</SourceLine>
@@ -9237,6 +9379,7 @@
   <ItemName>IsInvisible</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>870983679</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsInvisible(iPos As Integer, bVolgendTeTypenCharacter As Boolean) As Boolean</SourceLine>
@@ -9255,6 +9398,7 @@
   <ItemName>SetInvisible</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>366075903</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetInvisible(iPos As Integer, Assigns bValue As Boolean)</SourceLine>
@@ -9280,6 +9424,7 @@
   <ItemName>SetNextInvisible</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>422866943</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetNextInvisible(iPos As Integer, bValue As Boolean)</SourceLine>
@@ -9305,6 +9450,7 @@
   <ItemName>NextRedrawFull</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1417261055</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function NextRedrawFull() As Boolean</SourceLine>
@@ -9327,6 +9473,7 @@
   <ItemName>SpellCheck</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>647782399</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SpellCheck(strLanguage As String)</SourceLine>
@@ -9363,6 +9510,7 @@
   <ItemName>GetSpellChecker</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>991127551</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetSpellChecker(strLanguage As String) As Object</SourceLine>
@@ -9452,6 +9600,7 @@
   <ItemName>Event_SpellCheckRun</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1563156479</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Event_SpellCheckRun(thr As Thread)</SourceLine>
@@ -9527,6 +9676,7 @@
   <ItemName>Destructor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1992808447</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Destructor()</SourceLine>
@@ -9552,6 +9702,7 @@
   <ItemName>GetSpellCheckStatus</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1271969791</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub GetSpellCheckStatus(ByRef bRunning As Boolean, ByRef bErrors As Boolean)</SourceLine>
@@ -9588,6 +9739,7 @@
   <ItemName>IsInTableCell</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1462788095</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsInTableCell(iPos As Integer) As Boolean</SourceLine>
@@ -9618,6 +9770,7 @@
   <ItemName>GetDefaultStyle_Intern</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>694700031</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub GetDefaultStyle_Intern(ByRef strFont As String, ByRef iSize As Integer, ByRef bBold As Boolean, ByRef bItalic As Boolean, ByRef bUnderline As Boolean)</SourceLine>
@@ -9651,6 +9804,7 @@
   <ItemName>Print</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1137559551</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Print()</SourceLine>
@@ -9662,6 +9816,7 @@
    <SourceLine>Dim picArr() As Picture</SourceLine>
    <SourceLine>Dim t As Integer</SourceLine>
    <SourceLine>Dim iLast As Integer</SourceLine>
+   <SourceLine>Dim iBkColor As Integer</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>p = new PrinterSetup</SourceLine>
    <SourceLine>p.MaxHorizontalResolution = -1</SourceLine>
@@ -9679,10 +9834,12 @@
    <SourceLine>iPageHeight = Floor(p.Height / p.VerticalResolution * 72)</SourceLine>
    <SourceLine>#endif</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>picArr() = DrawRTF_GetArray(iPageWidth, iPageHeight, iPageHeight, True, Nil, 0)</SourceLine>
+   <SourceLine>iBkColor = (220 + (100 * 256) + (125 * 256 * 256))</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>picArr() = DrawRTF_GetArray(iPageWidth, iPageHeight, iPageHeight, iBkColor, Nil, 0)</SourceLine>
    <SourceLine>iLast = picArr.Ubound + 1</SourceLine>
    <SourceLine>For t = 1 To iLast</SourceLine>
-   <SourceLine>picArr = DrawRTF_GetArray(iPageWidth, iPageHeight, iPageHeight, True, g, t)</SourceLine>
+   <SourceLine>picArr = DrawRTF_GetArray(iPageWidth, iPageHeight, iPageHeight, iBkColor, g, t)</SourceLine>
    <SourceLine>If t &lt; iLast Then</SourceLine>
    <SourceLine>g.NextPage</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -9702,6 +9859,7 @@
   <ItemName>GetHyperlink</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1866713087</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetHyperlink(iPos As Integer) As String</SourceLine>
@@ -9745,6 +9903,7 @@
   <ItemName>GetHyperlinkWithDescription</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>246300671</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetHyperlinkWithDescription(iPos As Integer, ByRef strDescription As String) As String</SourceLine>
@@ -9811,6 +9970,7 @@
   <ItemName>DeleteHyperlink</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>743045119</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub DeleteHyperlink(ByRef iPos As Integer)</SourceLine>
@@ -9876,6 +10036,7 @@
   <ItemName>InsertHyperlink</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1347371007</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub InsertHyperlink(ByRef iPos As Integer, strHyperlink As String, strDescription As String)</SourceLine>
@@ -9920,6 +10081,7 @@
   <ItemName>GetEmbeddedHtmlCode</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1065347071</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetEmbeddedHtmlCode(iPos As Integer) As String</SourceLine>
@@ -9960,6 +10122,7 @@
   <ItemName>CleanHTMLForEmbedding_CutTagFromHtml</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1310019583</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub CleanHTMLForEmbedding_CutTagFromHtml(ByRef strSource As String, strTag As String, Optional bWithEndTagAndContent As Boolean = False)</SourceLine>
@@ -10032,6 +10195,7 @@
   <ItemName>CleanHTMLForEmbedding_CutEnterFromTag</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>793296895</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function CleanHTMLForEmbedding_CutEnterFromTag(strSource As String, strTag As String, Optional bWithEndTagAndContent As Boolean = False) As String</SourceLine>
@@ -10054,6 +10218,7 @@
   <ItemName>CleanHTMLForEmbedding</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1499983871</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function CleanHTMLForEmbedding(strHtml As String) As String</SourceLine>
@@ -10131,6 +10296,7 @@
   <ItemName>InsertEmbeddedHtmlCode</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1792854015</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub InsertEmbeddedHtmlCode(ByRef iPos As Integer, strHtmlCode As String)</SourceLine>
@@ -10184,6 +10350,7 @@
   <ItemName>DeleteEmbeddedHtmlCode</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1526413311</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub DeleteEmbeddedHtmlCode(ByRef iPos As Integer)</SourceLine>
@@ -10245,6 +10412,84 @@
   <ItemParams>ByRef iPos As Integer</ItemParams>
   <ItemResult></ItemResult>
  </Method>
+ <Method>
+  <ItemName>GetScaleFactor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1284937727</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub GetScaleFactor(oWnd As Object, ByRef iScale As Integer, ByRef dScaleBase As Double, ByRef bHiDPI As Boolean)</SourceLine>
+   <SourceLine>Dim dScale As Double</SourceLine>
+   <SourceLine>Dim iScaleBase As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>bHiDPI = False</SourceLine>
+   <SourceLine>iScale = 1</SourceLine>
+   <SourceLine>dScaleBase = 1</SourceLine>
+   <SourceLine>#if Not TargetConsole </SourceLine>
+   <SourceLine>If App.SupportsHiDPI Then</SourceLine>
+   <SourceLine>dScale = 1</SourceLine>
+   <SourceLine>If Not IsNull(oWnd) And oWnd IsA Window Then</SourceLine>
+   <SourceLine>dScale = Window(oWnd).ScaleFactor</SourceLine>
+   <SourceLine>If dScale &lt; 1 Then</SourceLine>
+   <SourceLine>dScale = 1</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>#if Not TargetWindows</SourceLine>
+   <SourceLine>If m_dLargestDrawingTime &gt;= DRAWINGTIMETHRESHOLD Then</SourceLine>
+   <SourceLine>dScale = 1</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>#endif</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If dScale &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>bHiDPI = True</SourceLine>
+   <SourceLine>iScale = Round(dScale * 100)</SourceLine>
+   <SourceLine>iScaleBase = 100</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iScale Mod 100 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 100</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 100</SourceLine>
+   <SourceLine>ElseIf iScale Mod 50 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 50</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 50</SourceLine>
+   <SourceLine>ElseIf iScale Mod 25 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 25</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 25</SourceLine>
+   <SourceLine>ElseIf iScale Mod 20 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 20</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 20</SourceLine>
+   <SourceLine>ElseIf iScale Mod 10 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 10</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 10</SourceLine>
+   <SourceLine>ElseIf iScale Mod 5 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 5</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 5</SourceLine>
+   <SourceLine>ElseIf iScale Mod 4 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 4</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 4</SourceLine>
+   <SourceLine>ElseIf iScale Mod 2 = 0 Then</SourceLine>
+   <SourceLine>iScale = iScale / 2</SourceLine>
+   <SourceLine>iScaleBase = iScaleBase / 2</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iScaleBase = 1 Then</SourceLine>
+   <SourceLine>dScaleBase = 1</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>dScaleBase = 1 / iScaleBase</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>#endif</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>oWnd As Object, ByRef iScale As Integer, ByRef dScaleBase As Double, ByRef bHiDPI As Boolean</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
  <Hook>
   <ItemName>FillFunctionValue</ItemName>
   <TextEncoding>134217984</TextEncoding>
@@ -10273,6 +10518,7 @@
   <ItemName>License</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>625369087</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <NoteLine>License</NoteLine>
@@ -10354,6 +10600,7 @@
   <ItemName>m_strArrFonts()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1995661311</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strArrFonts() As String</SourceLine>
@@ -10368,6 +10615,7 @@
   <ItemName>m_clColors()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1615478783</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_clColors() As Color</SourceLine>
@@ -10382,6 +10630,7 @@
   <ItemName>m_cpArr()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>35471359</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_cpArr() As CharPos</SourceLine>
@@ -10396,6 +10645,7 @@
   <ItemName>m_rpArrParagraph()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>984059903</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_rpArrParagraph() As clsRTFBox_Paragraph</SourceLine>
@@ -10410,6 +10660,7 @@
   <ItemName>m_chArr()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1945128959</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_chArr() As String</SourceLine>
@@ -10424,6 +10675,7 @@
   <ItemName>m_nis</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1876305919</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_nis As NextInputStyle</SourceLine>
@@ -10438,6 +10690,7 @@
   <ItemName>m_strArrFieldFunctie()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>30693375</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strArrFieldFunctie() As String</SourceLine>
@@ -10452,6 +10705,7 @@
   <ItemName>m_bNextRedrawWithMask</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1564989439</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bNextRedrawWithMask As Boolean</SourceLine>
@@ -10466,6 +10720,7 @@
   <ItemName>m_strArrPossibleFonts()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2059325439</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared m_strArrPossibleFonts() As String</SourceLine>
@@ -10480,6 +10735,7 @@
   <ItemName>m_dScale</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>112363519</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_dScale As Double</SourceLine>
@@ -10494,6 +10750,7 @@
   <ItemName>m_tcArr()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1938282495</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_tcArr() As TableCell</SourceLine>
@@ -10508,6 +10765,7 @@
   <ItemName>m_picRTFBuffer</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1421361151</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_picRTFBuffer As Picture</SourceLine>
@@ -10522,6 +10780,7 @@
   <ItemName>m_rpicArr()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1291765759</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_rpicArr() As clsRTFBox_Picture</SourceLine>
@@ -10536,6 +10795,7 @@
   <ItemName>m_bNextRedrawFull</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1332242431</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bNextRedrawFull As Boolean</SourceLine>
@@ -10550,6 +10810,7 @@
   <ItemName>m_scSpellCheck</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1406365695</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_scSpellCheck As Object</SourceLine>
@@ -10564,6 +10825,7 @@
   <ItemName>m_bSpellCheckLaunched</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1911515135</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bSpellCheckLaunched As Boolean</SourceLine>
@@ -10578,6 +10840,7 @@
   <ItemName>m_strArrSCWords()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>469415935</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strArrSCWords() As String</SourceLine>
@@ -10592,6 +10855,7 @@
   <ItemName>m_bArrSCWordsIgnore()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1960450047</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bArrSCWordsIgnore() As Boolean</SourceLine>
@@ -10606,6 +10870,7 @@
   <ItemName>m_strSpellCheckLanguageThread</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2090784767</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strSpellCheckLanguageThread As String</SourceLine>
@@ -10620,6 +10885,7 @@
   <ItemName>m_bSpellCheckFoundMistakes</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1579948031</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bSpellCheckFoundMistakes As Boolean</SourceLine>
@@ -10634,6 +10900,7 @@
   <ItemName>m_bSpellCheckRunning</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>812666879</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_bSpellCheckRunning As Boolean</SourceLine>
@@ -10648,6 +10915,7 @@
   <ItemName>m_csSpellCheck</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1271795711</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_csSpellCheck As CriticalSection</SourceLine>
@@ -10662,6 +10930,7 @@
   <ItemName>m_strSpellCheckText</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1873762303</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strSpellCheckText As String</SourceLine>
@@ -10676,6 +10945,7 @@
   <ItemName>m_thrSpellCheck</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1500932095</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_thrSpellCheck As Thread</SourceLine>
@@ -10690,6 +10960,7 @@
   <ItemName>m_strSpellCheckLanguage</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>194740223</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_strSpellCheckLanguage As String</SourceLine>
@@ -10704,6 +10975,7 @@
   <ItemName>m_dLargestDrawingTime</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1701474303</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Shared m_dLargestDrawingTime As Double</SourceLine>
@@ -10718,6 +10990,7 @@
   <ItemName>m_iArrFunctieType()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1864673279</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iArrFunctieType() As Integer</SourceLine>
@@ -10727,6 +11000,48 @@
   <ItemDeclaration>m_iArrFunctieType() As Integer</ItemDeclaration>
   <ItemFlags>33</ItemFlags>
   <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>m_bAntiAlias</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>639651839</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_bAntiAlias As Boolean = True</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_bAntiAlias As Boolean = True</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>AntiAlias</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>259211263</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>AntiAlias As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>AntiAlias As Boolean</ItemDeclaration>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <SetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Set</SourceLine>
+   <SourceLine>m_bAntiAlias = value</SourceLine>
+   <SourceLine>End Set</SourceLine>
+  </SetAccessor>
+  <GetAccessor>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Get</SourceLine>
+   <SourceLine>Return m_bAntiAlias</SourceLine>
+   <SourceLine>End Get</SourceLine>
+  </GetAccessor>
  </Property>
  <ViewBehavior>
   <ViewProperty>
@@ -10762,11 +11077,17 @@
    <PropertyValue>0</PropertyValue>
    <ItemType>Integer</ItemType>
   </ViewProperty>
+  <ViewProperty>
+   <ObjName>AntiAlias</ObjName>
+   <PropertyGroup>Behavior</PropertyGroup>
+   <ItemType>Boolean</ItemType>
+  </ViewProperty>
  </ViewBehavior>
  <Constant>
   <ItemName>ALIGNRIGHT</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>918835199</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>2</ItemDef>
@@ -10776,6 +11097,7 @@
   <ItemName>ALIGNCENTER</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>299614207</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>1</ItemDef>
@@ -10785,6 +11107,7 @@
   <ItemName>ALIGNLEFT</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1042065407</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>0</ItemDef>
@@ -10794,6 +11117,7 @@
   <ItemName>STYLE_BOLD</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1380880383</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>8</ItemDef>
@@ -10803,6 +11127,7 @@
   <ItemName>STYLE_ITALIC</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1852532735</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>16</ItemDef>
@@ -10812,6 +11137,7 @@
   <ItemName>STYLE_UNDERLINE</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1201438719</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>1</ItemDef>
@@ -10821,6 +11147,7 @@
   <ItemName>STYLE_UNDERLINE_DOT</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1650323455</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>2</ItemDef>
@@ -10830,6 +11157,7 @@
   <ItemName>STYLE_UNDERLINE_DASH</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1395384319</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>3</ItemDef>
@@ -10839,6 +11167,7 @@
   <ItemName>STYLE_UNDERLINE_DOUBLE</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1757943807</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>4</ItemDef>
@@ -10848,6 +11177,7 @@
   <ItemName>STYLE_UNDERLINE_THICK</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1813260287</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>5</ItemDef>
@@ -10857,6 +11187,7 @@
   <ItemName>STYLE_UNDERLINE_WORD</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>826626047</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>6</ItemDef>
@@ -10866,6 +11197,7 @@
   <ItemName>STYLE_UNDERLINE_WAVE</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1323761663</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>7</ItemDef>
@@ -10875,6 +11207,7 @@
   <ItemName>STYLE_STRIKETHROUGH</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>501026815</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>32</ItemDef>
@@ -10884,6 +11217,7 @@
   <ItemName>STYLE_SHADOW</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1357531135</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>64</ItemDef>
@@ -10893,6 +11227,7 @@
   <ItemName>ALLOW_PAGEBREAK</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1102843903</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>3</ItemType>
   <ItemDef>True</ItemDef>
@@ -10902,6 +11237,7 @@
   <ItemName>ALLOW_EXTRALINESTYLES</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1332101119</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>3</ItemType>
   <ItemDef>True</ItemDef>
@@ -10911,6 +11247,7 @@
   <ItemName>ALLOW_TABLES</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>989069311</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>3</ItemType>
   <ItemDef>True</ItemDef>
@@ -10920,6 +11257,7 @@
   <ItemName>ALLOW_PICTURES</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1372211199</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>3</ItemType>
   <ItemDef>True</ItemDef>
@@ -10929,6 +11267,7 @@
   <ItemName>CHECKBOX_UNCHECKED</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>96688127</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>0</ItemType>
   <ItemDef>☐</ItemDef>
@@ -10938,6 +11277,7 @@
   <ItemName>CHECKBOX_CHECKED</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1451884543</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>0</ItemType>
   <ItemDef>☒</ItemDef>
@@ -10947,6 +11287,7 @@
   <ItemName>ALLOW_CHECKBOX</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>745738239</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>3</ItemType>
   <ItemDef>True</ItemDef>
@@ -10956,6 +11297,7 @@
   <ItemName>PICFORMAT_PNG</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1314834431</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>2</ItemDef>
@@ -10965,6 +11307,7 @@
   <ItemName>PICFORMAT_JPG</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1341032447</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>1</ItemDef>
@@ -10974,6 +11317,7 @@
   <ItemName>STYLE_INVISIBLE</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>164405247</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>128</ItemDef>
@@ -10983,6 +11327,7 @@
   <ItemName>DRAWINGTIMETHRESHOLD</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>602814463</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>150</ItemDef>
@@ -10992,6 +11337,7 @@
   <ItemName>ALLOW_SPELLCHECKER</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1994385407</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>3</ItemType>
   <ItemDef>False</ItemDef>
@@ -11001,6 +11347,7 @@
   <ItemName>ALLOW_NSTOUCHBAR</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>552599551</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>3</ItemType>
   <ItemDef>False</ItemDef>
@@ -11010,6 +11357,7 @@
   <ItemName>FT_HYPERLINK</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>205979647</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>1</ItemDef>
@@ -11019,6 +11367,7 @@
   <ItemName>FT_NORMAL</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1208031231</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>0</ItemDef>
@@ -11028,6 +11377,7 @@
   <ItemName>ALLOW_HYPERLINKS</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1512738815</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>3</ItemType>
   <ItemDef>True</ItemDef>
@@ -11037,6 +11387,7 @@
   <ItemName>FT_HTML</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1136318463</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>2</ItemDef>
@@ -11046,9 +11397,20 @@
   <ItemName>ALLOW_EMBEDDEDHTML</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>255678463</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>3</ItemType>
   <ItemDef>True</ItemDef>
+  <ItemFlags>0</ItemFlags>
+ </Constant>
+ <Constant>
+  <ItemName>CLWHITE</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1671155711</PartID>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemType>2</ItemType>
+  <ItemDef>16777216</ItemDef>
   <ItemFlags>0</ItemFlags>
  </Constant>
  <Structure>
@@ -11058,6 +11420,7 @@
   <ItemName>CharPos</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1875587071</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>iLeft As Integer</SourceLine>
@@ -11084,6 +11447,7 @@
   <ItemName>NextInputStyle</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>195911679</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>btStyle As Byte</SourceLine>
@@ -11100,6 +11464,7 @@
   <ItemName>TableCell</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>413046783</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>iRow As Int16</SourceLine>
