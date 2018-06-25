@@ -29,7 +29,7 @@
    <SourceLine>Dim iLastAlignment As Integer</SourceLine>
    <SourceLine>Dim iCol As Integer</SourceLine>
    <SourceLine>Dim iRow As Integer</SourceLine>
-   <SourceLine>Dim iLastRow As Integer</SourceLine>
+   <SourceLine>Dim iLastRow As Integer </SourceLine>
    <SourceLine>Dim iArrColMinWidths() As Integer</SourceLine>
    <SourceLine>Dim iArrColMaxWidths() As Integer</SourceLine>
    <SourceLine>Dim bArrColBorder() As Boolean</SourceLine>
@@ -69,6 +69,7 @@
    <SourceLine>strValue = strValue.ReplaceAll("\pard\line", "\pard").ReplaceAll("\par\line", "\par")</SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll("\spikesreplacementline", "\line\pard") </SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll("\par\trowd", "\trowd")</SourceLine>
+   <SourceLine>strValue = strValue.ReplaceAll(Chr(9), "\tab ")</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>strArrTeVerwerken = strValue.Split("\")</SourceLine>
    <SourceLine>iLast = strArrTeVerwerken.Ubound</SourceLine>
@@ -398,9 +399,18 @@
    <SourceLine></SourceLine>
    <SourceLine>iLen = strValue.Len</SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll(Chr(13) + Chr(10), Chr(13)).ReplaceAll(Chr(10), Chr(13))</SourceLine>
+   <SourceLine>If Not bForcePlainText And strValue.Left(6) = "{\rtf1" Then</SourceLine>
+   <SourceLine>If strValue.Right(1) = "}" Then</SourceLine>
+   <SourceLine>'Do Nothing</SourceLine>
+   <SourceLine>ElseIf strValue.Right(2).Left(1) = "}" Then</SourceLine>
+   <SourceLine>strValue = strValue.Left(strValue.Len - 1)</SourceLine>
+   <SourceLine>ElseIf strValue.Right(3).Left(1) = "}" Then</SourceLine>
+   <SourceLine>strValue = strValue.Left(strValue.Len - 2)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>If Not bForcePlainText And strValue.Left(6) = "{\rtf1" And strValue.Right(1) = "}" Then</SourceLine>
    <SourceLine>strValue = strValue.Mid(7, strValue.Len - 7)</SourceLine>
-   <SourceLine>'strValue = strValue.ReplaceAll(Chr(13), "")</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>ParseRTF_LoadFields(strValue)</SourceLine>
    <SourceLine>System.DebugLog "ParseRTF_LoadFields executed in " + Format(Round(((Microseconds - dMSTussenStop) / 1000.0)), "0") + " ms"</SourceLine>
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
@@ -680,7 +690,7 @@
    <SourceLine>ElseIf strCommand.Len &gt;= 3 And strCommand.Left(1) = "'" Then</SourceLine>
    <SourceLine>'special character</SourceLine>
    <SourceLine>bValid = True</SourceLine>
-   <SourceLine>ElseIf (strCommand.Len = 4 Or strCommand.Len = 5) And strCommand.Left(1) = "u" Then</SourceLine>
+   <SourceLine>ElseIf (strCommand.Len = 4 Or strCommand.Len = 5 Or strCommand.Len = 6) And strCommand.Left(1) = "u" Then</SourceLine>
    <SourceLine>'unicode character</SourceLine>
    <SourceLine>bValid = True</SourceLine>
    <SourceLine>Else</SourceLine>
@@ -1054,7 +1064,9 @@
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>ElseIf (strCommand.Len = 4 And strCommand.Left(1) = "u" And NumbersOnly(strCommand.Mid(2)).Len = 3) Or _</SourceLine>
-   <SourceLine>(strCommand.Len = 5 And strCommand.Left(1) = "u" And NumbersOnly(strCommand.Mid(2)).Len = 4) Then</SourceLine>
+   <SourceLine>(strCommand.Len = 5 And strCommand.Left(1) = "u" And NumbersOnly(strCommand.Mid(2)).Len = 4) Or _</SourceLine>
+   <SourceLine>(strCommand.Len = 5 And strCommand.Left(1) = "u" And NumbersOnly(strCommand.Mid(2, 3)).Len = 3 And strCommand.Right(1) = "?") Or _</SourceLine>
+   <SourceLine>(strCommand.Len = 6 And strCommand.Left(1) = "u" And NumbersOnly(strCommand.Mid(2, 4)).Len = 4 And strCommand.Right(1) = "?") Then</SourceLine>
    <SourceLine>'Unicode Character</SourceLine>
    <SourceLine>ch = ChRTFCodeToPlain(strCommand)</SourceLine>
    <SourceLine>If ch.Len = 1 Then</SourceLine>
@@ -1325,6 +1337,7 @@
    <SourceLine>iPosStop = strValue.InStr(iPosStart, ";")</SourceLine>
    <SourceLine>If iPosStop &gt; 0 Then</SourceLine>
    <SourceLine>strFont = strValue.Mid(iPosStart + 1, iPosStop - (iPosStart + 1))</SourceLine>
+   <SourceLine>ParseRTF_LoadFonts_CorrectFontName(strFont)</SourceLine>
    <SourceLine>m_strArrFonts.Append(strFont)</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -1433,6 +1446,9 @@
    <SourceLine>strRTF = strRTF + "}"</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>strRTF = strRTF + "{\*\generator Spikesoft 16.02;}"</SourceLine>
+   <SourceLine>'Initialize Unicode</SourceLine>
+   <SourceLine>strRTF = strRTF + "\uc0"</SourceLine>
+   <SourceLine>bUnicodeInitialized = True</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>iLast = m_cpArr.Ubound</SourceLine>
    <SourceLine>If iLast &gt; 0 Then</SourceLine>
@@ -3050,7 +3066,11 @@
    <SourceLine>Dim iNr As Integer</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If strRTFCode.Left(1) = "u" Then</SourceLine>
-   <SourceLine>iNr = strRTFCode.Mid(2).Val</SourceLine>
+   <SourceLine>strRTFCode = strRTFCode.Mid(2)</SourceLine>
+   <SourceLine>If strRTFCode.Right(1) = "?" Then</SourceLine>
+   <SourceLine>strRTFCode = strRTFCode.Left(strRTFCode.Len - 1)</SourceLine>
+   <SourceLine>End If </SourceLine>
+   <SourceLine>iNr = strRTFCode.Val</SourceLine>
    <SourceLine>ch = Chr(iNr)</SourceLine>
    <SourceLine>ElseIf strRTFCode.Len = 3 And strRTFCode.Left(1) = "'" Then</SourceLine>
    <SourceLine>strRTFCode = strRTFCode.Mid(2)</SourceLine>
@@ -10488,6 +10508,56 @@
   <ItemFlags>33</ItemFlags>
   <IsShared>0</IsShared>
   <ItemParams>oWnd As Object, ByRef iScale As Integer, ByRef dScaleBase As Double, ByRef bHiDPI As Boolean</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ParseRTF_LoadFonts_CorrectFontName</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>308998143</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub ParseRTF_LoadFonts_CorrectFontName(ByRef strFont As String)</SourceLine>
+   <SourceLine>Dim iPos As Integer</SourceLine>
+   <SourceLine>Dim strInternalFont As String</SourceLine>
+   <SourceLine>Dim bChanged As Boolean</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>iPos = m_strArrPossibleFonts.IndexOf(strFont)</SourceLine>
+   <SourceLine>bChanged = False</SourceLine>
+   <SourceLine>If iPos &lt; 0 Then</SourceLine>
+   <SourceLine>If strFont.Right(5) = "-Bold" Then</SourceLine>
+   <SourceLine>strInternalFont = strFont.Left(strFont.Len - 5)</SourceLine>
+   <SourceLine>bChanged = True</SourceLine>
+   <SourceLine>ElseIf strFont.Right(8) = "-Oblique" Then</SourceLine>
+   <SourceLine>strInternalFont = strFont.Left(strFont.Len - 8)</SourceLine>
+   <SourceLine>bChanged = True</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>strInternalFont = strFont</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If bChanged Then</SourceLine>
+   <SourceLine>iPos = m_strArrPossibleFonts.IndexOf(strInternalFont)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If iPos &gt;= 0 Then</SourceLine>
+   <SourceLine>strFont = strInternalFont</SourceLine>
+   <SourceLine>ElseIf strInternalFont.ReplaceAll(" ", "") = strInternalFont Then</SourceLine>
+   <SourceLine>For t = m_strArrPossibleFonts.Ubound To 0 Step -1</SourceLine>
+   <SourceLine>If strInternalFont = m_strArrPossibleFonts(t).ReplaceAll(" ", "") Then</SourceLine>
+   <SourceLine>strFont = m_strArrPossibleFonts(t)</SourceLine>
+   <SourceLine>t = -1</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If </SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>ByRef strFont As String</ItemParams>
   <ItemResult></ItemResult>
  </Method>
  <Hook>

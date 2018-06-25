@@ -6227,6 +6227,117 @@
   <ItemParams>rtf As clsRTFBox_Data, strURL As String</ItemParams>
   <ItemResult>Boolean</ItemResult>
  </Method>
+ <Method>
+  <ItemName>SaveRTFFile</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1545445375</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function SaveRTFFile(fi As FolderItem) As Boolean</SourceLine>
+   <SourceLine>Dim s As TextOutputStream</SourceLine>
+   <SourceLine>Dim strRTF As String</SourceLine>
+   <SourceLine>Dim bRtVal As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>bRtVal = False</SourceLine>
+   <SourceLine>If Not IsNull(m_rtf) And Not IsNull(fi) Then</SourceLine>
+   <SourceLine>strRTF = m_rtf.GetRTF</SourceLine>
+   <SourceLine>If fi.Exists Then</SourceLine>
+   <SourceLine>fi.Delete</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If Not fi.Exists Then</SourceLine>
+   <SourceLine>Try</SourceLine>
+   <SourceLine>s = TextOutputStream.Create(fi)</SourceLine>
+   <SourceLine>Catch err As IOException</SourceLine>
+   <SourceLine>Break</SourceLine>
+   <SourceLine>End Try</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If s &lt;&gt; Nil Then</SourceLine>
+   <SourceLine>s.Write(strRTF)</SourceLine>
+   <SourceLine>s.Close</SourceLine>
+   <SourceLine>bRtVal = True</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return bRtVal</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>fi As FolderItem</ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>LoadRTFFile</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>478398463</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function LoadRTFFile(fi As FolderItem, bKeepUndo As Boolean) As Boolean</SourceLine>
+   <SourceLine>Dim strRTF As String</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return LoadRTFFile(fi, bKeepUndo, strRTF)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>fi As FolderItem, bKeepUndo As Boolean</ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>LoadRTFFile</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1194563583</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function LoadRTFFile(fi As FolderItem, bKeepUndo As Boolean, ByRef strRTF As String) As Boolean</SourceLine>
+   <SourceLine>Dim s As TextInputStream</SourceLine>
+   <SourceLine>Dim strRTFUndo As String</SourceLine>
+   <SourceLine>Dim bRtVal As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>bRtVal = False</SourceLine>
+   <SourceLine>If Not IsNull(m_rtf) And Not IsNull(fi) And fi.Exists And Not fi.Directory Then</SourceLine>
+   <SourceLine>s = TextInputStream.Open(fi)</SourceLine>
+   <SourceLine>strRTF = s.ReadAll</SourceLine>
+   <SourceLine>s.Close</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>m_bChangedSinceUndo = False</SourceLine>
+   <SourceLine>ReDim m_strArrUndoRTF(-1)</SourceLine>
+   <SourceLine>If bKeepUndo Then</SourceLine>
+   <SourceLine>strRTFUndo = GetRTF</SourceLine>
+   <SourceLine>m_strArrUndoRTF.Append(strRTFUndo) </SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>m_strArrUndoRTF.Append(strRTF)</SourceLine>
+   <SourceLine>m_iTicksLastUndo = 0</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>m_rtf.SetRTF(strRTF)</SourceLine>
+   <SourceLine>m_rtf.ClearRTFBuffer</SourceLine>
+   <SourceLine>m_iRedrawFromPos = 0</SourceLine>
+   <SourceLine>m_iRedrawToPos = m_rtf.m_cpArr.Ubound + 1</SourceLine>
+   <SourceLine>Refresh</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>bRtVal = True</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return bRtVal</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams>fi As FolderItem, bKeepUndo As Boolean, ByRef strRTF As String</ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
  <Hook>
   <ItemName>TextChanged</ItemName>
   <TextEncoding>134217984</TextEncoding>
