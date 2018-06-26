@@ -8807,6 +8807,7 @@
    <SourceLine>Dim strPicString As String</SourceLine>
    <SourceLine>Dim mb As MemoryBlock</SourceLine>
    <SourceLine>Dim bPng As Boolean</SourceLine>
+   <SourceLine>Dim bJpg As Boolean</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>ReDim m_rpicArr(-1) </SourceLine>
    <SourceLine>iPosSearchFrom = 0</SourceLine>
@@ -8855,39 +8856,27 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>'jpegblip</SourceLine>
-   <SourceLine>iPosStart = strPicture.InStr("\jpegblip ")</SourceLine>
+   <SourceLine>'Pictureformat</SourceLine>
    <SourceLine>bPng = False</SourceLine>
-   <SourceLine>If iPosStart &lt;= 0 Then</SourceLine>
+   <SourceLine>bJpg = False</SourceLine>
+   <SourceLine>iPosStart = strPicture.InStr("\jpegblip")</SourceLine>
+   <SourceLine>If iPosStart &gt; 0 Then</SourceLine>
+   <SourceLine>'jpegblip</SourceLine>
+   <SourceLine>bJpg = True</SourceLine>
+   <SourceLine>Else</SourceLine>
    <SourceLine>'pngblip</SourceLine>
-   <SourceLine>iPosStart = strPicture.InStr("\pngblip ")</SourceLine>
+   <SourceLine>iPosStart = strPicture.InStr("\pngblip")</SourceLine>
+   <SourceLine>If iPosStart &gt; 0 Then</SourceLine>
    <SourceLine>bPng = True</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>If bPng Or bJpg Then</SourceLine>
+   <SourceLine>iPosStart = strPicture.InStr(iPosStart + 8, " ")</SourceLine>
    <SourceLine>If iPosStart &gt; 0 Then</SourceLine>
-   <SourceLine>iPosStop = strPicture.InStr(iPosStart + 11, " ")</SourceLine>
-   <SourceLine>iPosCompare = strPicture.InStr(iPosStart + 11, "}")</SourceLine>
-   <SourceLine>If iPosStop &lt; 1 Or (iPosCompare &gt; 0 And iPosCompare &lt; iPosStop) Then</SourceLine>
-   <SourceLine>iPosStop = iPosCompare</SourceLine>
-   <SourceLine>End If</SourceLine>
-   <SourceLine>iPosCompare = strPicture.InStr(iPosStart + 11, "\")</SourceLine>
-   <SourceLine>If iPosStop &lt; 1 Or (iPosCompare &gt; 0 And iPosCompare &lt; iPosStop) Then</SourceLine>
-   <SourceLine>iPosStop = iPosCompare</SourceLine>
-   <SourceLine>End If</SourceLine>
-   <SourceLine>iPosCompare = strPicture.InStr(iPosStart + 11, Chr(13))</SourceLine>
-   <SourceLine>If iPosStop &lt; 1 Or (iPosCompare &gt; 0 And iPosCompare &lt; iPosStop) Then</SourceLine>
-   <SourceLine>iPosStop = iPosCompare</SourceLine>
-   <SourceLine>End If</SourceLine>
-   <SourceLine>iPosCompare = strPicture.InStr(iPosStart + 11, Chr(10))</SourceLine>
-   <SourceLine>If iPosStop &lt; 1 Or (iPosCompare &gt; 0 And iPosCompare &lt; iPosStop) Then</SourceLine>
-   <SourceLine>iPosStop = iPosCompare</SourceLine>
-   <SourceLine>End If</SourceLine>
+   <SourceLine>iPosStop = strPicture.InStr(iPosStart + 2, "}")</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If iPosStop &gt; 0 Then</SourceLine>
-   <SourceLine>If bPng Then</SourceLine>
-   <SourceLine>iPosStart = iPosStart + 9</SourceLine>
-   <SourceLine>Else</SourceLine>
-   <SourceLine>iPosStart = iPosStart + 10</SourceLine>
-   <SourceLine>End If</SourceLine>
+   <SourceLine>iPosStart = iPosStart + 1</SourceLine>
    <SourceLine>strPicString = strPicture.Mid(iPosStart, iPosStop - iPosStart)</SourceLine>
    <SourceLine>strPar = DecodeHex(strPicString)</SourceLine>
    <SourceLine>iLen = strPar.LenB</SourceLine>
@@ -8902,6 +8891,7 @@
    <SourceLine>Else</SourceLine>
    <SourceLine>picResized = New Picture(iWidth, iHeight)</SourceLine>
    <SourceLine>picResized.Graphics.DrawPicture(pic, 0, 0, iWidth, iHeight, 0, 0, pic.Width, pic.Height)</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -11481,6 +11471,16 @@
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>16777216</ItemDef>
+  <ItemFlags>0</ItemFlags>
+ </Constant>
+ <Constant>
+  <ItemName>ALLOW_EXTERNALEDITOR</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1022750719</PartID>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemType>3</ItemType>
+  <ItemDef>True</ItemDef>
   <ItemFlags>0</ItemFlags>
  </Constant>
  <Structure>
