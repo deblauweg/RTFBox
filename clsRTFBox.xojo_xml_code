@@ -20,13 +20,16 @@
    <SourceLine></SourceLine>
    <SourceLine>Dim dScaleBase As Double</SourceLine>
    <SourceLine>Dim iScale As Integer</SourceLine>
+   <SourceLine>Dim iCalcWidth As Integer</SourceLine>
+   <SourceLine>Dim iCalcHeight As Integer</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If IsNull(m_pic) Then</SourceLine>
    <SourceLine>GetImage</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>GetScaleFactor(iScale, dScaleBase)</SourceLine>
-   <SourceLine>If (m_pic.Width &lt;&gt; Round(Self.Width * dScaleBase * iScale) Or _</SourceLine>
-   <SourceLine>m_pic.Height &lt;&gt; Round(Self.Height * dScaleBase * iScale)) Then</SourceLine>
+   <SourceLine>iCalcWidth = Round(Self.Width * dScaleBase * iScale)</SourceLine>
+   <SourceLine>iCalcHeight = Round(Self.Height * dScaleBase * iScale)</SourceLine>
+   <SourceLine>If Abs(m_pic.Width - iCalcWidth) &gt; 1 Or Abs(m_pic.Height - iCalcHeight) &gt; 1 Then</SourceLine>
    <SourceLine>m_pic = Nil</SourceLine>
    <SourceLine>GetImage</SourceLine>
    <SourceLine>ElseIf m_iRedrawFromPos &gt;= 0 Then</SourceLine>
@@ -109,6 +112,35 @@
    <SourceLine>mnuBase = New MenuItem</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If Not m_bReadOnly Then</SourceLine>
+   <SourceLine>#if clsRTFBox_Data.ALLOW_EXTERNALEDITOR</SourceLine>
+   <SourceLine>mnu = New MenuItem</SourceLine>
+   <SourceLine>mnu.Text = "File"</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>mnuSub = New MenuItem</SourceLine>
+   <SourceLine>mnuSub.Text = "Open"</SourceLine>
+   <SourceLine>mnuSub.Tag = "OpenRTFFile"</SourceLine>
+   <SourceLine>mnu.Append(mnuSub)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>mnuSub = New MenuItem</SourceLine>
+   <SourceLine>mnuSub.Text = "Save"</SourceLine>
+   <SourceLine>mnuSub.Tag = "SaveRTFFile"</SourceLine>
+   <SourceLine>mnu.Append(mnuSub)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>mnu.Append(New MenuItem(MenuItem.TextSeparator))</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>mnuSub = New MenuItem</SourceLine>
+   <SourceLine>If IsNull(m_fiRTFExternalFile) Or Not m_fiRTFExternalFile.Exists Then</SourceLine>
+   <SourceLine>mnuSub.Text = "Open RTF in external software"</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>mnuSub.Text = "Close RTF in external software and reload in this editor"</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>mnuSub.Tag = "EditRTFFileInExternalEditor"</SourceLine>
+   <SourceLine>mnu.Append(mnuSub)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>mnuBase.Append(mnu)</SourceLine>
+   <SourceLine>mnuBase.Append(New MenuItem(MenuItem.TextSeparator))</SourceLine>
+   <SourceLine>#endif</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>mnu = New MenuItem</SourceLine>
    <SourceLine>mnu.Text = "Bold    (" + strCmd + "b)"</SourceLine>
    <SourceLine>mnu.Tag = "Bold"</SourceLine>
@@ -473,6 +505,12 @@
    <SourceLine>ElseIf mnu.Tag.StringValue.Left(3) = "SC." Then</SourceLine>
    <SourceLine>strFunctie = mnu.Tag.StringValue.Mid(4)</SourceLine>
    <SourceLine>ActionSpellCheck_Action(strFunctie, mnu.Text, iPosClicked)</SourceLine>
+   <SourceLine>ElseIf mnu.Tag = "OpenRTFFile" Then</SourceLine>
+   <SourceLine>ActionOpenRTFFile</SourceLine>
+   <SourceLine>ElseIf mnu.Tag = "SaveRTFFile" Then</SourceLine>
+   <SourceLine>ActionSaveRTFFile</SourceLine>
+   <SourceLine>ElseIf mnu.Tag = "EditRTFFileInExternalEditor" Then</SourceLine>
+   <SourceLine>ActionEditRTFInExternalEditor</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -1783,7 +1821,7 @@
    <SourceLine>g.AntiAlias = AntiAlias</SourceLine>
    <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
    <SourceLine>g.ScaleX = dOriginalScaleX</SourceLine>
-   <SourceLine>g.ScaleY = dOriginalScaleY</SourceLine>
+   <SourceLine>g.ScaleY = dOriginalScaleY </SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If Not m_bReadOnly And m_bLayoutBar Then</SourceLine>
@@ -1797,7 +1835,7 @@
    <SourceLine></SourceLine>
    <SourceLine>If m_bChangedSinceUndo And (Ticks - m_iTicksLastUndo) &gt; 900 And (Ticks - m_iTicksLastDirtyAction) &gt; 90 Then</SourceLine>
    <SourceLine>'Changed</SourceLine>
-   <SourceLine>strRtf = m_rtf.GetRTF(False)</SourceLine>
+   <SourceLine>strRtf = m_rtf.GetRTF(False, False)</SourceLine>
    <SourceLine>If m_strArrUndoRTF.Ubound &gt; 2 Then</SourceLine>
    <SourceLine>m_strArrUndoRTF.Remove(0)</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -1958,7 +1996,7 @@
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetRTF() As String</SourceLine>
-   <SourceLine>Return m_rtf.GetRTF</SourceLine>
+   <SourceLine>Return m_rtf.GetRTF(True, False)</SourceLine>
    <SourceLine>End Function</SourceLine>
   </ItemSource>
   <TextEncoding>134217984</TextEncoding>
@@ -4828,7 +4866,7 @@
    <SourceLine>m_strArrUndoRTF.Remove(m_strArrUndoRTF.Ubound)</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>m_rtf.SetRTF(strRtf)</SourceLine>
+   <SourceLine>m_rtf.SetRTF(strRtf, False)</SourceLine>
    <SourceLine>m_iSelStart = iSelStart</SourceLine>
    <SourceLine>m_iRedrawFromPos = 0</SourceLine>
    <SourceLine>m_iRedrawToPos = m_rtf.m_chArr.Ubound </SourceLine>
@@ -6234,14 +6272,14 @@
   <PartID>1545445375</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Function SaveRTFFile(fi As FolderItem) As Boolean</SourceLine>
+   <SourceLine>Function SaveRTFFile(fi As FolderItem, bLimitRTFCapabilities As Boolean) As Boolean</SourceLine>
    <SourceLine>Dim s As TextOutputStream</SourceLine>
    <SourceLine>Dim strRTF As String</SourceLine>
    <SourceLine>Dim bRtVal As Boolean</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>bRtVal = False</SourceLine>
    <SourceLine>If Not IsNull(m_rtf) And Not IsNull(fi) Then</SourceLine>
-   <SourceLine>strRTF = m_rtf.GetRTF</SourceLine>
+   <SourceLine>strRTF = m_rtf.GetRTF(True, bLimitRTFCapabilities)</SourceLine>
    <SourceLine>If fi.Exists Then</SourceLine>
    <SourceLine>fi.Delete</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -6268,7 +6306,7 @@
   <AliasName></AliasName>
   <ItemFlags>0</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>fi As FolderItem</ItemParams>
+  <ItemParams>fi As FolderItem, bLimitRTFCapabilities As Boolean</ItemParams>
   <ItemResult>Boolean</ItemResult>
  </Method>
  <Method>
@@ -6278,10 +6316,10 @@
   <PartID>478398463</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Function LoadRTFFile(fi As FolderItem, bKeepUndo As Boolean) As Boolean</SourceLine>
+   <SourceLine>Function LoadRTFFile(fi As FolderItem, bKeepUndo As Boolean, bLimitRTFCapabilities As Boolean) As Boolean</SourceLine>
    <SourceLine>Dim strRTF As String</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>Return LoadRTFFile(fi, bKeepUndo, strRTF)</SourceLine>
+   <SourceLine>Return LoadRTFFile(fi, bKeepUndo, bLimitRTFCapabilities, strRTF)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>End Function</SourceLine>
   </ItemSource>
@@ -6289,7 +6327,7 @@
   <AliasName></AliasName>
   <ItemFlags>0</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>fi As FolderItem, bKeepUndo As Boolean</ItemParams>
+  <ItemParams>fi As FolderItem, bKeepUndo As Boolean, bLimitRTFCapabilities As Boolean</ItemParams>
   <ItemResult>Boolean</ItemResult>
  </Method>
  <Method>
@@ -6299,7 +6337,7 @@
   <PartID>1194563583</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Function LoadRTFFile(fi As FolderItem, bKeepUndo As Boolean, ByRef strRTF As String) As Boolean</SourceLine>
+   <SourceLine>Function LoadRTFFile(fi As FolderItem, bKeepUndo As Boolean, bLimitRTFCapabilities As Boolean, ByRef strRTF As String) As Boolean</SourceLine>
    <SourceLine>Dim s As TextInputStream</SourceLine>
    <SourceLine>Dim strRTFUndo As String</SourceLine>
    <SourceLine>Dim bRtVal As Boolean</SourceLine>
@@ -6319,11 +6357,12 @@
    <SourceLine>m_strArrUndoRTF.Append(strRTF)</SourceLine>
    <SourceLine>m_iTicksLastUndo = 0</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>m_rtf.SetRTF(strRTF)</SourceLine>
+   <SourceLine>m_rtf.SetRTF(strRTF, bLimitRTFCapabilities)</SourceLine>
    <SourceLine>m_rtf.ClearRTFBuffer</SourceLine>
    <SourceLine>m_iRedrawFromPos = 0</SourceLine>
    <SourceLine>m_iRedrawToPos = m_rtf.m_cpArr.Ubound + 1</SourceLine>
    <SourceLine>Refresh</SourceLine>
+   <SourceLine>RTFLoaded(strRTF)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>bRtVal = True</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -6335,8 +6374,102 @@
   <AliasName></AliasName>
   <ItemFlags>0</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>fi As FolderItem, bKeepUndo As Boolean, ByRef strRTF As String</ItemParams>
+  <ItemParams>fi As FolderItem, bKeepUndo As Boolean, bLimitRTFCapabilities As Boolean, ByRef strRTF As String</ItemParams>
   <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ActionOpenRTFFile</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1374201855</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub ActionOpenRTFFile()</SourceLine>
+   <SourceLine>Dim fi As FolderItem</SourceLine>
+   <SourceLine>Dim bOk As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>fi = GetOpenFolderItem("*.rtf")</SourceLine>
+   <SourceLine>If Not IsNull(fi) And Not fi.Directory And fi.Exists Then</SourceLine>
+   <SourceLine>bOk = LoadRTFFile(fi, True, False)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ActionSaveRTFFile</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>2117206015</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub ActionSaveRTFFile()</SourceLine>
+   <SourceLine>Dim fi As FolderItem</SourceLine>
+   <SourceLine>Dim bOk As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>fi = GetSaveFolderItem("*.rtf", "rtfbox.rtf")</SourceLine>
+   <SourceLine>If Not IsNull(fi) And Not fi.Directory Then</SourceLine>
+   <SourceLine>bOk = SaveRTFFile(fi, False)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ActionEditRTFInExternalEditor</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>395714559</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub ActionEditRTFInExternalEditor()</SourceLine>
+   <SourceLine>Dim fi As FolderItem</SourceLine>
+   <SourceLine>Dim strFile As String</SourceLine>
+   <SourceLine>Dim dt As Date</SourceLine>
+   <SourceLine>Dim bOk As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If Not IsNull(m_fiRTFExternalFile) And m_fiRTFExternalFile.Exists Then</SourceLine>
+   <SourceLine>bOk = LoadRTFFile(m_fiRTFExternalFile, True, True)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>m_fiRTFExternalFile = Nil</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>bOk = False</SourceLine>
+   <SourceLine>fi = SpecialFolder.ApplicationData</SourceLine>
+   <SourceLine>fi = fi.Child("RTFBox")</SourceLine>
+   <SourceLine>If Not fi.Exists Then</SourceLine>
+   <SourceLine>fi.CreateAsFolder</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>If Not IsNull(fi) And fi.Exists Then</SourceLine>
+   <SourceLine>dt = New Date</SourceLine>
+   <SourceLine>strFile = dt.SQLDateTime.ReplaceAll(":", "").ReplaceAll("-", "").ReplaceAll(" ", "") + ".rtf"</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>fi = fi.Child(strFile)</SourceLine>
+   <SourceLine>If Not IsNull(fi) And Not fi.Exists And SaveRTFFile(fi, True) Then</SourceLine>
+   <SourceLine>m_fiRTFExternalFile = fi</SourceLine>
+   <SourceLine>m_fiRTFExternalFile.Launch</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult></ItemResult>
  </Method>
  <Hook>
   <ItemName>TextChanged</ItemName>
@@ -6410,6 +6543,14 @@
   <ItemParams>strURL As String</ItemParams>
   <ItemResult>Boolean</ItemResult>
  </Hook>
+ <Hook>
+  <ItemName>RTFLoaded</ItemName>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemFlags>33</ItemFlags>
+  <SystemFlags>0</SystemFlags>
+  <ItemParams>strRTF As String</ItemParams>
+  <ItemResult></ItemResult>
+ </Hook>
  <Property>
   <ItemName>Value</ItemName>
   <Compatibility></Compatibility>
@@ -6432,7 +6573,8 @@
    <SourceLine>m_strArrUndoRTF.Append(value)</SourceLine>
    <SourceLine>m_iTicksLastUndo = 0</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>m_rtf.SetRTF(value)</SourceLine>
+   <SourceLine>m_rtf.SetRTF(value, False)</SourceLine>
+   <SourceLine>RTFLoaded(value)</SourceLine>
    <SourceLine>m_rtf.ClearRTFBuffer</SourceLine>
    <SourceLine>m_iRedrawFromPos = 0</SourceLine>
    <SourceLine>m_iRedrawToPos = m_rtf.m_cpArr.Ubound + 1</SourceLine>
@@ -6442,7 +6584,7 @@
   <GetAccessor>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Get</SourceLine>
-   <SourceLine>Return m_rtf.GetRTF</SourceLine>
+   <SourceLine>Return m_rtf.GetRTF(True, False)</SourceLine>
    <SourceLine>End Get</SourceLine>
   </GetAccessor>
  </Property>
@@ -7333,6 +7475,21 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>End Get</SourceLine>
   </GetAccessor>
+ </Property>
+ <Property>
+  <ItemName>m_fiRTFExternalFile</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1665400831</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_fiRTFExternalFile As FolderItem</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_fiRTFExternalFile As FolderItem</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
  </Property>
  <ViewBehavior>
   <ViewProperty>

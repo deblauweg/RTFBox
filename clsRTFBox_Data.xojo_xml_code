@@ -14,7 +14,7 @@
   <PartID>727078911</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Sub ParseRTF_SplitParagraphs(strValue As String, ByRef strArrParagraphs() As String, ByRef iArrParagraphAlignment() As Integer, ByRef bArrParagraphStartsDefault() As Boolean, ByRef bArrParagraphNewLine() As Boolean, ByRef iArrTableCell() As Integer)</SourceLine>
+   <SourceLine>Sub ParseRTF_SplitParagraphs(strValue As String, ByRef strArrParagraphs() As String, ByRef iArrParagraphAlignment() As Integer, ByRef bArrParagraphStartsDefault() As Boolean, ByRef bArrParagraphNewLine() As Boolean, ByRef iArrTableCell() As Integer, bLimitRTFCapabilities As Boolean)</SourceLine>
    <SourceLine>Dim strArrTeVerwerken() As String</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>Dim strV3 As String</SourceLine>
@@ -64,19 +64,21 @@
    <SourceLine>strValue = strValue.ReplaceAll("\\", "\backslash")</SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll("\u8232", "\line")</SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll("\par\pard", "\pard").ReplaceAll("\par \pard", "\pard")</SourceLine>
+   <SourceLine>strValue = strValue.ReplaceAll("\par" + Chr(13) + "\pard", "\pard").ReplaceAll("\par" + Chr(13) + Chr(13) + "\pard", "\pard") 'Wordpad :(</SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll("\line\pard\line", "\spikesreplacementline").ReplaceAll("\line\par\line", "\spikesreplacementline")</SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll("\line\pard", "\pard").ReplaceAll("\line\par", "\par")</SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll("\pard\line", "\pard").ReplaceAll("\par\line", "\par")</SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll("\spikesreplacementline", "\line\pard") </SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll("\par\trowd", "\trowd")</SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll(Chr(9), "\tab ")</SourceLine>
+   <SourceLine>If (strValue.InStr("\" + Chr(13)) &gt; 0) Then</SourceLine>
+   <SourceLine>strValue = strValue.ReplaceAll("\pard\", "\").ReplaceAll("\pard ", " ")</SourceLine>
+   <SourceLine>strValue = strValue.ReplaceAll("\" + Chr(13), "\pard ")</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>strArrTeVerwerken = strValue.Split("\")</SourceLine>
    <SourceLine>iLast = strArrTeVerwerken.Ubound</SourceLine>
    <SourceLine>For t = 0 To iLast</SourceLine>
-   <SourceLine>If strArrTeVerwerken(t).Left(1) = Chr(13) Then</SourceLine>
-   <SourceLine>strArrTeVerwerken(t) = strArrTeVerwerken(t).Replace(Chr(13), "line ").LTrim</SourceLine>
-   <SourceLine>End If</SourceLine>
    <SourceLine>strV3 = strArrTeVerwerken(t).Left(3)</SourceLine>
    <SourceLine>ch = strV3.Right(1)</SourceLine>
    <SourceLine>If ch = Chr(13) Or ch = Chr(10) Or ch = Chr(9) Then strV3 = strV3.Left(2) + " "</SourceLine>
@@ -90,7 +92,7 @@
    <SourceLine>ch = strV6.Right(1)</SourceLine>
    <SourceLine>If ch = Chr(13) Or ch = Chr(10) Or ch = Chr(9) Then strV6 = strV6.Left(5) + " "</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>If strArrTeVerwerken(t) = "trowd" Or strV6 = "trowd " Then</SourceLine>
+   <SourceLine>If Not bLimitRTFCapabilities And (strArrTeVerwerken(t) = "trowd" Or strV6 = "trowd ") Then</SourceLine>
    <SourceLine>bEindeRij = False</SourceLine>
    <SourceLine>If iRow = -1 Then</SourceLine>
    <SourceLine>iLastRow = iLastRow + 1</SourceLine>
@@ -104,14 +106,14 @@
    <SourceLine>Else </SourceLine>
    <SourceLine>'nesting</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>ElseIf strArrTeVerwerken(t) = "cell" Or strV5 = "cell " Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And (strArrTeVerwerken(t) = "cell" Or strV5 = "cell ") Then</SourceLine>
    <SourceLine>'Einde cell, voorlopig doen we hier niets mee</SourceLine>
-   <SourceLine>ElseIf ((strArrTeVerwerken(t) = "row" Or strV4 = "row ") And iRow &gt;= 0) Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And (((strArrTeVerwerken(t) = "row" Or strV4 = "row ") And iRow &gt;= 0)) Then</SourceLine>
    <SourceLine>iRow = -1</SourceLine>
    <SourceLine>iCol = -1</SourceLine>
    <SourceLine>iCurrentCell = -1</SourceLine>
    <SourceLine>bEindeRij = True</SourceLine>
-   <SourceLine>ElseIf strArrTeVerwerken(t).Left(8) = "clwWidth" Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strArrTeVerwerken(t).Left(8) = "clwWidth" Then</SourceLine>
    <SourceLine>'Maximale cellbreedte</SourceLine>
    <SourceLine>bEindeRij = False</SourceLine>
    <SourceLine>If iRow &gt;= 0 And iCol = -1 Then</SourceLine>
@@ -147,7 +149,7 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>ElseIf strArrTeVerwerken(t).Left(5) = "cellx" Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strArrTeVerwerken(t).Left(5) = "cellx" Then</SourceLine>
    <SourceLine>'Minimale cellbreedte</SourceLine>
    <SourceLine>bEindeRij = False</SourceLine>
    <SourceLine>If iRow &gt;= 0 And iCol = -1 Then</SourceLine>
@@ -179,11 +181,11 @@
    <SourceLine>bArrColBorder.Append(False)</SourceLine>
    <SourceLine>iArrColBackground.Append(-1)</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>ElseIf strArrTeVerwerken(t) = "clbrdrl" Or strArrTeVerwerken(t) = "clbrdrr" Or _</SourceLine>
-   <SourceLine>strArrTeVerwerken(t) = "clbrdrt" Or strArrTeVerwerken(t) = "clbrdrb" Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And (strArrTeVerwerken(t) = "clbrdrl" Or strArrTeVerwerken(t) = "clbrdrr" Or _</SourceLine>
+   <SourceLine>strArrTeVerwerken(t) = "clbrdrt" Or strArrTeVerwerken(t) = "clbrdrb") Then</SourceLine>
    <SourceLine>'Do Nothing</SourceLine>
-   <SourceLine>ElseIf strArrTeVerwerken(t) = "brdrs" Or _</SourceLine>
-   <SourceLine>strArrTeVerwerken(t) = "brdrdot" Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And (strArrTeVerwerken(t) = "brdrs" Or _</SourceLine>
+   <SourceLine>strArrTeVerwerken(t) = "brdrdot") Then</SourceLine>
    <SourceLine>'Border</SourceLine>
    <SourceLine>bEindeRij = False</SourceLine>
    <SourceLine>If iRow &gt;= 0 And iCol = -1 Then</SourceLine>
@@ -193,7 +195,7 @@
    <SourceLine>bArrColBorder(bArrColBorder.Ubound) = True</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>ElseIf strArrTeVerwerken(t).Left(7) = "clcbpat" Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strArrTeVerwerken(t).Left(7) = "clcbpat" Then</SourceLine>
    <SourceLine>'Cell Background Color</SourceLine>
    <SourceLine>bEindeRij = False</SourceLine>
    <SourceLine>If iRow &gt;= 0 And iCol = -1 Then</SourceLine>
@@ -203,13 +205,13 @@
    <SourceLine>iArrColBackground(iArrColBackground.Ubound) = Val(strArrTeVerwerken(t).Mid(8))</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>ElseIf strArrTeVerwerken(t) = "line" Or strArrTeVerwerken(t) = "par" Or strArrTeVerwerken(t) = "pard" Or _</SourceLine>
    <SourceLine>strV5 = "line " Or strV4 = "par " Or strV5 = "pard " Or _</SourceLine>
-   <SourceLine>((strArrTeVerwerken(t) = "intbl" Or strV6 = "intbl ") And iRow &gt;= 0) Then 'Or _</SourceLine>
-   <SourceLine>'((strArrTeVerwerken(t) = "row" Or strV4 = "row ") And iRow &gt;= 0) Then</SourceLine>
+   <SourceLine>(Not bLimitRTFCapabilities And (strArrTeVerwerken(t) = "intbl" Or strV6 = "intbl ") And iRow &gt;= 0) Then </SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>bEindeRij = False</SourceLine>
-   <SourceLine>If strArrTeVerwerken(t) = "intbl" Or strV6 = "intbl " Then</SourceLine>
+   <SourceLine>If Not bLimitRTFCapabilities And (strArrTeVerwerken(t) = "intbl" Or strV6 = "intbl ") Then</SourceLine>
    <SourceLine>iCol = iCol + 1</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>''Todo: tablenesting ondersteunen</SourceLine>
@@ -263,7 +265,7 @@
    <SourceLine>strArrParagraphs.Append(strArrTeVerwerken(t).Mid(6))</SourceLine>
    <SourceLine>ElseIf strV4 = "par " Then</SourceLine>
    <SourceLine>strArrParagraphs.Append(strArrTeVerwerken(t).Mid(5))</SourceLine>
-   <SourceLine>ElseIf strV6 = "intbl " Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strV6 = "intbl " Then</SourceLine>
    <SourceLine>strArrParagraphs.Append(strArrTeVerwerken(t).Mid(7))</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>strArrParagraphs.Append("")</SourceLine>
@@ -312,7 +314,7 @@
    <SourceLine>strArrParagraphs(tCount) = strArrParagraphs(tCount) + "\"</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>Else</SourceLine>
-   <SourceLine>strArrTeVerwerken(t) = ParseRTF_CutOutUnknownCommand(strArrTeVerwerken(t))</SourceLine>
+   <SourceLine>strArrTeVerwerken(t) = ParseRTF_CutOutUnknownCommand(strArrTeVerwerken(t), bLimitRTFCapabilities)</SourceLine>
    <SourceLine>If strArrParagraphs(tCount) = "" Then</SourceLine>
    <SourceLine>strArrParagraphs(tCount) = strArrTeVerwerken(t)</SourceLine>
    <SourceLine>ElseIf strArrTeVerwerken(t).Left(1) = "\" Then</SourceLine>
@@ -347,7 +349,7 @@
   <AliasName></AliasName>
   <ItemFlags>33</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>strValue As String, ByRef strArrParagraphs() As String, ByRef iArrParagraphAlignment() As Integer, ByRef bArrParagraphStartsDefault() As Boolean, ByRef bArrParagraphNewLine() As Boolean, ByRef iArrTableCell() As Integer</ItemParams>
+  <ItemParams>strValue As String, ByRef strArrParagraphs() As String, ByRef iArrParagraphAlignment() As Integer, ByRef bArrParagraphStartsDefault() As Boolean, ByRef bArrParagraphNewLine() As Boolean, ByRef iArrTableCell() As Integer, bLimitRTFCapabilities As Boolean</ItemParams>
   <ItemResult></ItemResult>
  </Method>
  <Method>
@@ -357,7 +359,7 @@
   <PartID>1756549119</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Sub Parse(strValue As String, bForcePlainText As Boolean)</SourceLine>
+   <SourceLine>Sub Parse(strValue As String, bForcePlainText As Boolean, bLimitRTFCapabilities As Boolean)</SourceLine>
    <SourceLine>Dim strArrParagraphs() As String</SourceLine>
    <SourceLine>Dim iArrParagraphAlignment() As Integer</SourceLine>
    <SourceLine>Dim bArrParagraphStartsDefault() As Boolean</SourceLine>
@@ -414,7 +416,7 @@
    <SourceLine>ParseRTF_LoadFields(strValue)</SourceLine>
    <SourceLine>System.DebugLog "ParseRTF_LoadFields executed in " + Format(Round(((Microseconds - dMSTussenStop) / 1000.0)), "0") + " ms"</SourceLine>
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
-   <SourceLine>ParseRTF_CutOutUnwantedBlocks(strValue)</SourceLine>
+   <SourceLine>ParseRTF_CutOutUnwantedBlocks(strValue, bLimitRTFCapabilities)</SourceLine>
    <SourceLine>System.DebugLog "ParseRTF_CutOutUnwantedBlocks executed in " + Format(Round(((Microseconds - dMSTussenStop) / 1000.0)), "0") + " ms"</SourceLine>
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
    <SourceLine>ParseRTF_LoadFonts(strValue)</SourceLine>
@@ -432,11 +434,14 @@
    <SourceLine>ParseRTF_AndereAccoladeToestanden(strValue)</SourceLine>
    <SourceLine>System.DebugLog "ParseRTF_AndereAccoladeToestanden executed in " + Format(Round(((Microseconds - dMSTussenStop) / 1000.0)), "0") + " ms"</SourceLine>
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
-   <SourceLine>ParseRTF_SplitParagraphs(strValue, strArrParagraphs, iArrParagraphAlignment, bArrParagraphStartsDefault, bArrParagraphNewLine, iArrTableCell)</SourceLine>
+   <SourceLine>ParseRTF_SplitParagraphs(strValue, strArrParagraphs, iArrParagraphAlignment, bArrParagraphStartsDefault, bArrParagraphNewLine, iArrTableCell, bLimitRTFCapabilities)</SourceLine>
    <SourceLine>System.DebugLog "ParseRTF_SplitParagraphs executed in " + Format(Round(((Microseconds - dMSTussenStop) / 1000.0)), "0") + " ms"</SourceLine>
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
    <SourceLine>ParseRTF_Explode(strArrParagraphs, iArrParagraphAlignment, bArrParagraphStartsDefault, bArrParagraphNewLine, iArrTableCell)</SourceLine>
    <SourceLine>System.DebugLog "ParseRTF_Explode executed in " + Format(Round(((Microseconds - dMSTussenStop) / 1000.0)), "0") + " ms"</SourceLine>
+   <SourceLine>dMSTussenStop = Microseconds</SourceLine>
+   <SourceLine>ParseRTF_ReApplyCheckboxes</SourceLine>
+   <SourceLine>System.DebugLog "ParseRTF_ReApplyCheckboxes executed in " + Format(Round(((Microseconds - dMSTussenStop) / 1000.0)), "0") + " ms"</SourceLine>
    <SourceLine>dMSTussenStop = Microseconds</SourceLine>
    <SourceLine>Optimize(True)</SourceLine>
    <SourceLine>System.DebugLog "Optimize executed in " + Format(Round(((Microseconds - dMSTussenStop) / 1000.0)), "0") + " ms"</SourceLine>
@@ -490,7 +495,7 @@
   <AliasName></AliasName>
   <ItemFlags>33</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>strValue As String, bForcePlainText As Boolean</ItemParams>
+  <ItemParams>strValue As String, bForcePlainText As Boolean, bLimitRTFCapabilities As Boolean</ItemParams>
   <ItemResult></ItemResult>
  </Method>
  <Method>
@@ -550,7 +555,7 @@
   <PartID>793819135</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Function ParseRTF_CutOutUnknownCommand(strValue As String) As String</SourceLine>
+   <SourceLine>Function ParseRTF_CutOutUnknownCommand(strValue As String, bLimitRTFCapabilities As Boolean) As String</SourceLine>
    <SourceLine>Dim strRtVal As String</SourceLine>
    <SourceLine>Dim strCommand As String</SourceLine>
    <SourceLine>Dim strRest As String</SourceLine>
@@ -606,7 +611,7 @@
    <SourceLine>If iPart &gt;= 0 And iPart &lt;= (m_strArrFieldFunctie.Ubound + 1) Then</SourceLine>
    <SourceLine>bValid = True</SourceLine>
    <SourceLine>End If</SourceLine>
-   <SourceLine>ElseIf strCommand.Left(11) = "picinternal" And strCommand.Mid(12).Val &gt; 0 Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strCommand.Left(11) = "picinternal" And strCommand.Mid(12).Val &gt; 0 Then</SourceLine>
    <SourceLine>'Pictures</SourceLine>
    <SourceLine>bValid = True</SourceLine>
    <SourceLine>ElseIf strCommand.Left(2) = "tx" And strCommand.Mid(3).Val &gt; 0 Then</SourceLine>
@@ -621,25 +626,25 @@
    <SourceLine>ElseIf strCommand.Left(2) = "fi" And strCommand.Mid(3).Val &lt;&gt; 0 Then</SourceLine>
    <SourceLine>'first indent (relative value to defined indent to change the indent on the first line of a paragraph)</SourceLine>
    <SourceLine>bValid = True</SourceLine>
-   <SourceLine>ElseIf strCommand = "trowd" Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strCommand = "trowd" Then</SourceLine>
    <SourceLine>'Begin Tablerow</SourceLine>
    <SourceLine>bValid = True</SourceLine>
-   <SourceLine>ElseIf strCommand.Left(8) = "clwWidth" And strCommand.Mid(9).Val &gt; 0 Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strCommand.Left(8) = "clwWidth" And strCommand.Mid(9).Val &gt; 0 Then</SourceLine>
    <SourceLine>'CellWidth Part 1</SourceLine>
    <SourceLine>bValid = True</SourceLine>
-   <SourceLine>ElseIf strCommand.Left(5) = "cellx" And strCommand.Mid(6).Val &gt; 0 Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strCommand.Left(5) = "cellx" And strCommand.Mid(6).Val &gt; 0 Then</SourceLine>
    <SourceLine>'CellWidth Part 2</SourceLine>
    <SourceLine>bValid = True</SourceLine>
-   <SourceLine>ElseIf strCommand.Left(7) = "clcbpat" Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strCommand.Left(7) = "clcbpat" Then</SourceLine>
    <SourceLine>'Cell Background color</SourceLine>
    <SourceLine>bValid = True</SourceLine>
-   <SourceLine>ElseIf strCommand = "intbl" Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strCommand = "intbl" Then</SourceLine>
    <SourceLine>'Begin Cell</SourceLine>
    <SourceLine>bValid = True</SourceLine>
-   <SourceLine>ElseIf strCommand = "cell" Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strCommand = "cell" Then</SourceLine>
    <SourceLine>'End Cell</SourceLine>
    <SourceLine>bValid = True</SourceLine>
-   <SourceLine>ElseIf strCommand = "row" Then</SourceLine>
+   <SourceLine>ElseIf Not bLimitRTFCapabilities And strCommand = "row" Then</SourceLine>
    <SourceLine>'End Tablerow</SourceLine>
    <SourceLine>bValid = True</SourceLine>
    <SourceLine>ElseIf strCommand = "caps" Then</SourceLine>
@@ -675,7 +680,7 @@
    <SourceLine>ElseIf strCommand = "strike" Then</SourceLine>
    <SourceLine>'strikethrough on</SourceLine>
    <SourceLine>bValid = True</SourceLine>
-   <SourceLine>ElseIf strCommand = "strike0" Then</SourceLine>
+   <SourceLine>ElseIf strCommand = "strike0" Then </SourceLine>
    <SourceLine>'strikethrough off</SourceLine>
    <SourceLine>bValid = True</SourceLine>
    <SourceLine>ElseIf strCommand.Left(2) = "ul" Then</SourceLine>
@@ -714,7 +719,7 @@
   <AliasName></AliasName>
   <ItemFlags>33</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>strValue As String</ItemParams>
+  <ItemParams>strValue As String, bLimitRTFCapabilities As Boolean</ItemParams>
   <ItemResult>String</ItemResult>
  </Method>
  <Method>
@@ -1379,7 +1384,7 @@
   <PartID>453814271</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Function GetRTF(bWithNISDisable As Boolean = True) As String</SourceLine>
+   <SourceLine>Function GetRTF(bWithNISDisable As Boolean = True, bLimitRTFCapabilities As Boolean = False) As String</SourceLine>
    <SourceLine>Dim strRTF As String</SourceLine>
    <SourceLine>Dim t As Integer</SourceLine>
    <SourceLine>Dim iLast As Integer</SourceLine>
@@ -1464,8 +1469,10 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>iPar = m_cpArr(0).iParagraph</SourceLine>
    <SourceLine>If iPar &gt;= 0 Then</SourceLine>
+   <SourceLine>If Not bLimitRTFCapabilities Then</SourceLine>
    <SourceLine>strRTFTablecell = GetRTF_AddTableCell(iPar, iCurrentCell, iCurrentRow, iCurrentCol)</SourceLine>
    <SourceLine>strRTF = strRTF + strRTFTablecell</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>strTabStopString = m_rpArrParagraph(iPar).GetRTFString(strRTFTablecell.Len &gt; 0)</SourceLine>
    <SourceLine>strRTFTablecell = ""</SourceLine>
    <SourceLine>If strTabStopString &lt;&gt; strLastTabStopString Then</SourceLine>
@@ -1479,8 +1486,10 @@
    <SourceLine>End If</SourceLine>
    <SourceLine>bLastWasCommand = True</SourceLine>
    <SourceLine>If m_cpArr(0).iPicture &gt; 0 Then</SourceLine>
+   <SourceLine>If Not bLimitRTFCapabilities Then</SourceLine>
    <SourceLine>strAddRTF = GetRTF_AddPicture(0)</SourceLine>
    <SourceLine>strRTF = strRTF + strAddRTF</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>ElseIf m_chArr(0) = Chr(13) Then</SourceLine>
    <SourceLine>'Do Nothing</SourceLine>
    <SourceLine>ElseIf m_chArr(0) = Chr(10) Then</SourceLine>
@@ -1534,11 +1543,13 @@
    <SourceLine>iPar = m_cpArr(0).iParagraph</SourceLine>
    <SourceLine>If m_cpArr(t).iParagraph &lt;&gt; m_cpArr(t - 1).iParagraph Then</SourceLine>
    <SourceLine>iPar = m_cpArr(t).iParagraph</SourceLine>
+   <SourceLine>If Not bLimitRTFCapabilities Then</SourceLine>
    <SourceLine>strRTFTablecell = GetRTF_AddTableCell(iPar, iCurrentCell, iCurrentRow, iCurrentCol)</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If (m_rpArrParagraph(m_cpArr(t).iParagraph).TableCell &gt;= 0 And _</SourceLine>
    <SourceLine>m_rpArrParagraph(m_cpArr(t - 1).iParagraph).TableCell &lt; 0) Then</SourceLine>
    <SourceLine>strRTF = strRTF + "\par"</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>strRTF = strRTF + strRTFTablecell + m_rpArrParagraph(iPar).GetRTFString(strRTFTablecell.Len &gt; 0)</SourceLine>
    <SourceLine>strRTFTablecell = ""</SourceLine>
@@ -1546,8 +1557,10 @@
    <SourceLine>bCharactersAfterNewParagraph = False</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>If m_cpArr(t).iPicture &gt; 0 Then</SourceLine>
+   <SourceLine>If Not bLimitRTFCapabilities Then</SourceLine>
    <SourceLine>strAddRTF = GetRTF_AddPicture(t)</SourceLine>
    <SourceLine>strRTF = strRTF + strAddRTF</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>ElseIf m_chArr(t) = Chr(10) Then</SourceLine>
    <SourceLine>If bCharactersAfterNewParagraph Then</SourceLine>
    <SourceLine>If t &lt; iLast Then</SourceLine>
@@ -1618,7 +1631,7 @@
   <AliasName></AliasName>
   <ItemFlags>0</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>bWithNISDisable As Boolean = True</ItemParams>
+  <ItemParams>bWithNISDisable As Boolean = True, bLimitRTFCapabilities As Boolean = False</ItemParams>
   <ItemResult>String</ItemResult>
  </Method>
  <Method>
@@ -2001,16 +2014,16 @@
   <PartID>758276095</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Sub SetRTF(strValue As String)</SourceLine>
+   <SourceLine>Sub SetRTF(strValue As String, bLimitRTFCapabilities As Boolean)</SourceLine>
    <SourceLine>m_bNextRedrawWithMask = True</SourceLine>
-   <SourceLine>Parse(strValue, False)</SourceLine>
+   <SourceLine>Parse(strValue, False, bLimitRTFCapabilities)</SourceLine>
    <SourceLine>End Sub</SourceLine>
   </ItemSource>
   <TextEncoding>134217984</TextEncoding>
   <AliasName></AliasName>
   <ItemFlags>0</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>strValue As String</ItemParams>
+  <ItemParams>strValue As String, bLimitRTFCapabilities As Boolean</ItemParams>
   <ItemResult></ItemResult>
  </Method>
  <Method>
@@ -3934,7 +3947,7 @@
   <PartID>59340799</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Sub ParseRTF_CutOutUnwantedBlocks(ByRef strValue As String)</SourceLine>
+   <SourceLine>Sub ParseRTF_CutOutUnwantedBlocks(ByRef strValue As String, bLimitRTFCapabilities As Boolean)</SourceLine>
    <SourceLine>Dim iPos As Integer</SourceLine>
    <SourceLine>Dim iOpen As Integer</SourceLine>
    <SourceLine>Dim tCommentStyle As Integer</SourceLine>
@@ -3950,6 +3963,9 @@
    <SourceLine>strArrCommentStyle.Append("footer") 'Footer</SourceLine>
    <SourceLine>strArrCommentStyle.Append("header") 'Header</SourceLine>
    <SourceLine>strArrCommentStyle.Append("info") 'Info</SourceLine>
+   <SourceLine>If bLimitRTFCapabilities Then</SourceLine>
+   <SourceLine>strArrCommentStyle.Append("pict") 'Pictures</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>strArrCommentStyle.Append("comment") 'Meer commentaar</SourceLine>
    <SourceLine>strArrCommentStyle.Append("*") 'Commentaar</SourceLine>
    <SourceLine>For tCommentStyle = strArrCommentStyle.Ubound To 0 Step -1</SourceLine>
@@ -4026,7 +4042,7 @@
   <AliasName></AliasName>
   <ItemFlags>33</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>ByRef strValue As String</ItemParams>
+  <ItemParams>ByRef strValue As String, bLimitRTFCapabilities As Boolean</ItemParams>
   <ItemResult></ItemResult>
  </Method>
  <Method>
@@ -5057,6 +5073,7 @@
    <SourceLine>Dim ch As String</SourceLine>
    <SourceLine>Dim iLenStartPar As Integer</SourceLine>
    <SourceLine>Dim bInQuotes As Boolean</SourceLine>
+   <SourceLine>Dim bAcco As Boolean</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>strIntern = strField.Mid(8, strField.Len - 8).Trim</SourceLine>
    <SourceLine>strIntern = strIntern.Trim</SourceLine>
@@ -5067,8 +5084,13 @@
    <SourceLine>strValue = ""</SourceLine>
    <SourceLine>bValueFound = False</SourceLine>
    <SourceLine>bInQuotes = False</SourceLine>
+   <SourceLine>bAcco = False</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>iPosStart = strIntern.Instr("\fldinst ")</SourceLine>
+   <SourceLine>If iPosStart &lt;= 0 Then</SourceLine>
+   <SourceLine>iPosStart = strIntern.Instr("\fldinst{")</SourceLine>
+   <SourceLine>bAcco = True</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>If iPosStart &gt; 0 And iPosStart + 9 &lt;= iLen Then</SourceLine>
    <SourceLine>t = iPosStart + 9</SourceLine>
    <SourceLine>bStepOut = False</SourceLine>
@@ -5086,7 +5108,13 @@
    <SourceLine>ElseIf bInQuotes Then</SourceLine>
    <SourceLine>strFunctie = strFunctie + ch</SourceLine>
    <SourceLine>t = t + 1</SourceLine>
-   <SourceLine>ElseIf ch = " " Or ch = "\" Or ch = "}" Or ch = Chr(9) Or ch = Chr(10) Or ch = Chr(13) Then</SourceLine>
+   <SourceLine>ElseIf ch = "}" Then</SourceLine>
+   <SourceLine>If bAcco Then</SourceLine>
+   <SourceLine>bAcco = False</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>bStepOut = True</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>ElseIf ch = " " Or ch = "\" Or ch = Chr(9) Or ch = Chr(10) Or ch = Chr(13) Then</SourceLine>
    <SourceLine>bStepOut = True</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>strFunctie = strFunctie + ch</SourceLine>
@@ -5097,8 +5125,14 @@
    <SourceLine></SourceLine>
    <SourceLine>iPosStart = strIntern.Instr("{\fldrslt ")</SourceLine>
    <SourceLine>If iPosStart &lt; 1 Then</SourceLine>
+   <SourceLine>iPosStart = strIntern.InStr("{\fldrslt{")</SourceLine>
+   <SourceLine>If iPosStart &lt; 1 Then</SourceLine>
    <SourceLine>iPosStart = strIntern.Instr("{\fldrslt\")</SourceLine>
    <SourceLine>iLenStartPar = 9</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>bAcco = True</SourceLine>
+   <SourceLine>iLenStartPar = 10</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>iLenStartPar = 10</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -5108,8 +5142,12 @@
    <SourceLine>Do</SourceLine>
    <SourceLine>ch = strIntern.Mid(t, 1)</SourceLine>
    <SourceLine>If ch = "}" Then</SourceLine>
+   <SourceLine>If bAcco Then</SourceLine>
+   <SourceLine>bAcco = False</SourceLine>
+   <SourceLine>Else</SourceLine>
    <SourceLine>bStepOut = True</SourceLine>
    <SourceLine>bValueFound = True</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine>ElseIf ch = "\" Then</SourceLine>
    <SourceLine>strValue = strValue + ch</SourceLine>
    <SourceLine>t = t + 1</SourceLine>
@@ -5966,7 +6004,7 @@
    <SourceLine></SourceLine>
    <SourceLine>If iPos &gt;= 0 And iPos &lt;= iLast Then</SourceLine>
    <SourceLine>AddHandler rtf.FillFunctionValue, AddressOf Event_FillFunctionValue</SourceLine>
-   <SourceLine>rtf.Parse(strRTF, bForcePlaintext)</SourceLine>
+   <SourceLine>rtf.Parse(strRTF, bForcePlaintext, False)</SourceLine>
    <SourceLine>RemoveHandler rtf.FillFunctionValue, AddressOf Event_FillFunctionValue</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'ExportMemoryMap("1")</SourceLine>
@@ -6175,7 +6213,7 @@
    <SourceLine>Else</SourceLine>
    <SourceLine>'Out of boundaries, en niet binnen boundaries te krijgen, waarschijnlijk lege tekst of enkel controlecharacters</SourceLine>
    <SourceLine>'Gewoon inlezen</SourceLine>
-   <SourceLine>Parse(strRTF, bForcePlaintext)</SourceLine>
+   <SourceLine>Parse(strRTF, bForcePlaintext, False)</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>m_bNextRedrawWithMask = True</SourceLine>
    <SourceLine></SourceLine>
@@ -6197,7 +6235,7 @@
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub SetText(strValue As String)</SourceLine>
    <SourceLine>m_bNextRedrawWithMask = True</SourceLine>
-   <SourceLine>Parse(strValue, True)</SourceLine>
+   <SourceLine>Parse(strValue, True, False)</SourceLine>
    <SourceLine>End Sub</SourceLine>
   </ItemSource>
   <TextEncoding>134217984</TextEncoding>
@@ -10548,6 +10586,43 @@
   <ItemFlags>33</ItemFlags>
   <IsShared>0</IsShared>
   <ItemParams>ByRef strFont As String</ItemParams>
+  <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>ParseRTF_ReApplyCheckboxes</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>379983871</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Sub ParseRTF_ReApplyCheckboxes()</SourceLine>
+   <SourceLine>Dim iLast As Integer</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine>Dim iFunctie As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>iLast = m_cpArr.Ubound - 2</SourceLine>
+   <SourceLine>For t = 0 To iLast</SourceLine>
+   <SourceLine>If m_cpArr(t).btAscSpecial = 10 And m_cpArr(t + 2).btAscSpecial = 9 And _</SourceLine>
+   <SourceLine>m_cpArr(t + 1).iFunctie = 0 And m_cpArr(t + 2).iFunctie = 0 And _</SourceLine>
+   <SourceLine>(m_chArr(t + 1) = CHECKBOX_UNCHECKED Or m_chArr(t + 1) = CHECKBOX_CHECKED) Then</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>m_strArrFieldFunctie.Append("checkbox")</SourceLine>
+   <SourceLine>m_iArrFunctieType.Append(FT_NORMAL)</SourceLine>
+   <SourceLine>iFunctie = m_strArrFieldFunctie.Ubound + 1 </SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>m_cpArr(t).iFunctie = iFunctie</SourceLine>
+   <SourceLine>m_cpArr(t + 1).iFunctie = iFunctie</SourceLine>
+   <SourceLine>m_cpArr(t + 2).iFunctie = iFunctie</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>End Sub</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
   <ItemResult></ItemResult>
  </Method>
  <Hook>

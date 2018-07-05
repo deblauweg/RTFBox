@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<RBProject version="2016r4.1" FormatVersion="2" MinIDEVersion="20070100">
+<RBProject version="2018r1.1" FormatVersion="2" MinIDEVersion="20070100">
 <block type="Module" ID="1064204045">
  <ObjName>clsRTFBox_Paragraph</ObjName>
  <ObjContainerID>0</ObjContainerID>
@@ -11,6 +11,7 @@
   <ItemName>AddTabstop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>398092287</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub AddTabstop(iTabstop As Integer)</SourceLine>
@@ -31,6 +32,7 @@
   <ItemName>GetNextTabstop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1151033343</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetNextTabstop(iCurrentPos As Integer) As Integer</SourceLine>
@@ -66,6 +68,7 @@
   <ItemName>DelTabstop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1143060479</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub DelTabstop(iTabstop As Integer)</SourceLine>
@@ -90,6 +93,7 @@
   <ItemName>Constructor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2074669055</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Constructor()</SourceLine>
@@ -109,6 +113,7 @@
   <ItemName>Constructor</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>633290751</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub Constructor(rp As clsRTFBox_Paragraph)</SourceLine>
@@ -143,6 +148,7 @@
   <ItemName>RemoveAllTabstops</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1032851455</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub RemoveAllTabstops()</SourceLine>
@@ -160,6 +166,7 @@
   <ItemName>GetRTFString</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>839266303</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetRTFString(bRemoveFirstParagraphTag As Boolean) As String</SourceLine>
@@ -204,6 +211,7 @@
   <ItemName>GetFixedTabstops</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>249143295</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetFixedTabstops() As Integer()</SourceLine>
@@ -230,6 +238,7 @@
   <ItemName>ToggleTabstop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>227835903</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Sub ToggleTabstop(iPos As Integer)</SourceLine>
@@ -272,6 +281,7 @@
   <ItemName>IsTabStop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>519698431</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function IsTabStop(iPos As Integer) As Boolean</SourceLine>
@@ -307,6 +317,7 @@
   <ItemName>GetPreviousTabstop</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1818736639</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Function GetPreviousTabstop(iCurrentPos As Integer) As Integer</SourceLine>
@@ -350,6 +361,7 @@
   <ItemName>m_iArrTabstop()</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1399795711</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iArrTabstop() As Integer</SourceLine>
@@ -364,6 +376,7 @@
   <ItemName>m_iAlign</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>560758783</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iAlign As Integer = 0</SourceLine>
@@ -378,6 +391,7 @@
   <ItemName>Alignment</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>434251775</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Alignment As Integer</SourceLine>
@@ -409,6 +423,7 @@
   <ItemName>m_iIndent</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>2089793535</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iIndent As Integer = 0</SourceLine>
@@ -423,6 +438,7 @@
   <ItemName>Indent</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>130220031</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>Indent As Integer</SourceLine>
@@ -453,6 +469,7 @@
   <ItemName>m_iTableCell</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1005850623</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iTableCell As Int16</SourceLine>
@@ -467,6 +484,7 @@
   <ItemName>TableCell</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>127848447</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>TableCell As Int16</SourceLine>
@@ -495,6 +513,7 @@
   <ItemName>m_iFirstIndent</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1058926591</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>m_iFirstIndent As Integer</SourceLine>
@@ -509,6 +528,7 @@
   <ItemName>FirstIndent</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1198411775</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
    <SourceLine>FirstIndent As Integer</SourceLine>
@@ -594,6 +614,7 @@
   <ItemName>ALIGNLEFT</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>766578687</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>0</ItemDef>
@@ -603,6 +624,7 @@
   <ItemName>ALIGNRIGHT</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>1850853375</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>2</ItemDef>
@@ -612,6 +634,7 @@
   <ItemName>ALIGNCENTER</ItemName>
   <Compatibility></Compatibility>
   <Visible>1</Visible>
+  <PartID>891277311</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>1</ItemDef>
