@@ -397,7 +397,8 @@
    <SourceLine>ReDim m_rpicArr(-1)</SourceLine>
    <SourceLine>ReDim m_strArrFieldFunctie(-1)</SourceLine>
    <SourceLine>ReDim m_iArrFunctieType(-1)</SourceLine>
-   <SourceLine>'m_dLargestDrawingTime = 0</SourceLine>
+   <SourceLine>m_dLargestDrawingTime = 0</SourceLine>
+   <SourceLine>m_iTicksSlownessWarning = 0</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>iLen = strValue.Len</SourceLine>
    <SourceLine>strValue = strValue.ReplaceAll(Chr(13) + Chr(10), Chr(13)).ReplaceAll(Chr(10), Chr(13))</SourceLine>
@@ -2014,7 +2015,7 @@
   <PartID>758276095</PartID>
   <ItemSource>
    <TextEncoding>134217984</TextEncoding>
-   <SourceLine>Sub SetRTF(strValue As String, bLimitRTFCapabilities As Boolean)</SourceLine>
+   <SourceLine>Sub SetRTF(strValue As String, bLimitRTFCapabilities As Boolean = False)</SourceLine>
    <SourceLine>m_bNextRedrawWithMask = True</SourceLine>
    <SourceLine>Parse(strValue, False, bLimitRTFCapabilities)</SourceLine>
    <SourceLine>End Sub</SourceLine>
@@ -2023,7 +2024,7 @@
   <AliasName></AliasName>
   <ItemFlags>0</ItemFlags>
   <IsShared>0</IsShared>
-  <ItemParams>strValue As String, bLimitRTFCapabilities As Boolean</ItemParams>
+  <ItemParams>strValue As String, bLimitRTFCapabilities As Boolean = False</ItemParams>
   <ItemResult></ItemResult>
  </Method>
  <Method>
@@ -4014,23 +4015,6 @@
    <SourceLine>bCutSomething = True</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>Loop Until bCutSomething Or bFoundNothing</SourceLine>
-   <SourceLine>'iLen = strValue.Len</SourceLine>
-   <SourceLine>'For t = iPos + strArrCommentStyle(tCommentStyle).Len + 2 To iLen</SourceLine>
-   <SourceLine>'ch = strValue.Mid(t, 1)</SourceLine>
-   <SourceLine>'If ch = "{" Then</SourceLine>
-   <SourceLine>'iOpen = iOpen + 1</SourceLine>
-   <SourceLine>'Else</SourceLine>
-   <SourceLine>'If ch = "}" Then</SourceLine>
-   <SourceLine>'iOpen = iOpen - 1</SourceLine>
-   <SourceLine>'</SourceLine>
-   <SourceLine>'If iOpen = 0 Then</SourceLine>
-   <SourceLine>''Jump Out, we're done here</SourceLine>
-   <SourceLine>'strValue = strValue.Left(iPos - 1) + strValue.Mid(t + 1)</SourceLine>
-   <SourceLine>'iLen = t</SourceLine>
-   <SourceLine>'End If</SourceLine>
-   <SourceLine>'End If</SourceLine>
-   <SourceLine>'End If</SourceLine>
-   <SourceLine>'Next t</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>bFoundNothing = True</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -8161,7 +8145,7 @@
    <SourceLine>#If TargetConsole</SourceLine>
    <SourceLine>If iWidth &lt; 1 Or iHeight &lt; 1 Then</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(1, 1)</SourceLine>
-   <SourceLine>Elseif TargetWindows And (bPrint Or m_dLargestDrawingTime &lt; DRAWINGTIMETHRESHOLD) Then</SourceLine>
+   <SourceLine>Elseif TargetWindows And (bPrint Or Not HasToDrawInLowQuality) Then</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(iWidth, iHeight, 32)</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(iWidth, iHeight)</SourceLine>
@@ -8171,7 +8155,7 @@
    <SourceLine>m_picRTFBuffer = New Picture(1, 1)</SourceLine>
    <SourceLine>Elseif bHiDPI Then</SourceLine>
    <SourceLine>m_picRTFBuffer = Window(oWnd).BitmapForCaching(iWidth, iHeight)</SourceLine>
-   <SourceLine>Elseif TargetWindows And (bPrint Or m_dLargestDrawingTime &lt; DRAWINGTIMETHRESHOLD) Then</SourceLine>
+   <SourceLine>Elseif TargetWindows And (bPrint Or Not HasToDrawInLowQuality) Then</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(iWidth, iHeight, 32)</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>m_picRTFBuffer = New Picture(iWidth, iHeight)</SourceLine>
@@ -8188,7 +8172,7 @@
    <SourceLine>#Else</SourceLine>
    <SourceLine>If bHiDPI Then</SourceLine>
    <SourceLine>picMask = Window(oWnd).BitmapForCaching(m_picRTFBuffer.Width, m_picRTFBuffer.Height)</SourceLine>
-   <SourceLine>Elseif TargetWindows And (bPrint Or m_dLargestDrawingTime &lt; DRAWINGTIMETHRESHOLD) Then</SourceLine>
+   <SourceLine>Elseif TargetWindows And (bPrint Or Not HasToDrawInLowQuality) Then</SourceLine>
    <SourceLine>picMask = New Picture(m_picRTFBuffer.Width, m_picRTFBuffer.Height, 32)</SourceLine>
    <SourceLine>Else</SourceLine>
    <SourceLine>picMask = New Picture(m_picRTFBuffer.Width, m_picRTFBuffer.Height)</SourceLine>
@@ -8614,7 +8598,7 @@
    <SourceLine>Next t</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>dMsDrawingTime = Round(((Microseconds - dMsDrawingTime) / 1000.0))</SourceLine>
-   <SourceLine>If dMSDrawingTime &gt; m_dLargestDrawingTime Then</SourceLine>
+   <SourceLine>If Not bPrint And dMSDrawingTime &gt; m_dLargestDrawingTime Then</SourceLine>
    <SourceLine>m_dLargestDrawingTime = dMsDrawingTime</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>System.DebugLog "GetImage.DrawRTF_Internal_EffectiveDraw uitgevoerd in " + Format(Round(((Microseconds - dMsTussenStop) / 1000.0)), "0") + " ms"</SourceLine>
@@ -10485,7 +10469,7 @@
    <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>#if Not TargetWindows</SourceLine>
-   <SourceLine>If m_dLargestDrawingTime &gt;= DRAWINGTIMETHRESHOLD Then</SourceLine>
+   <SourceLine>If HasToDrawInLowQuality Then</SourceLine>
    <SourceLine>dScale = 1</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>#endif</SourceLine>
@@ -10624,6 +10608,108 @@
   <IsShared>0</IsShared>
   <ItemParams></ItemParams>
   <ItemResult></ItemResult>
+ </Method>
+ <Method>
+  <ItemName>HasImages</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1635266559</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function HasImages() As Boolean</SourceLine>
+   <SourceLine>Return (m_rpicArr.Ubound &gt;= 0)</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>HasTables</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1335111679</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function HasTables() As Boolean</SourceLine>
+   <SourceLine>Dim bRtVal As Boolean</SourceLine>
+   <SourceLine>Dim iLast As Integer</SourceLine>
+   <SourceLine>Dim t As Integer</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>bRtVal = False</SourceLine>
+   <SourceLine>iLast = m_rpArrParagraph.Ubound</SourceLine>
+   <SourceLine>For t = 0 To iLast</SourceLine>
+   <SourceLine>If m_rpArrParagraph(t).TableCell &gt;= 0 Then</SourceLine>
+   <SourceLine>bRtVal = True</SourceLine>
+   <SourceLine>t = iLast + 1</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>Next t</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return bRtVal</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>IsSlowToDrawWarningVisible</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>722270207</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function IsSlowToDrawWarningVisible() As Boolean</SourceLine>
+   <SourceLine>Dim bRtVal As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>bRtVal = False</SourceLine>
+   <SourceLine>If (m_bHasToDrawInLowQuality And m_dLargestDrawingTime &gt; DRAWINGTIMETHRESHOLD) Then</SourceLine>
+   <SourceLine>If m_iTicksSlownessWarning = 0 Then</SourceLine>
+   <SourceLine>m_iTicksSlownessWarning = Ticks</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>bRtVal = ((Floor(Abs(Ticks - m_iTicksSlownessWarning) / 60) Mod 60) &lt; 6)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return bRtVal</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>0</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>Boolean</ItemResult>
+ </Method>
+ <Method>
+  <ItemName>HasToDrawInLowQuality</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>991850495</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>Function HasToDrawInLowQuality() As Boolean</SourceLine>
+   <SourceLine>If Not m_bHasToDrawInLowQuality Then</SourceLine>
+   <SourceLine>If m_dLargestDrawingTime &gt; DRAWINGTIMETHRESHOLD Then</SourceLine>
+   <SourceLine>m_dLargestDrawingTime = 0</SourceLine>
+   <SourceLine>m_bHasToDrawInLowQuality = True</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>Return m_bHasToDrawInLowQuality</SourceLine>
+   <SourceLine>End Function</SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <AliasName></AliasName>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+  <ItemParams></ItemParams>
+  <ItemResult>Boolean</ItemResult>
  </Method>
  <Hook>
   <ItemName>FillFunctionValue</ItemName>
@@ -11178,6 +11264,36 @@
    <SourceLine>End Get</SourceLine>
   </GetAccessor>
  </Property>
+ <Property>
+  <ItemName>m_bHasToDrawInLowQuality</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>793954303</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_bHasToDrawInLowQuality As Boolean</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_bHasToDrawInLowQuality As Boolean</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>m_iTicksSlownessWarning</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>2079840255</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_iTicksSlownessWarning As Integer</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_iTicksSlownessWarning As Integer</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
  <ViewBehavior>
   <ViewProperty>
    <ObjName>Name</ObjName>
@@ -11465,7 +11581,7 @@
   <PartID>602814463</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
-  <ItemDef>150</ItemDef>
+  <ItemDef>200</ItemDef>
   <ItemFlags>33</ItemFlags>
  </Constant>
  <Constant>

@@ -545,10 +545,12 @@
    <SourceLine>ActionJumpIn</SourceLine>
    <SourceLine>ElseIf X &gt;= GetLayoutStartPos(CTRLPOSUNDO) And X &lt;= GetLayoutStopPos(CTRLPOSUNDO) Then</SourceLine>
    <SourceLine>ActionUndo</SourceLine>
+   <SourceLine>ElseIf X &gt;= GetLayoutStartPos(CTRLPOSEXTERNALEDITOR) And X &lt;= GetLayoutStopPos(CTRLPOSEXTERNALEDITOR) Then</SourceLine>
+   <SourceLine>ActionEditRTFInExternalEditor</SourceLine>
    <SourceLine>ElseIf X &gt;= GetLayoutStartPos(CTRLPOSCOLOR) And X &lt;= GetLayoutStopPos(CTRLPOSCOLOR) Then</SourceLine>
    <SourceLine>mnuBase = GetColorMenu("COLOR", GetColor)</SourceLine>
    <SourceLine>mnu = mnuBase.PopUp(Self.Window.Left + Self.Left + GetLayoutStartPos(CTRLPOSCOLOR), Self.Window.Top + Self.Top + 20)</SourceLine>
-   <SourceLine>End If</SourceLine>
+   <SourceLine>End If </SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>If Not IsNull(mnu) Then</SourceLine>
    <SourceLine>If mnu.Tag.StringValue.Left(5) = "FONT." Then</SourceLine>
@@ -2551,6 +2553,8 @@
    <SourceLine>Dim iY2 As Integer</SourceLine>
    <SourceLine>Dim iMinus As Integer</SourceLine>
    <SourceLine>Dim tScale As Integer</SourceLine>
+   <SourceLine>Dim bExternalEditor As Boolean</SourceLine>
+   <SourceLine>Dim strCommandText As String</SourceLine>
    <SourceLine>Dim bCheckWithTimes As Boolean</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>GetScaleFactor(iScale, dScaleBase)</SourceLine>
@@ -2940,6 +2944,58 @@
    <SourceLine>iMinus = iMinus - 1</SourceLine>
    <SourceLine>g.DrawLine(iX1, iY1, iX1 + iMinus, iY1 + iMinus)</SourceLine>
    <SourceLine>g.DrawLine(iX2, iY1, iX2 - iMinus, iY1 + iMinus)</SourceLine>
+   <SourceLine></SourceLine>
+   <SourceLine>'External Editor</SourceLine>
+   <SourceLine>If Not IsNull(m_fiRTFExternalFile) And m_fiRTFExternalFile.Exists And _</SourceLine>
+   <SourceLine>Not IsNull(m_dtRTFExternalFileModification) And m_iRTFExternalFileLength &gt; 0 Then</SourceLine>
+   <SourceLine>bExternalEditor = True</SourceLine>
+   <SourceLine>g.ForeColor = &amp;c444444</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>bExternalEditor = False</SourceLine>
+   <SourceLine>g.ForeColor = &amp;cEEEEEE</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>g.FillRect(GetLayoutStartPos(CTRLPOSEXTERNALEDITOR) * iScale, iScale, _</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSEXTERNALEDITOR) * iScale, 20 * iScale)</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleOriginalX</SourceLine>
+   <SourceLine>g.ScaleY = dScaleOriginalY</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>g.Bold = True</SourceLine>
+   <SourceLine>g.Underline = False</SourceLine>
+   <SourceLine>g.Italic = False</SourceLine>
+   <SourceLine>g.TextFont = "Arial"</SourceLine>
+   <SourceLine>g.TextSize = 16</SourceLine>
+   <SourceLine>If bExternalEditor Then</SourceLine>
+   <SourceLine>iRelief = 1</SourceLine>
+   <SourceLine>If m_iRTFExternalFileLength &lt;&gt; m_fiRTFExternalFile.Length Or _</SourceLine>
+   <SourceLine>Abs(m_dtRTFExternalFileModification.TotalSeconds - m_fiRTFExternalFile.ModificationDate.TotalSeconds) &gt; 1 Then</SourceLine>
+   <SourceLine>strCommandText = "Reload"</SourceLine>
+   <SourceLine>g.ForeColor = &amp;cB1FF44</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>strCommandText = "Close"</SourceLine>
+   <SourceLine>g.ForeColor = &amp;cFFFFFF</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>ElseIf Not IsNull(m_rtf) And (m_rtf.HasImages Or m_rtf.HasTables) Then</SourceLine>
+   <SourceLine>iRelief = 0</SourceLine>
+   <SourceLine>g.ForeColor = &amp;cF48342</SourceLine>
+   <SourceLine>strCommandText = "Edit"</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>iRelief = 0</SourceLine>
+   <SourceLine>strCommandText = "Edit"</SourceLine>
+   <SourceLine>If m_bCursorVisible And Not IsNull(m_rtf) And m_rtf.IsSlowToDrawWarningVisible Then</SourceLine>
+   <SourceLine>g.ForeColor = &amp;c7FBA2C</SourceLine>
+   <SourceLine>Else</SourceLine>
+   <SourceLine>g.ForeColor = &amp;c6A9B26</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>iWidth = g.StringWidth(strCommandText)</SourceLine>
+   <SourceLine>iX1 = GetLayoutStartPos(CTRLPOSEXTERNALEDITOR) + iRelief + ((m_iLayoutCtrlWidth(CTRLPOSEXTERNALEDITOR) - iWidth) / 2)</SourceLine>
+   <SourceLine>iY1 = 17 + iRelief</SourceLine>
+   <SourceLine>g.DrawString(strCommandText, iX1, iY1)</SourceLine>
+   <SourceLine>If iScale &lt;&gt; 1 Or dScaleBase &lt;&gt; 1 Then</SourceLine>
+   <SourceLine>g.ScaleX = dScaleBase</SourceLine>
+   <SourceLine>g.ScaleY = dScaleBase</SourceLine>
+   <SourceLine>End If</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>'Piekje Font</SourceLine>
    <SourceLine>g.ForeColor = &amp;c000000</SourceLine>
@@ -3859,6 +3915,9 @@
    <SourceLine>m_iLayoutCtrlWidth(CTRLPOSJUMPOUT) = 20</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>m_iLayoutCtrlWidth(CTRLPOSUNDO) = 20</SourceLine>
+   <SourceLine>#if clsRTFBox_Data.ALLOW_EXTERNALEDITOR</SourceLine>
+   <SourceLine>m_iLayoutCtrlWidth(CTRLPOSEXTERNALEDITOR) = 70</SourceLine>
+   <SourceLine>#endif</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>m_iLayoutCtrlWidth(CTRLPOSCOLOR) = 30</SourceLine>
    <SourceLine>m_iLayoutCtrlWidth(CTRLPOSFONTSIZE) = 30</SourceLine>
@@ -6438,8 +6497,14 @@
    <SourceLine>Dim dt As Date</SourceLine>
    <SourceLine>Dim bOk As Boolean</SourceLine>
    <SourceLine></SourceLine>
-   <SourceLine>If Not IsNull(m_fiRTFExternalFile) And m_fiRTFExternalFile.Exists Then</SourceLine>
+   <SourceLine>If Not IsNull(m_fiRTFExternalFile) And m_fiRTFExternalFile.Exists And _</SourceLine>
+   <SourceLine>Not IsNull(m_dtRTFExternalFileModification) And m_iRTFExternalFileLength &gt; 0 Then</SourceLine>
+   <SourceLine>If m_iRTFExternalFileLength &lt;&gt; m_fiRTFExternalFile.Length Or _</SourceLine>
+   <SourceLine>Abs(m_dtRTFExternalFileModification.TotalSeconds - m_fiRTFExternalFile.ModificationDate.TotalSeconds) &gt; 1 Then</SourceLine>
+   <SourceLine></SourceLine>
    <SourceLine>bOk = LoadRTFFile(m_fiRTFExternalFile, True, True)</SourceLine>
+   <SourceLine>End If</SourceLine>
+   <SourceLine>m_fiRTFExternalFile.Delete</SourceLine>
    <SourceLine></SourceLine>
    <SourceLine>m_fiRTFExternalFile = Nil</SourceLine>
    <SourceLine>Else</SourceLine>
@@ -6457,7 +6522,10 @@
    <SourceLine>fi = fi.Child(strFile)</SourceLine>
    <SourceLine>If Not IsNull(fi) And Not fi.Exists And SaveRTFFile(fi, True) Then</SourceLine>
    <SourceLine>m_fiRTFExternalFile = fi</SourceLine>
+   <SourceLine>m_dtRTFExternalFileModification = New Date(fi.ModificationDate)</SourceLine>
+   <SourceLine>m_iRTFExternalFileLength = fi.Length</SourceLine>
    <SourceLine>m_fiRTFExternalFile.Launch</SourceLine>
+   <SourceLine>DrawCursorAndMakeUndoPointIfNecessary</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
    <SourceLine>End If</SourceLine>
@@ -7491,6 +7559,36 @@
   <ItemFlags>33</ItemFlags>
   <IsShared>0</IsShared>
  </Property>
+ <Property>
+  <ItemName>m_dtRTFExternalFileModification</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>890814463</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_dtRTFExternalFileModification As Date</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_dtRTFExternalFileModification As Date</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
+ <Property>
+  <ItemName>m_iRTFExternalFileLength</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1472477183</PartID>
+  <ItemSource>
+   <TextEncoding>134217984</TextEncoding>
+   <SourceLine>m_iRTFExternalFileLength As Integer</SourceLine>
+   <SourceLine></SourceLine>
+  </ItemSource>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemDeclaration>m_iRTFExternalFileLength As Integer</ItemDeclaration>
+  <ItemFlags>33</ItemFlags>
+  <IsShared>0</IsShared>
+ </Property>
  <ViewBehavior>
   <ViewProperty>
    <ObjName>Name</ObjName>
@@ -7759,7 +7857,7 @@
   <PartID>485773311</PartID>
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
-  <ItemDef>17</ItemDef>
+  <ItemDef>19</ItemDef>
   <ItemFlags>33</ItemFlags>
  </Constant>
  <Constant>
@@ -7830,6 +7928,16 @@
   <TextEncoding>134217984</TextEncoding>
   <ItemType>2</ItemType>
   <ItemDef>17</ItemDef>
+  <ItemFlags>33</ItemFlags>
+ </Constant>
+ <Constant>
+  <ItemName>CTRLPOSEXTERNALEDITOR</ItemName>
+  <Compatibility></Compatibility>
+  <Visible>1</Visible>
+  <PartID>1140985855</PartID>
+  <TextEncoding>134217984</TextEncoding>
+  <ItemType>2</ItemType>
+  <ItemDef>19</ItemDef>
   <ItemFlags>33</ItemFlags>
  </Constant>
 </block>
